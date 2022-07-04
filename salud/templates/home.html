@@ -1,0 +1,17 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+{% block referencia %}home.html{% endblock %}
+{% block title_1 %}{% block title_2 %}¿Qué es un mapa de brechas de evidencia?{% endblock %}{% endblock %}
+
+{% block content %}
+    
+    <p>
+        Los <strong><i>mapas de brechas de evidencia (MBE)</i></strong> son una herramienta visual y analítica que permite consolidar la información existente sobre un tema específico. Estos se estructuran mediante la relación causal entre las intervenciones particulares de un sector y sus correspondientes variables de resultado. Además, responden a la necesidad de tomar decisiones basadas en evidencia, ya que sistematizan y sintetizan la información de forma clara.    
+    </p>
+
+    <p>
+        Esta herramienta tiene como objetivo automatizar la búsqueda, descarga, depuración y consolidación de artículos académicos provenientes de bases de datos indexadas. Adicionalmente, facilitar el proceso de generación los mapas de brechas de evidencia y por último permitir la visualización de estos, de tal forma que facilite su comprensión.
+    </p>
+    <a class="btn btn-success" href="{% url 'baseApp:lista-mapas' %}" >Ver listado de mapas</a>
+        
+{% endblock %}

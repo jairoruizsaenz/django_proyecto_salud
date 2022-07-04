@@ -1,0 +1,28 @@
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; primera</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">anterior</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="">&laquo; primera</a></li>
+                <li class="page-item disabled"><a class="page-link" href="">anterior</a></li>
+            {% endif %}
+
+            <span class="current">
+                <li class="page-item disabled"><a class="page-link" href="#">
+                    página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                </a></li>
+            </span>
+        
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">siguiente</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="">siguiente</a></li>
+                <li class="page-item disabled"><a class="page-link" href="">última &raquo;</a></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+{% endif %}
