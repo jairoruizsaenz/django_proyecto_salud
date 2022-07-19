@@ -11,7 +11,7 @@
         </button>
                 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <a class="navbar-brand abs" href="">Proyecto de salud</a>
+            <a class="navbar-brand abs" href=""></a>
             <ul class="navbar-nav ms-auto">                
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
@@ -21,10 +21,11 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Departamentos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Municipios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Manzanas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Ayuda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:departamentos' %}">Departamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:municipios' %}">Municipios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:manzanas' %}">Manzanas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:ayuda' %}">Ayuda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:pruebas' %}">Pruebas</a></li>
                 {% endif %}
             </ul>
         </div>

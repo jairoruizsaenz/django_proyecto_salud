@@ -1,17 +1,53 @@
 <!-- templates/home.html -->
 {% extends 'base.html' %}
+{% load static %}
 {% block referencia %}home.html{% endblock %}
-{% block title_1 %}{% block title_2 %}¿Qué es un mapa de brechas de evidencia?{% endblock %}{% endblock %}
+{% block title_1 %}{% endblock %}
+{% block title_2 %}Accesibilidad a Servicios de Salud{% endblock %}
 
 {% block content %}
-    
-    <p>
-        Los <strong><i>mapas de brechas de evidencia (MBE)</i></strong> son una herramienta visual y analítica que permite consolidar la información existente sobre un tema específico. Estos se estructuran mediante la relación causal entre las intervenciones particulares de un sector y sus correspondientes variables de resultado. Además, responden a la necesidad de tomar decisiones basadas en evidencia, ya que sistematizan y sintetizan la información de forma clara.    
-    </p>
+<div class="row">	
+    <div class="col-12">
+        <p>
+            En esta herramienta se pueden visualizar los resultados obtenidos en el desarrollo del proyecto "<i>Accesibilidad a los Servicios de Salud</i>" en su segunda etapa realizado por la Subdirección de Salud y la Unidad de Científicos de Datos del DNP. El objetivo principal de este proyecto consiste en realizar un análisis exploratorio y espacial sobre la accesibilidad a la oferta de servicios de salud a partir de las bases de datos que la Subdirección de Salud tiene disponibles.
+        </p>
+        <p>
+            La Organización Mundial de la Salud (OMS) considera que el acceso a los servicios de salud puede medirse a través de la utilización de los servicios de salud por parte de los individuos, lo cual a su vez, es influido por la estructura del sistema de servicios (disponibilidad de servicios, organización y financiamiento) y por la naturaleza de los requerimientos (recursos para los consumidores potenciales). Para estos efectos, se podría considerar que el acceso está condicionado al uso efectivo de la población de los servicios de salud, pues puede entenderse como la posibilidad de obtener atención en salud cuando se requiere, independientemente de las características de la población en términos de ingresos, lugar de residencia (urbano o rural), pertinencia o no a un grupo étnico, minoría o grupo vulnerable, entre otros. Por esta razón, se decidió considerar cuatro dimensiones para medir la accesibilidad:
+        </p>
+    </div>
+</div>
 
-    <p>
-        Esta herramienta tiene como objetivo automatizar la búsqueda, descarga, depuración y consolidación de artículos académicos provenientes de bases de datos indexadas. Adicionalmente, facilitar el proceso de generación los mapas de brechas de evidencia y por último permitir la visualización de estos, de tal forma que facilite su comprensión.
-    </p>
-    <a class="btn btn-success" href="{% url 'baseApp:lista-mapas' %}" >Ver listado de mapas</a>
+<div class="row">	
+    <div class="col-md-6">    
+        <img src="{% static 'images/diagrama.png' %}" alt="" height="320" class="mx-auto d-block">
+    </div>
+
+    <div class="col-md-6">        
+        <ul>
+            <br><li>
+                <strong>Disponibilidad:</strong> se puede entender como la garantía de la suficiencia de infraestructura, bienes y servicios de salud, estos últimos, entendidos como recursos materiales y humanos necesarios para la atención en salud de la población.
+            </li>
+            <br><li>
+                <strong>Accesibilidad:</strong> consiste en la inexistencia de barreras u obstáculos para el acceso a los servicios de salud, sean éstos de tipo físico, económico, cultural
+            </li>
+            <br><li>
+                <strong>Utilización:</strong> entendida como el uso que hace la población de la infraestructura o las sedes con sus recursos físicos y humanos, cuando lo requieren.
+            </li>
+            <br><li>
+                <strong>Calidad:</strong> se entiende como la condición que permite que la oferta de infraestructura y servicios, con sus recursos físicos y humanos, sean apropiados para atender las necesidades de salud de los pacientes.
+            </li>
+        </ul>    
+    </div>
+</div>
+
+<div class="row">	
+    <div class="col-12">
+        <p>
+            En las siguientes pestañas se pueden ver los indicadores de cada dimensión ubicados en el territorio colombiano en diferentes niveles de desagregación.
+        </p>
+    </div>
+</div>
+    
+    {% comment %} <a class="btn btn-success" href="{% url 'baseApp:lista-mapas' %}" >Ver listado de mapas</a> {% endcomment %}
         
 {% endblock %}
