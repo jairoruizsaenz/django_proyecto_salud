@@ -1,10 +1,16 @@
 :root {
     --color-verde-dnp: #198754;
+    --light_gray: #f7f7f7 ;
+    --dark_blue: #4866c8;
+    --light_blue: #c9d2f2;
+
+    --p_naranja: #f2964d;
+    --t_naranja: #fce4c2;
 }
 
 body {
     /* background-color: #f9f9f9 !important; */
-    background-color: #f7f7f7 !important;
+    background-color: var(--light_gray) !important;
     font-family: "Nunito", sans-serif;
     padding-top: 70px;
 }
@@ -283,4 +289,18 @@ g.xAxis-divisions > g > line {
 g.yAxis-divisions > g > line {
     stroke-dasharray: 3;
     stroke-opacity: 0.5;
+}
+
+.collapsed {
+    color:var(--light_gray);
+    background-color: var(--color-verde-dnp);
+}
+
+.accordion-body {
+    background-color: var(--light_blue);
+}
+
+.accordion-button[aria-expanded="true"] {
+    color:var(--light_gray);
+    background-color: var(--dark_blue);
 }

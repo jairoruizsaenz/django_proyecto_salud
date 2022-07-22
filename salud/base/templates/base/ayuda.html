@@ -1,7 +1,187 @@
+<!-- templates/ayuda.html -->
 {% extends 'base.html' %}
-{% block content %}
+{% load static %}
+{% block referencia %}ayuda.html{% endblock %}
+{% block title_1 %}Ayuda{% endblock %}
+{% block title_2 %}Ayuda{% endblock %}
 
-<h1>Hola</h1>
+{% block content %}
 <p>{{ mensaje }}</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        ¿Cual es el significado de cada indicador y cómo son medidos?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Debido a la gran cantidad de indicadores calculados en el desarrollo de este proyecto, se creó un boton azul con un signo de pregunta, que muestra los detalles de cada indicador. Para cada indicador se puede ver el nombre, la descripción, la fuente y el nombre de la variable en los archivos descargables. Esta funcionalidad está presente en las tres pestañas de desagregación: Departamento, Municipio y Manzana.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        ¿Por qué no están los mismos indicadores en los tres niveles de desagregación?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Esto se da principalmente en la dimensión de "Calidad", en donde la fuente de información es una encuesta con muestreo probabilístico. En este caso, las estimaciones son confiables solo a nivel departamental así que no se muestran a nivel municipal ni de manzana.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        ¿Por qué el departamento de San Andrés no tiene información en la dimensión de accesibilidad?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Esto se debe a la disponibilidad de la información. El cálculo de los indicadores de accessibilidad dependen de la red vial de los municipios, y en las islas no se tienen datos de este tipo.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        ¿Por qué la leyenda presenta a veces diferentes colores para los mismos valores?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Los colores y la leyenda del mapa se construyen a partir de los percentiles 0, 20, 40, 60 y 80 de los indicadores. En algunos indicadores, la mayoria de departamentos/municipios/manzanas se concentran alrededor cero o cien, y por esta razón los percentiles mencionados son iguales. Vale la pena aclarar que esto se debe estrictamente a la distribución de la variable de interés y que sucede pocas veces dentro del tablero.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        ¿Qué puedo comparar en la opción "comparar" de los mapas?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Cuando se selecciona la opción "comparar", se muestra un nuevo mapa con otro indicador. El propósito de esta funcionalidad consiste en poder comparar dos indicadores simultáneamente en el mismo territorio. Es importante notar que no es posible comparar dos territorios diferentes desde este tablero. Por esta razón se dejan disponibles los archivos descargables.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        ¿Es posible ver la ubicación de las sedes de las IPS en los mapas?
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        La opción para poder ver la ubicación de las sedes solo está presente en la pestaña de "Manzana". Allí, debajo de los botones que controlan el zoom de los mapas, aparece un boton que permite mostrar u ocultar las sedes. Cuando se muestran las sedes, se puede poner el cursor encima de las mismas para ver el nombre correspondiente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSeven">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        ¿Por qué en los indicadores de población sin cobertura de la pestaña de "Manzana" aparecen huecos en los polígonos?
+                    </button>
+                </h2>
+                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        En estos indicadores de población sin cobertura, los huecos representan las áreas de influencia de las sedes de las IPS. Esto significa que los polígonos que no aparecen en los mapas están cubiertos por dichas áreas, lo cual implica que la población tiene acceso a los servicios de salud. Por otro lado, las manzanas o secciones rurales que sí aparecen en el mapa, representan la población que no está siendo cubierta.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEight">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                        ¿Por qué los archivos a descargar están en diferentes formatos?
+                    </button>
+                </h2>
+                <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Esto se hace para conveniencia del usuario. Tener diferentes formatos da la flexibilidad de abrir los archivos en cualquier software. Para abrir estos archivos en un programa GIS, se recomiendan los geopackages.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingNine">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                        ¿Por qué no existe la opción de descargar los datos a nivel de manzana?
+                    </button>
+                </h2>
+                <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Debido a la gran cantidad de poligonos (manzanas y secciones rurales) que existen en este nivel de desagregación, el tamaño de los archivos es muy grande para habilitar la descarga desde el tablero (más de 7 GB). Si se requieren estos archivos, se pueden solicitar a la Subdirección de Salud.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTen">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                        ¿Por qué el tablero se demora en cargar alguna información?
+                    </button>
+                </h2>
+                <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        El tamaño de los archivos de insumo de este tablero depende del nivel de desagregación que se quiere visualizar. Entre mas desagregado, mayor tamaño y por esta razon mayor tiempo de procesamiento. La pestaña de "Manzanas" es la que mayor cantidad de información tiene, así que es la que más tiempo se demora en actualizar.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEleven">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                        ¿Por qué la población total de personas publicada por el DANE no es la misma que la que se presenta en este tablero?
+                    </button>
+                </h2>
+                <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Esto se debe al proceso de anonimización realizado por el DANE en las tablas de datos del Censo. En el documento "Descripción de niveles geográficos con la asociación de variables anonimizadas del CNPV 2018" publicado por el DANE, se explica el proceso de anonimización y la razón por la cual esto sucede. La población total oficial es de 44.2 millones de habitantes mientras que a nivel de manzana y seccion rural esta población es de 43.8 millones.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwelve">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                        Temp
+                    </button>
+                </h2>
+                <div id="collapseTwelve" class="accordion-collapse collapse" aria-labelledby="headingTwelve" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Temp ---
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThirteen">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
+                        Temp
+                    </button>
+                </h2>
+                <div id="collapseThirteen" class="accordion-collapse collapse" aria-labelledby="headingThirteen" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Temp ---
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
 
 {% endblock %}

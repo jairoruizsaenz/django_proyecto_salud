@@ -9,4 +9,5 @@ urlpatterns = [
     path('manzanas/', manzanas, name='manzanas'),
     path('ayuda/', ayuda, name='ayuda'),
     path('pruebas/', pruebas, name='pruebas'),
+    path('prueba_mapas/agregar_punto/', agregar_punto, name='agregar_punto'),
 ]
