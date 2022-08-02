@@ -4,10 +4,12 @@ from .views import *
 
 app_name = 'baseApp'
 urlpatterns = [
-    path('departamentos/', departamentos, name='departamentos'),
-    path('municipios/', municipios, name='municipios'),
-    path('manzanas/', manzanas, name='manzanas'),
+    path('nacional/', nacional, name='nacional'),
+    path('departamental/', departamental, name='departamental'),
+    path('municipal/', municipal, name='municipal'),
+    path('red/', red, name='red'),
     path('ayuda/', ayuda, name='ayuda'),
+    path('simulacion/', simulacion, name='simulacion'),
     path('pruebas/', pruebas, name='pruebas'),
     path('prueba_mapas/agregar_punto/', agregar_punto, name='agregar_punto'),
 ]

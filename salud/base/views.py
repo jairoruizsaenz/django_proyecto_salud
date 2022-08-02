@@ -3,19 +3,25 @@ from django.http import JsonResponse
 from .forms import Punto_Salud_Create_Form
 import random
 
-def departamentos(request):
-    context = { 'mensaje': 'Vista departamentos' }
-    return render(request, 'base/departamentos.html', context)
+
+def nacional(request):
+    context = { 'mensaje': 'Vista nacional' }
+    return render(request, 'base/nacional.html', context)
 
 
-def municipios(request):
-    context = { 'mensaje': 'Vista municipios' }
-    return render(request, 'base/municipios.html', context)
+def departamental(request):
+    context = { 'mensaje': 'Vista departamental' }
+    return render(request, 'base/departamental.html', context)
 
 
-def manzanas(request):
-    context = { 'mensaje': 'Vista manzanas' }
-    return render(request, 'base/manzanas.html', context)
+def municipal(request):
+    context = { 'mensaje': 'Vista municipal' }
+    return render(request, 'base/municipal.html', context)
+
+
+def red(request):
+    context = { 'mensaje': 'Vista red' }
+    return render(request, 'base/red.html', context)
 
 
 def ayuda(request):
@@ -24,6 +30,11 @@ def ayuda(request):
 
 
 def pruebas(request):
+    context = { 'mensaje': 'Vista pruebas' }
+    return render(request, 'base/pruebas.html', context)
+
+
+def simulacion(request):
 
 # def test_jairo(request, doc_temp_id):
     # http://127.0.0.1:8000/BP/test_jairo/5/
@@ -68,8 +79,8 @@ def pruebas(request):
     # context = {'doc_template':doc_template_instance, 'form': form}
     # return render(request, 'BP/test_jairo.html', context)   
 
-    context = { 'form':form, 'mensaje': 'Vista pruebas' }    
-    return render(request, 'base/pruebas.html', context)
+    context = { 'form':form, 'mensaje': 'Vista simulación' }    
+    return render(request, 'base/simulacion.html', context)
 
 
 def agregar_punto(request):

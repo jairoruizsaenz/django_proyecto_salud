@@ -3,124 +3,176 @@
 {% load static %}
 {% block referencia %}pruebas.html{% endblock %}
 {% block title_1 %}Pruebas{% endblock %}
-{% block title_2 %}Formulario nuevo punto de atención en salud{% endblock %}
+{% block title_2 %}Pruebas{% endblock %}
 
 {% block content %}
 <p>{{ mensaje }}</p>
 
-	<div class="row">
-		<div class="col-md-4">
-			{% comment %} <a class="boton" title="Agregar" href="{% url 'baseApp:crear-mapa' %}">Agregar <i class="fas fa-plus verde"></i></a> {% endcomment %}
-		</div>
-		<div class="col-md-8">
-		</div>
+{% comment %} <select class="form-select  form-select-sm" aria-label="Default select example">
+    <option selected>Open this select menu</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select> {% endcomment %}
+
+
+    <strong>PRESENTANDO - una sola ubicación</strong>
+    <div>
+        <ul>
+            <li>
+                se usa la misma lógica de "COMPARAR" pero para una sola ubicación
+            </li>
+            <li>
+                se presenta un indicador en el mapa como en la aplicación actual, al lado se presenta un radar con todos los indicadores de la dimensión seleccionada (normalizar, en el hover del puntico del radar colocar el valor sin normalizar)
+            </li>
+            <li>
+                en el dropdown de selección de Dimensiones incluir una opción de personlizado para escoger los indicadores de interes de cualquier dimensión (se tiene que abrir una opción para seleccionar los indicadores)
+            </li>
+            <li>
+                máximo 15* valores en el gráfico de radar
+            </li>
+            <li>
+                agregar tabla para reemplazar los gráficos de barras - <a href = "https://www.ag-grid.com/">https://www.ag-grid.com/</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <hr>
+    <strong>COMPARANDO - dos ubicaciones diferentes</strong>
+    <div>
+        <p>
+            tipo de comparación por mapa o gráfico 
+            https://plotly.com/python/radar-chart/radar
+            se plantea un dropdown para seleccionar si es por mapa o estrella (radar)
+        </p>
+        <ul>    
+            <li>opción mapa >> se muestran dos mapas</li>
+            <li>opción radar >> se muestran un gráfico > radar presentando los indicadores por cada dimensión predefinida (normalizar?)</li>
+            <li>opción radar >> se muestran un gráfico > radar seleccionado los indicadores de interes de cuálquier dimensión (normalizar?)</li>
+        </ul>
+    </div>
+    <p>
+        - presentar multiples ubicaciones  un indicador
+    </p>
+    <hr>
+    
+  <div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group" style="margin: 10px 0px;">
+                <label for="selection1">Tipo de visualización</label>
+                <select class="form-select  form-select-sm" aria-label="Default select example" id="selection1">
+                    <option value="1">Sencilla</option>
+                    <option value="2">Comparar 2 ubicaciones</option>
+                    <option value="3">Comparar 3 ubicaciones</option>                    
+                </select>
+            </div>
+    
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="selection1">Dimensión</label>
+                <select class="form-select  form-select-sm" aria-label="Default select example" id="selection2">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+    
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="selection1">Indicador</label>
+                <select class="form-select  form-select-sm" aria-label="Default select example" id="selection3">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="row">
+		<div class="col-md-6">
+            <div>
+                map1 - Departamental
+                <div id="map1" style="height: 480px;"></div>
+            </div>
+            
+            <form>
+                <div class="form-group" style="margin: 10px 0px;">
+                    <label for="selection1">Departamento</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection1">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </form>
+
+        </div>
+		<div class="col-md-6">
+            <div>
+                map2 - Municipal
+                <div id="map2" style="height: 480px;"></div>
+            </div> 
+
+            <form>
+                <div class="form-group" style="margin: 10px 0px;">
+                    <label for="selection1">Departamento</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection1">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </form>
+        </div>        
 	</div>
+    
+    <script>
+        function polystyle(feature) {
+            return {
+                fillColor: 'blue',
+                weight: 0.8,
+                opacity: 1,
+                color: 'white',  //Outline color
+                fillOpacity: 0.4
+            };
+        }
+                
+		var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);		
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map1);
 
-	<div class="row">
 
-		<div class="row col-md-5">
-			<form action="" method="POST">
-				{% csrf_token %}
-				{{ form }}
-				<br>
-				<button type="submit" class="btn btn-success"></i>Agregar punto de atención</button>
-				<button class="btn btn-danger"></i>Cancelar</button>
-			</form>	
-		</div>
+        // https://gist.github.com/john-guerra/43c7656821069d00dcbc
+        var polyData1 = 'http://127.0.0.1:8000/static/json/Colombia.geo.json'        
+        $.getJSON(polyData1, function (data) {
+            L.geoJson(data, {style: polystyle}).addTo(map1);
+            console.log(data);
+        });
+    </script>
 
-		<div class="row col-md-7">				
-			<div id="map" style="height: 560px;"></div>
-			<div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">https://leaflet-extras.github.io/leaflet-providers/preview/</a></div>
-			<div><a href="https://leafletjs.com/examples/quick-start/" target="_blank">https://leafletjs.com/examples/quick-start/</a></div>	
-		</div>
-
-	</div>
-	
-	<script>
-		var map = L.map('map').setView([4.683709901063048, -74.05116825770746], 16);
-		
+    <script>
+		var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 5);		
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+		}).addTo(map2);
 
-		{% comment %} 
-		var marker = L.marker([4.6825, -74.055]).addTo(map);
-
-		var circle = L.circle([4.6825, -74.055], {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.5,
-			radius: 100
-		}).addTo(map); 
-		{% endcomment %}
-
-		{% comment %} marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup(); {% endcomment %}
-		{% comment %} circle.bindPopup("I am a circle."); {% endcomment %}
-
-		var popup = L.popup();
-		function onMapClick(e) {
-			
-
-			// console.log(e.latlng.toString());
-			// console.log(e);
-
-			$.ajax({
-				url: '{% url "baseApp:agregar_punto" %}',
-				data: {'latitud': e.latlng.lat, 'longitud': e.latlng.lng},
-				dataType: 'json',
-
-				success: function (data) {
-					var latitud = JSON.parse(data.latitud);
-					var longitud = JSON.parse(data.longitud);
-					var radio = JSON.parse(data.radio);
-					var color = JSON.parse(JSON.stringify(data.color));
-
-					var circle = L.circle([latitud, longitud], {
-						color: color,
-						fillColor: color,
-						fillOpacity: 0.5,
-						radius: radio
-					}).addTo(map);
-
-					//circle.bindPopup(
-					circle.bindTooltip(
-						"<div class='leaflet-tooltip-own'>" +
-							"<p style='text-transform: uppercase;'><strong>Centro prestador de servicios médicos</strong></p>" +
-							"<table>" +
-								"<tr>" +
-									"<th>Variable</th>" +
-									"<th>Valor</th>" +
-								"</tr>" +
-								"<tr>" +
-									"<td><strong>Latitud:</strong></td>" +
-									"<td>" + latitud + "</td>" +
-								"</tr>" +
-								"<tr>" +
-									"<td><strong>Longitud:</strong></td>" +
-									"<td>" + longitud + "</td>" +
-								"</tr>" +
-								"<tr>" +
-									"<td><strong>Cobertura:</strong></td>" +
-									"<td>" + "<span style='color:red'>" + radio + ' metros</span>' + "</td>" +
-								"</tr>" +
-							"</table>" +
-						"</div>"
-					);
-
-					// popup
-					// 	.setLatLng(e.latlng)
-					// 	.setContent("Se agregó un punto en las coordenadas: <strong>" + latitud + ', ' + longitud + "</strong> con un radio de <span style='color:red'><strong>cobertura de " + radio + ' metros </strong></span>')
-					// 	.openOn(map);
-
-				},
-				error: function (res) {
-					console.log(res.responseText);
-				}
-			});
-		}
-
-		map.on('click', onMapClick);
-
+        // https://www.kaggle.com/datasets/alfredomaussa/mapa-de-colombia-con-municipios?resource=download&select=MunicipiosVeredas_2MB.json
+        var polyData2 = 'http://127.0.0.1:8000/static/json/MunicipiosVeredas_2MB.json'
+        $.getJSON(polyData2, function (data) {
+            L.geoJson(data, {style: polystyle}).addTo(map2);
+            console.log(data);
+        });
     </script>
 {% endblock %}

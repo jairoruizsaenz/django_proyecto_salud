@@ -1,0 +1,126 @@
+<!-- templates/pruebas.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block referencia %}pruebas.html{% endblock %}
+{% block title_1 %}Pruebas{% endblock %}
+{% block title_2 %}Formulario nuevo punto de atención en salud{% endblock %}
+
+{% block content %}
+<p>{{ mensaje }}</p>
+
+	<div class="row">
+		<div class="col-md-4">
+			{% comment %} <a class="boton" title="Agregar" href="{% url 'baseApp:crear-mapa' %}">Agregar <i class="fas fa-plus verde"></i></a> {% endcomment %}
+		</div>
+		<div class="col-md-8">
+		</div>
+	</div>
+
+	<div class="row">
+
+		<div class="col-md-5">
+			<form action="" method="POST">
+				{% csrf_token %}
+				{{ form }}
+				<br>
+				<button type="submit" class="btn btn-success"></i>Agregar punto de atención</button>
+				<button class="btn btn-danger"></i>Cancelar</button>
+			</form>	
+		</div>
+
+		<div class="col-md-7">				
+			<div id="map" style="height: 560px;"></div>
+			<div><a href="https://leaflet-extras.github.io/leaflet-providers/preview/" target="_blank">https://leaflet-extras.github.io/leaflet-providers/preview/</a></div>
+			<div><a href="https://leafletjs.com/examples/quick-start/" target="_blank">https://leafletjs.com/examples/quick-start/</a></div>	
+		</div>
+
+	</div>
+	
+	<script>
+		var map = L.map('map').setView([4.683709901063048, -74.05116825770746], 16);
+		
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
+
+		{% comment %} 
+		var marker = L.marker([4.6825, -74.055]).addTo(map);
+
+		var circle = L.circle([4.6825, -74.055], {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5,
+			radius: 100
+		}).addTo(map); 
+		{% endcomment %}
+
+		{% comment %} marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup(); {% endcomment %}
+		{% comment %} circle.bindPopup("I am a circle."); {% endcomment %}
+
+		var popup = L.popup();
+		function onMapClick(e) {
+			
+
+			// console.log(e.latlng.toString());
+			// console.log(e);
+
+			$.ajax({
+				url: '{% url "baseApp:agregar_punto" %}',
+				data: {'latitud': e.latlng.lat, 'longitud': e.latlng.lng},
+				dataType: 'json',
+
+				success: function (data) {
+					var latitud = JSON.parse(data.latitud);
+					var longitud = JSON.parse(data.longitud);
+					var radio = JSON.parse(data.radio);
+					var color = JSON.parse(JSON.stringify(data.color));
+
+					var circle = L.circle([latitud, longitud], {
+						color: color,
+						fillColor: color,
+						fillOpacity: 0.5,
+						radius: radio
+					}).addTo(map);
+
+					//circle.bindPopup(
+					circle.bindTooltip(
+						"<div class='leaflet-tooltip-own'>" +
+							"<p style='text-transform: uppercase;'><strong>Centro prestador de servicios médicos</strong></p>" +
+							"<table>" +
+								"<tr>" +
+									"<th>Variable</th>" +
+									"<th>Valor</th>" +
+								"</tr>" +
+								"<tr>" +
+									"<td><strong>Latitud:</strong></td>" +
+									"<td>" + latitud + "</td>" +
+								"</tr>" +
+								"<tr>" +
+									"<td><strong>Longitud:</strong></td>" +
+									"<td>" + longitud + "</td>" +
+								"</tr>" +
+								"<tr>" +
+									"<td><strong>Cobertura:</strong></td>" +
+									"<td>" + "<span style='color:red'>" + radio + ' metros</span>' + "</td>" +
+								"</tr>" +
+							"</table>" +
+						"</div>"
+					);
+
+					// popup
+					// 	.setLatLng(e.latlng)
+					// 	.setContent("Se agregó un punto en las coordenadas: <strong>" + latitud + ', ' + longitud + "</strong> con un radio de <span style='color:red'><strong>cobertura de " + radio + ' metros </strong></span>')
+					// 	.openOn(map);
+
+				},
+				error: function (res) {
+					console.log(res.responseText);
+				}
+			});
+		}
+
+		map.on('click', onMapClick);
+
+    </script>
+{% endblock %}
