@@ -185,7 +185,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map1);
 
-        var polyData1 = 'http://127.0.0.1:8000/static/json/MunicipiosVeredas_2MB.json'
+        var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         $.getJSON(polyData1, function (data) {
             L.geoJson(data, {style: polystyle}).addTo(map1);
             // console.log(data);
@@ -199,7 +199,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map2);
 
-        var polyData2 = 'http://127.0.0.1:8000/static/json/MunicipiosVeredas_2MB.json'
+        var polyData2 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         $.getJSON(polyData2, function (data) {
             L.geoJson(data, {style: polystyle}).addTo(map2);
             // console.log(data);
@@ -212,8 +212,8 @@
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map3);
-
-        var polyData3 = 'http://127.0.0.1:8000/static/json/MunicipiosVeredas_2MB.json'
+        
+        var polyData3 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         $.getJSON(polyData3, function (data) {
             L.geoJson(data, {style: polystyle}).addTo(map3);
             // console.log(data);
