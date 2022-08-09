@@ -15,9 +15,11 @@ body {
     padding-top: 70px;
 }
 
-/* .hidden{
+/*
+.hidden{
     display: none;
-} */
+}
+*/
 
 .hidden {
     overflow: hidden;  /* Hide the element content, while height = 0 */

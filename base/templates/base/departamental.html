@@ -9,21 +9,21 @@
 <p>{{ mensaje }}</p>
 
     <div class="row">
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="selection_tipo_grafico">Tipo de gráfico</label>
-                <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_tipo_grafico" onchange="controlObjetos()">
-                    <option value="map" selected>Mapa</option>
-                    <option value="radar">Radar</option>
-                </select>
-            </div>
-        </div>
         <div class="col-md-2" style="margin-top: 25px">
             <div class="form-group">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="compareCheck" onclick="controlObjetos()">
                     <label class="form-check-label" for="compareCheck">Comparar</label>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4 hidden" id="selection_tipo_grafico_group">
+            <div class="form-group">
+                <label class="d-inline-block" for="selection_tipo_grafico">Tipo de gráfico</label>
+                <select class="form-select form-select-sm d-inline-block" aria-label="Default select example" id="selection_tipo_grafico" onclick="controlObjetos()">
+                    <option value="map" selected>Mapa</option>
+                    <option value="radar">Radar</option>
+                </select>
             </div>
         </div>
     </div>
@@ -37,18 +37,18 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1">
-                        <option value="0" selected>----------</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph()">
+                        {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
+                        <option value="05" selected>Antioquia</option>
+                        <option value="08">Atlántico</option>
+                        <option value="23">Córdoba</option>
                     </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" onchange="updateGraph()">
                         <option value="accesibilidad" selected>Accesibilidad</option>
                         <option value="calidad">Calidad</option>
                         <option value="disponibilidad">Disponibilidad</option>
@@ -60,7 +60,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph()">
                         <option value="0" selected>----------</option>
                         {% comment %} 
                         <option value="1">One</option>
@@ -94,16 +94,16 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_2">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2">
-                        <option value="0" selected>----------</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2" onchange="updateGraph()">
+                        <option value="0" selected>Todos</option>
+                        <option value="05">Antioquia</option>
+                        <option value="08">Atlántico</option>
+                        <option value="23">Córdoba</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_2">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" onchange="updateGraph()">
                         <option value="accesibilidad" selected>Accesibilidad</option>
                         <option value="calidad">Calidad</option>
                         <option value="disponibilidad">Disponibilidad</option>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" onchange="updateGraph()">
                         <option selected>----------</option>
                         {% comment %} 
                         <option value="1">One</option>
@@ -130,16 +130,16 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_3">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3">
-                        <option value="0" selected>----------</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3" onchange="updateGraph()">
+                        <option value="0" selected>Todos</option>
+                        <option value="05">Antioquia</option>
+                        <option value="08">Atlántico</option>
+                        <option value="23">Córdoba</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_3">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" onchange="updateGraph()">
                         <option value="accesibilidad" selected>Accesibilidad</option>
                         <option value="calidad">Calidad</option>
                         <option value="disponibilidad">Disponibilidad</option>
@@ -149,7 +149,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" onchange="updateGraph()">
                         <option selected>----------</option>
                         {% comment %} 
                         <option value="1">One</option>
@@ -174,10 +174,10 @@
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_5">
-                        <option value="0" selected>----------</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
+                        <option value="0" selected>Todos</option>
+                        <option value="05">Antioquia</option>
+                        <option value="08">Atlántico</option>
+                        <option value="23">Córdoba</option>
                     </select>
                 </div>
             </div>
@@ -237,7 +237,6 @@
         </div>
     </div>
 
-
     <script>
         function controlObjetos() {
             var section1 = document.getElementById("section1"); // Presentar - Mapa
@@ -247,10 +246,18 @@
             var tipo_grafico = document.getElementById('selection_tipo_grafico');
             var tipo_grafico_value = tipo_grafico.options[tipo_grafico.selectedIndex].value;
             
+            var selection_tipo_grafico_group = document.getElementById('selection_tipo_grafico_group');
+            
             var compareCheck = document.getElementById('compareCheck');
             var compareCheck_value = compareCheck.checked;
 
-            console.log('tipo_grafico:', tipo_grafico_value, ' - ', 'compareCheck:', compareCheck_value);
+            if (compareCheck_value) {
+                selection_tipo_grafico_group.classList.add("visible");
+                selection_tipo_grafico_group.classList.remove("hidden");
+            } else {
+                selection_tipo_grafico_group.classList.add("hidden");
+                selection_tipo_grafico_group.classList.remove("visible");
+            }
 
             section1.classList.remove("visible");
             section2.classList.remove("visible");            
@@ -260,28 +267,32 @@
             section2.classList.add("hidden");            
             section4.classList.add("hidden");
 
-            if (tipo_grafico_value == 'map' && compareCheck_value == false ) {
+            if (compareCheck_value == false) {
+                // console.log('Map - show')
                 section1.classList.add("visible");
-                section1.classList.remove("hidden");
-            } else if (tipo_grafico_value == 'map' && compareCheck_value == true ) {
-                section2.classList.add("visible");
-                section2.classList.remove("hidden");
-            } else if (tipo_grafico_value == 'radar' && compareCheck_value == true ) {
-                section4.classList.add("visible");
-                section4.classList.remove("hidden");
+                section1.classList.remove("hidden");                
             } else {
-                console.log('Error - controlObjetos()');
-            }
+
+                if (tipo_grafico_value == 'map') {
+                    // console.log('Map - compare')
+                    section2.classList.add("visible");
+                    section2.classList.remove("hidden");                
+                } else if (tipo_grafico_value == 'radar') {
+                    // console.log('Radar - compare')
+                    section4.classList.add("visible");
+                    section4.classList.remove("hidden");                
+                }
+            }            
         };
         controlObjetos();
     </script>
     
     <script>        
         function indicadorPersonalizado() {
-            console.log('indicadorPersonalizado()');
+            // console.log('indicadorPersonalizado()');
             var dimension = document.getElementById('selection_dimension_5');
             var dimension_value = dimension.options[dimension.selectedIndex].value;
-            console.log(dimension_value);
+            // console.log(dimension_value);
             
             var nueva_selection_indicador = document.getElementById("section5");
             section5.classList.remove("visible");
@@ -299,29 +310,75 @@
         indicadorPersonalizado()
     </script>
 
+
+    <script>
+        function indicadorPersonalizado() {
+            var selection_departamento_1 = document.getElementById("selection_departamento_1");          
+        };
+        indicadorPersonalizado();
+
+        function customFilter(elemento) {
+            return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
+        }
+    </script>
+
     <script>
         function polystyle(feature) {
             return {
-                fillColor: 'blue',
+                fillColor: 'red',
                 weight: 0.8,
                 opacity: 1,
                 color: 'white',  //Outline color
                 fillOpacity: 0.4
             };
         }
-                
-        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map1);
 
+        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
+
+        var layerGroup = L.layerGroup().addTo(map1);
         var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-        $.getJSON(polyData1, function (data) {
-            L.geoJson(data, {style: polystyle}).addTo(map1);
-            // console.log(data);
-        });
+        
+        function updateGraph() {
+            console.log("updateGraph");
+            layerGroup.clearLayers();
+
+            $.getJSON(polyData1, function (data) {
+                var filtered_data = data['features'].filter(customFilter)
+                L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
+            });
+        }
+        updateGraph();
     </script>
+
+    {% comment %} <script>
+        function polystyle(feature) {
+            return {
+                fillColor: 'red',
+                weight: 0.8,
+                opacity: 1,
+                color: 'white',  //Outline color
+                fillOpacity: 0.4
+            };
+        }
+
+        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
+
+        var layerGroup = L.layerGroup().addTo(map1);
+        var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
+        
+        function updateGraph() {
+            console.log("updateGraph");
+            layerGroup.clearLayers();
+
+            $.getJSON(polyData1, function (data) {
+                var filtered_data = data['features'].filter(customFilter)
+                L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
+            });
+        }
+        updateGraph();
+    </script> {% endcomment %}
 
     <script>
         var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 5);
@@ -352,54 +409,56 @@
     </script>
 
     <script>
-        data = [{
-            type: 'scatterpolar',
-            r: [39, 28, 8, 7, 28, 39],
-            theta: ['A','B','C', 'D', 'E', 'A'],
-            fill: 'toself'
-          }]
+        data = [
+            {
+                type: 'scatterpolar',
+                r: [39, 28, 8, 7, 28, 39],
+                theta: ['A','B','C', 'D', 'E', 'A'],
+                fill: 'toself'
+            }
+        ]
           
         layout = {
-        polar: {
-            radialaxis: {
-            visible: true,
-            range: [0, 50]
-            }
-        },
-        showlegend: false
+            polar: {
+                radialaxis: {
+                    visible: true,
+                    range: [0, 50]
+                }
+            },
+            showlegend: false
         }
           
         Plotly.newPlot("radar1", data, layout)
     </script>
 
     <script>
-    data = [
-        {
-            type: 'scatterpolar',
-            r: [39, 28, 8, 7, 28, 39],
-            theta: ['A','B','C', 'D', 'E', 'A'],
-            fill: 'toself',
-            name: 'Group A'
-        },
-        {
-            type: 'scatterpolar',
-            r: [1.5, 10, 39, 31, 15, 1.5],
-            theta: ['A','B','C', 'D', 'E', 'A'],
-            fill: 'toself',
-            name: 'Group B'
+        data = [
+            {
+                type: 'scatterpolar',
+                r: [39, 28, 8, 7, 28, 39],
+                theta: ['A','B','C', 'D', 'E', 'A'],
+                fill: 'toself',
+                name: 'Group A'
+            },
+            {
+                type: 'scatterpolar',
+                r: [1.5, 10, 39, 31, 15, 1.5],
+                theta: ['A','B','C', 'D', 'E', 'A'],
+                fill: 'toself',
+                name: 'Group B'
+            }
+        ]
+            
+        layout = {
+            polar: {
+                radialaxis: {
+                    visible: true,
+                    range: [0, 50]
+                }
+            }
         }
-      ]
-      
-      layout = {
-        polar: {
-          radialaxis: {
-            visible: true,
-            range: [0, 50]
-          }
-        }
-      }
-      
-      Plotly.newPlot("radar2", data, layout)
+            
+        Plotly.newPlot("radar2", data, layout)
     </script>
-    
+
 {% endblock %}
