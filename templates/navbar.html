@@ -13,13 +13,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <a class="navbar-brand abs" href=""></a>
             <ul class="navbar-nav ms-auto">                
-                {% if request.user.is_authenticated %}
+                {% comment %} {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Hola {{ request.user.first_name|title }} ({{ request.user.username }})</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
-                {% else %}
+                {% else %} {% endcomment %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:nacional' %}">Nacional</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:departamental' %}">Departamental</a></li>
@@ -28,7 +28,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:red' %}">Red</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:ayuda' %}">Ayuda</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:pruebas' %}">pruebas</a></li>
-                {% endif %}
+                {% comment %} {% endif %} {% endcomment %}
             </ul>
         </div>
     </div>

@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Punto_Salud(models.Model):
     
     departamento = models.CharField(null=False, default='', max_length=255)
@@ -34,3 +33,20 @@ class Punto_Salud(models.Model):
 
     # def __str__(self):
     #     return str(self.pk)
+
+
+class Departamento(models.Model):    
+    divipola = models.CharField(max_length=2, unique=True)
+    nombre = models.CharField(null=False, default='', max_length=255)
+    
+    def __str__(self):
+        return self.nombre
+
+
+class Municipio(models.Model):
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+    divipola = models.CharField(max_length=5, unique=True)
+    nombre = models.CharField(null=False, default='', max_length=255)
+    
+    def __str__(self):
+        return f"{self.nombre} ({self.departamento.nombre})"

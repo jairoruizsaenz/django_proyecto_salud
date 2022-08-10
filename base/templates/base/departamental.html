@@ -33,15 +33,16 @@
     <!-- Presentar - Mapa -->
     <div id="section1">
         <div class="row">
-            <p style="color:red;">section1</p>
+            <p style="color:red;">section1</p>            
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph()">
                         {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
-                        <option value="05" selected>Antioquia</option>
-                        <option value="08">Atlántico</option>
-                        <option value="23">Córdoba</option>
+                        <option value="00" selected>Todos</option>
+                        {% for dep in lista_departamentos %}
+                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -95,10 +96,10 @@
                 <div class="form-group">
                     <label for="selection_departamento_2">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2" onchange="updateGraph()">
-                        <option value="0" selected>Todos</option>
-                        <option value="05">Antioquia</option>
-                        <option value="08">Atlántico</option>
-                        <option value="23">Córdoba</option>
+                        <option value="00" selected>Todos</option>                        
+                        {% for dep in lista_departamentos %}
+                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
@@ -131,10 +132,10 @@
                 <div class="form-group">
                     <label for="selection_departamento_3">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3" onchange="updateGraph()">
-                        <option value="0" selected>Todos</option>
-                        <option value="05">Antioquia</option>
-                        <option value="08">Atlántico</option>
-                        <option value="23">Córdoba</option>
+                        <option value="00" selected>Todos</option>
+                        {% for dep in lista_departamentos %}
+                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
@@ -167,23 +168,23 @@
     </div>
 
     <!-- Comparar - Radar -->
-    <div id="section4">
+    <div id="section3">
         <div class="row">
-            <p style="color:red;">section4</p>
+            <p style="color:red;">section3</p>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="selection_departamento_1">Departamento</label>
+                    <label for="selection_departamento_5">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_5">
-                        <option value="0" selected>Todos</option>
-                        <option value="05">Antioquia</option>
-                        <option value="08">Atlántico</option>
-                        <option value="23">Córdoba</option>
+                        <option value="00" selected>Todos</option>
+                        {% for dep in lista_departamentos %}
+                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="selection_dimension_1">Dimensión</label>
+                    <label for="selection_dimension_5">Dimensión</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" onchange="indicadorPersonalizado()">
                         <option value="accesibilidad" selected>Accesibilidad</option>
                         <option value="calidad">Calidad</option>
@@ -196,7 +197,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="selection_indicador_1">Indicador</label>
+                    <label for="selection_indicador_5">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_5">
                         <option value="0" selected>----------</option>
                         {% comment %} 
@@ -241,7 +242,7 @@
         function controlObjetos() {
             var section1 = document.getElementById("section1"); // Presentar - Mapa
             var section2 = document.getElementById("section2"); // Comparar  - Mapa            
-            var section4 = document.getElementById("section4"); // Comparar  - Radar
+            var section3 = document.getElementById("section3"); // Comparar  - Radar
 
             var tipo_grafico = document.getElementById('selection_tipo_grafico');
             var tipo_grafico_value = tipo_grafico.options[tipo_grafico.selectedIndex].value;
@@ -261,11 +262,11 @@
 
             section1.classList.remove("visible");
             section2.classList.remove("visible");            
-            section4.classList.remove("visible");
+            section3.classList.remove("visible");
 
             section1.classList.add("hidden");
             section2.classList.add("hidden");            
-            section4.classList.add("hidden");
+            section3.classList.add("hidden");
 
             if (compareCheck_value == false) {
                 // console.log('Map - show')
@@ -279,8 +280,8 @@
                     section2.classList.remove("hidden");                
                 } else if (tipo_grafico_value == 'radar') {
                     // console.log('Radar - compare')
-                    section4.classList.add("visible");
-                    section4.classList.remove("hidden");                
+                    section3.classList.add("visible");
+                    section3.classList.remove("hidden");                
                 }
             }            
         };
@@ -317,7 +318,7 @@
         };
         indicadorPersonalizado();
 
-        function customFilter(elemento) {
+        function filtroDepartamental(elemento) {
             return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
         }
     </script>
@@ -344,7 +345,11 @@
             layerGroup.clearLayers();
 
             $.getJSON(polyData1, function (data) {
-                var filtered_data = data['features'].filter(customFilter)
+                if (selection_departamento_1.value == '00') {
+                    var filtered_data = data
+                } else {
+                    var filtered_data = data['features'].filter(filtroDepartamental)
+                }
                 L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
             });
         }
@@ -373,7 +378,7 @@
             layerGroup.clearLayers();
 
             $.getJSON(polyData1, function (data) {
-                var filtered_data = data['features'].filter(customFilter)
+                var filtered_data = data['features'].filter(filtroDepartamental)
                 L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
             });
         }

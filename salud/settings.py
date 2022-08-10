@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-mx5rd55m%2qkqxi!l$nn)x0xk696wa&_i8l@ch0e4cj&8)x+5d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'import_export',
     'base.apps.BaseConfig',
     'django.contrib.admin',
     'django.contrib.auth',
