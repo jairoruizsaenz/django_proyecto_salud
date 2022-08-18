@@ -1,7 +1,6 @@
 from django.db import models
 
-class Punto_Salud(models.Model):
-    
+class Punto_Salud(models.Model):    
     departamento = models.CharField(null=False, default='', max_length=255)
     municipio = models.CharField(null=False, default='', max_length=255)
     direccion = models.CharField(verbose_name='Dirección',null=False, default='', max_length=255)
@@ -50,3 +49,27 @@ class Municipio(models.Model):
     
     def __str__(self):
         return f"{self.nombre} ({self.departamento.nombre})"
+
+
+class Dimension(models.Model):    
+    nombre = models.CharField(null=False, default='', max_length=255)
+    
+    class Meta:
+        verbose_name = "Dimensión"
+        verbose_name_plural = "Dimensiones"
+
+    def __str__(self):
+        return self.nombre
+
+
+class Indicador(models.Model):
+    dimension = models.ForeignKey(Dimension, on_delete=models.CASCADE)
+    nombre = models.CharField(null=False, default='', max_length=255)
+    
+    class Meta:
+        verbose_name = "Indicador"
+        verbose_name_plural = "Indicadores"
+
+    def __str__(self):
+        return f"{self.nombre} ({self.dimension.nombre})"
+    

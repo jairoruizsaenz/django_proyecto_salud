@@ -6,8 +6,7 @@
 {% block title_2 %}Departamental{% endblock %}
 
 {% block content %}
-<p>{{ mensaje }}</p>
-
+    <p>{{ mensaje }}</p>    
     <div class="row">
         <div class="col-md-2" style="margin-top: 25px">
             <div class="form-group">
@@ -39,8 +38,8 @@
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph()">
                         {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
-                        <option value="00" selected>Todos</option>
-                        {% for dep in lista_departamentos %}
+                        <option value="todos" selected>Todos</option>
+                        {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                         {% endfor %}
                     </select>
@@ -49,12 +48,10 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" onchange="updateGraph()">
-                        <option value="accesibilidad" selected>Accesibilidad</option>
-                        <option value="calidad">Calidad</option>
-                        <option value="disponibilidad">Disponibilidad</option>
-                        <option value="poblacion">Población</option>
-                        <option value="utilizacion">Utilización</option>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                        {% for dimension in dimensiones %}
+                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -62,7 +59,7 @@
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph()">
-                        <option value="0" selected>----------</option>
+                        <option value="0" selected>pruebas</option>
                         {% comment %} 
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -96,31 +93,24 @@
                 <div class="form-group">
                     <label for="selection_departamento_2">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2" onchange="updateGraph()">
-                        <option value="00" selected>Todos</option>                        
-                        {% for dep in lista_departamentos %}
+                        <option value="todos" selected>Todos</option>                        
+                        {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_2">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" onchange="updateGraph()">
-                        <option value="accesibilidad" selected>Accesibilidad</option>
-                        <option value="calidad">Calidad</option>
-                        <option value="disponibilidad">Disponibilidad</option>
-                        <option value="poblacion">Población</option>
-                        <option value="utilizacion">Utilización</option>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                        {% for dimension in dimensiones %}
+                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" onchange="updateGraph()">
-                        <option selected>----------</option>
-                        {% comment %} 
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
-                        {% endcomment %}
+                        <option value="0" selected>pruebas</option>
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -132,31 +122,24 @@
                 <div class="form-group">
                     <label for="selection_departamento_3">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3" onchange="updateGraph()">
-                        <option value="00" selected>Todos</option>
-                        {% for dep in lista_departamentos %}
+                        <option value="todos" selected>Todos</option>
+                        {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_3">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" onchange="updateGraph()">
-                        <option value="accesibilidad" selected>Accesibilidad</option>
-                        <option value="calidad">Calidad</option>
-                        <option value="disponibilidad">Disponibilidad</option>
-                        <option value="poblacion">Población</option>
-                        <option value="utilizacion">Utilización</option>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                        {% for dimension in dimensiones %}
+                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" onchange="updateGraph()">
-                        <option selected>----------</option>
-                        {% comment %} 
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
-                        {% endcomment %}
+                        <option value="0" selected>pruebas</option>
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -175,8 +158,8 @@
                 <div class="form-group">
                     <label for="selection_departamento_5">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_5">
-                        <option value="00" selected>Todos</option>
-                        {% for dep in lista_departamentos %}
+                        <option value="todos" selected>Todos</option>
+                        {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                         {% endfor %}
                     </select>
@@ -185,12 +168,10 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_5">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" onchange="indicadorPersonalizado()">
-                        <option value="accesibilidad" selected>Accesibilidad</option>
-                        <option value="calidad">Calidad</option>
-                        <option value="disponibilidad">Disponibilidad</option>
-                        <option value="poblacion">Población</option>
-                        <option value="utilizacion">Utilización</option>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()">
+                        {% for dimension in dimensiones %}
+                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                        {% endfor %}
                         <option value="personalizado">Personalizado</option>
                     </select>
                 </div>
@@ -199,29 +180,19 @@
                 <div class="form-group">
                     <label for="selection_indicador_5">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_5">
-                        <option value="0" selected>----------</option>
-                        {% comment %} 
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
-                        {% endcomment %}
+                        <option value="0" selected>pruebas</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div id="section5">
-            <div class="row">
+        <div id="section4">
+            <div class="row mt-1">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="selection_dimension_1">Indicador</label>
                         <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_6" onchange="indicadorPersonalizado()">
-                            <option value="0" selected>----------</option>
-                            {% comment %} 
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option> 
-                            {% endcomment %}
+                            <option value="0" selected>pruebas</option>
                         </select>
                     </div>
                 </div>
@@ -295,14 +266,14 @@
             var dimension_value = dimension.options[dimension.selectedIndex].value;
             // console.log(dimension_value);
             
-            var nueva_selection_indicador = document.getElementById("section5");
-            section5.classList.remove("visible");
-            section5.classList.add("hidden");
+            var nueva_selection_indicador = document.getElementById("section4");
+            section4.classList.remove("visible");
+            section4.classList.add("hidden");
 
             if (dimension_value == 'personalizado') {
                 document.getElementById("selection_indicador_5").disabled = true;
-                section5.classList.remove("hidden");
-                section5.classList.add("visible");
+                section4.classList.remove("hidden");
+                section4.classList.add("visible");
             } else {
                 document.getElementById("selection_indicador_5").disabled = false;
             }
@@ -311,13 +282,7 @@
         indicadorPersonalizado()
     </script>
 
-
     <script>
-        function indicadorPersonalizado() {
-            var selection_departamento_1 = document.getElementById("selection_departamento_1");          
-        };
-        indicadorPersonalizado();
-
         function filtroDepartamental(elemento) {
             return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
         }
@@ -341,11 +306,11 @@
         var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         
         function updateGraph() {
-            console.log("updateGraph");
+            // console.log("updateGraph");
             layerGroup.clearLayers();
 
             $.getJSON(polyData1, function (data) {
-                if (selection_departamento_1.value == '00') {
+                if (selection_departamento_1.value == 'todos') {
                     var filtered_data = data
                 } else {
                     var filtered_data = data['features'].filter(filtroDepartamental)
@@ -464,6 +429,39 @@
         }
             
         Plotly.newPlot("radar2", data, layout)
+    </script>
+
+    <script>
+        // Actualización de dropdownlist
+        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+        
+        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
+            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
+            var url = "{% url 'baseApp:ajax_load_indicadores' %}";
+            var dimensionId = $(dimension_dropdown_id).val();
+
+            if (dimensionId == 'personalizado') {
+                $(indicador_dropdown_id).html('<option value="">----------</option>');
+            } else {
+                $.ajax({
+                    url: url,
+                    data: { 'dimensionId': dimensionId },
+                    success: function (data) {
+                        $(indicador_dropdown_id).html(data);
+                    }
+                });
+            }
+        }
+        
+        $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); });
+        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
+        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
+        $("#selection_dimension_5").change(function () { update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5"); });
+
+        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
+        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
+        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
+        update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
     </script>
 
 {% endblock %}

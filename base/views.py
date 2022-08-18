@@ -17,6 +17,17 @@ from .models import *
 
 #     return HttpResponse('Carga de datos completa')
 
+def load_indicadores(request):
+    dimension_id = request.GET.get('dimensionId')
+    indicadores = Indicador.objects.filter(dimension_id=dimension_id).order_by('nombre')
+    return render(request, 'base/items_dropdown_list_options.html', {'items': indicadores})
+
+
+def load_municipios(request):
+    departamento_id = request.GET.get('departamentoId')
+    municipios = Municipio.objects.filter(departamento__divipola=departamento_id).order_by('nombre')
+    return render(request, 'base/items_dropdown_list_options.html', {'items': municipios})
+
 
 def nacional(request):
     context = { 'mensaje': 'Vista nacional' }
@@ -24,18 +35,26 @@ def nacional(request):
 
 
 def departamental(request):
-    lista_departamentos = Departamento.objects.all()
-    # lista_departamentos = departamentos.values_list('divipola', 'nombre', flat=False)
-
+    departamentos = Departamento.objects.all()
+    dimensiones = Dimension.objects.all()
+    
     context = { 
         'mensaje':'Vista departamental',
-        'lista_departamentos':lista_departamentos
+        'departamentos':departamentos,
+        'dimensiones':dimensiones
     }
     return render(request, 'base/departamental.html', context)
 
 
 def municipal(request):
-    context = { 'mensaje': 'Vista municipal' }
+    departamentos = Departamento.objects.all()
+    dimensiones = Dimension.objects.all()
+    
+    context = { 
+        'mensaje':'Vista municipal',
+        'departamentos':departamentos,
+        'dimensiones':dimensiones
+    }
     return render(request, 'base/municipal.html', context)
 
 

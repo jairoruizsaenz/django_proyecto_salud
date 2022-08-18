@@ -11,5 +11,7 @@ class MunicipioAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 # admin.site.register(Question, QuestionAdmin)
 admin.site.register(Punto_Salud)
+admin.site.register(Dimension)
+admin.site.register(Indicador)
 admin.site.register(Departamento, DepartamentoAdmin)
 admin.site.register(Municipio, MunicipioAdmin)
