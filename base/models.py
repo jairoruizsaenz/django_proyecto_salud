@@ -22,6 +22,10 @@ class Punto_Salud(models.Model):
     TIPO_SERVICIOS_CHOICES =(('Primario', 'Primario'), ('Complementario', 'Complementario'))
     tipo_servicios = models.CharField(verbose_name='Tipo de servicios', choices=TIPO_SERVICIOS_CHOICES, max_length=14, default='-')
 
+    class Meta:
+        verbose_name = "Punto de salud"
+        verbose_name_plural = "Puntos de salud"
+
     # def save(self, *args, **kwargs):
     #     try:
     #         this = Doc_Template.objects.get(id=self.id)
