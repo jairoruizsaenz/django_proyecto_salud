@@ -21,6 +21,17 @@ body {
 }
 */
 
+#multipleSelect {
+    max-width: 100%;
+    width: 100%;
+}
+
+.vscomp-toggle-button {
+    padding: 10px 30px 10px 10px;
+    border-radius: 5px;
+    max-height: 31px !important;
+}
+
 .hidden {
     overflow: hidden;  /* Hide the element content, while height = 0 */
     height: 0;

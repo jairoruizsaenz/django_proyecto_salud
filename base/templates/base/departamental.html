@@ -29,6 +29,20 @@
 
     <hr>
 
+    {% comment %} jairo {% endcomment %}
+    <div class="form-group">
+        <label for="selection_dimension_1">Indicadores</label>
+        <div>
+            <select id="multipleSelect" multiple name="native-select" placeholder="Indicadores" data-search="true" data-silent-initial-value-set="true"> <!-- tiene EventListener abajo-->
+                {% for item in indicadores %}
+                    <option value="{{ item.pk }}">({{ item.dimension}}) {{ item.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <hr>
+
     <!-- Presentar - Mapa -->
     <div id="section1">
         <div class="row">
@@ -189,12 +203,7 @@
         <div id="section4">
             <div class="row mt-1">
                 <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="selection_dimension_1">Indicador</label>
-                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_6" onchange="indicadorPersonalizado()">
-                            <option value="0" selected>pruebas</option>
-                        </select>
-                    </div>
+                    {% comment %} jairo {% endcomment %}
                 </div>
             </div>
         </div>
@@ -259,12 +268,35 @@
         controlObjetos();
     </script>
     
-    <script>        
+    <script>
+        var selection = [];
+        // lectura de indicadores en formato json para el multiselect
+        var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
+
+        function filtroMultiselect(elemento) { 
+            return selection.includes(elemento.pk.toString());
+        }
+        
         function indicadorPersonalizado() {
-            // console.log('indicadorPersonalizado()');
+            // console.log('function indicadorPersonalizado()');
             var dimension = document.getElementById('selection_dimension_5');
             var dimension_value = dimension.options[dimension.selectedIndex].value;
-            // console.log(dimension_value);
+                
+            selection = $('#multipleSelect').val();
+            var data_multiselect = indicadores_json.filter(filtroMultiselect)
+
+            var selection__ind_pk = [];
+            var selection__ind_name = [];
+            for(var i=0; i < data_multiselect.length; i++){
+               selection__ind_pk.push(data_multiselect[i].pk);
+               selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
+            }
+
+            console.log('-----')
+            console.log('selection:', selection)
+            console.log('data_multiselect:', data_multiselect)
+            console.log('selection__ind_pk:', selection__ind_pk)
+            console.log('selection__ind_name:', selection__ind_name)
             
             var nueva_selection_indicador = document.getElementById("section4");
             section4.classList.remove("visible");
@@ -452,7 +484,7 @@
                 });
             }
         }
-        
+
         $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); });
         $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
         $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
@@ -462,6 +494,17 @@
         update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
         update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
         update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
+    </script>
+
+    <script src="{% static 'js/virtual-select.min.js' %}"></script>
+    <script>
+        VirtualSelect.init({ 
+            ele: '#multipleSelect'
+        });
+
+        document.getElementById('multipleSelect').addEventListener('change', function() {
+            indicadorPersonalizado();
+          });
     </script>
 
 {% endblock %}

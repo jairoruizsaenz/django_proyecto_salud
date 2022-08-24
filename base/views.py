@@ -34,14 +34,19 @@ def nacional(request):
     return render(request, 'base/nacional.html', context)
 
 
+from django.core import serializers
 def departamental(request):
     departamentos = Departamento.objects.all()
     dimensiones = Dimension.objects.all()
-    
+    indicadores = Indicador.objects.all()
+    indicadores_json = serializers.serialize("json", indicadores)
+
     context = { 
         'mensaje':'Vista departamental',
         'departamentos':departamentos,
-        'dimensiones':dimensiones
+        'dimensiones':dimensiones,
+        'indicadores':indicadores,
+        'indicadores_json':indicadores_json
     }
     return render(request, 'base/departamental.html', context)
 
