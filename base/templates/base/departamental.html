@@ -36,7 +36,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph_1()">
                         {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
                         <option value="todos" selected>Todos</option>
                         {% for dep in departamentos %}
@@ -48,7 +48,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph_1()">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -58,13 +58,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph_1()">
                         <option value="0" selected>pruebas</option>
-                        {% comment %} 
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option> 
-                        {% endcomment %}
                     </select>
                 </div>
             </div>
@@ -92,7 +87,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_2">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2" onchange="updateGraph_2()">
                         <option value="todos" selected>Todos</option>                        
                         {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
@@ -101,7 +96,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_2">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph_2()">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -109,7 +104,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" onchange="updateGraph_2()">
                         <option value="0" selected>pruebas</option>
                     </select>
                 </div>
@@ -121,7 +116,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_3">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3" onchange="updateGraph_3()">
                         <option value="todos" selected>Todos</option>
                         {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
@@ -130,7 +125,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_3">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="updateGraph_3()">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -138,7 +133,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" onchange="updateGraph()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" onchange="updateGraph_3()">
                         <option value="0" selected>pruebas</option>
                     </select>
                 </div>
@@ -287,11 +282,11 @@
                selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
             }
 
-            console.log('-----')
-            console.log('selection:', selection)
-            console.log('data_multiselect:', data_multiselect)
-            console.log('selection__ind_pk:', selection__ind_pk)
-            console.log('selection__ind_name:', selection__ind_name)
+            // console.log('-----')
+            // console.log('selection:', selection)
+            // console.log('data_multiselect:', data_multiselect)
+            // console.log('selection__ind_pk:', selection__ind_pk)
+            // console.log('selection__ind_name:', selection__ind_name)
             
             var nueva_selection_indicador = document.getElementById("section4");
             section4.classList.remove("visible");
@@ -310,99 +305,113 @@
     </script>
 
     <script>
-        function filtroDepartamental(elemento) {
+        function filtroDepartamental_1(elemento) {
             return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
         }
+        function filtroDepartamental_2(elemento) {
+            return elemento['properties'].DPTO_CCDGO == selection_departamento_2.value;
+        }
+        function filtroDepartamental_3(elemento) {
+            return elemento['properties'].DPTO_CCDGO == selection_departamento_3.value;
+        }
     </script>
 
     <script>
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // ::: Mapas
+        
         function polystyle(feature) {
             return {
                 fillColor: 'red',
                 weight: 0.8,
                 opacity: 1,
                 color: 'white',  //Outline color
-                fillOpacity: 0.4
+                fillOpacity: 0.5
             };
         }
-
-        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
-
-        var layerGroup = L.layerGroup().addTo(map1);
-        var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         
-        function updateGraph() {
-            // console.log("updateGraph");
-            layerGroup.clearLayers();
+        var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
+        // https://leafletjs.com/reference.html
 
-            $.getJSON(polyData1, function (data) {
-                if (selection_departamento_1.value == 'todos') {
-                    var filtered_data = data
-                } else {
-                    var filtered_data = data['features'].filter(filtroDepartamental)
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
+       
+        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map2);
+        
+        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
+        
+         // https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.FeatureGroup/
+        var layerGroup1 = L.featureGroup()
+        var layerGroup2 = L.featureGroup()
+        var layerGroup3 = L.featureGroup()
+        
+        map1.addLayer(layerGroup1);
+        map2.addLayer(layerGroup2);
+        map3.addLayer(layerGroup3);
+
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        function updateGraph_1() {
+            // console.log("updateGraph_1");
+            layerGroup1.clearLayers();
+
+            $.getJSON(polyData, function (data) {
+                var filtered_data = data
+                if (selection_departamento_1.value != 'todos') {
+                    filtered_data = data['features'].filter(filtroDepartamental_1);
                 }
-                L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
+                console.log('filtered_data_1:', filtered_data);
+
+                var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_1.addTo(layerGroup1)
+
+                map1.flyToBounds(shape_data_1.getBounds());
             });
         }
-        updateGraph();
-    </script>
 
-    {% comment %} <script>
-        function polystyle(feature) {
-            return {
-                fillColor: 'red',
-                weight: 0.8,
-                opacity: 1,
-                color: 'white',  //Outline color
-                fillOpacity: 0.4
-            };
-        }
+        function updateGraph_2() {
+            // console.log("updateGraph_2");
+            layerGroup2.clearLayers();
 
-        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
+            $.getJSON(polyData, function (data) {
+                var filtered_data = data
+                if (selection_departamento_2.value != 'todos') {
+                    filtered_data = data['features'].filter(filtroDepartamental_2);
+                }
+                console.log('filtered_data_2:', filtered_data);
 
-        var layerGroup = L.layerGroup().addTo(map1);
-        var polyData1 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-        
-        function updateGraph() {
-            console.log("updateGraph");
-            layerGroup.clearLayers();
+                var shape_data_2 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_2.addTo(layerGroup2)
 
-            $.getJSON(polyData1, function (data) {
-                var filtered_data = data['features'].filter(filtroDepartamental)
-                L.geoJson(filtered_data, {style: polystyle}).addTo(layerGroup);
+                map2.flyToBounds(shape_data_2.getBounds());
             });
         }
-        updateGraph();
-    </script> {% endcomment %}
 
-    <script>
-        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map2);
+        function updateGraph_3() {
+            // console.log("updateGraph_2");
+            layerGroup3.clearLayers();
 
-        var polyData2 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-        $.getJSON(polyData2, function (data) {
-            L.geoJson(data, {style: polystyle}).addTo(map2);
-            // console.log(data);
-        });
-    </script>
+            $.getJSON(polyData, function (data) {
+                var filtered_data = data
+                if (selection_departamento_3.value != 'todos') {
+                    filtered_data = data['features'].filter(filtroDepartamental_3);
+                }
+                console.log('filtered_data_3:', filtered_data);
 
-    <script>
-        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map3);
-        
-        var polyData3 = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-        $.getJSON(polyData3, function (data) {
-            L.geoJson(data, {style: polystyle}).addTo(map3);
-            // console.log(data);
-        });
+                var shape_data_3 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_3.addTo(layerGroup3)
+
+                map3.flyToBounds(shape_data_3.getBounds());
+            });
+        }
+
+        updateGraph_1();
+        updateGraph_2();
+        updateGraph_3();
     </script>
 
     <script>

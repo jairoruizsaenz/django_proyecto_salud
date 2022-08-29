@@ -76,4 +76,16 @@ class Indicador(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.dimension.nombre})"
+
+
+class RegistroIndiceMunicipal(models.Model):
+    municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
+    valor = models.FloatField()
     
+    class Meta:
+        verbose_name = "Registro índice - municipal"
+        verbose_name_plural = "Registros índices - municipal"
+
+    def __str__(self):
+        return f"{self.nombre} ({self.dimension.nombre})"
