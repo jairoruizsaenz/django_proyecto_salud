@@ -59,7 +59,10 @@
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph_1()">
-                        <option value="0" selected>pruebas</option>
+                        <!-- <option value="0">pruebas</option> -->
+                        {% for indicador in indicadores_first %}
+                            <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -105,7 +108,10 @@
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" onchange="updateGraph_2()">
-                        <option value="0" selected>pruebas</option>
+                        <!-- <option value="0" selected>pruebas</option> -->
+                        {% for indicador in indicadores_first %}
+                            <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -134,7 +140,10 @@
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" onchange="updateGraph_3()">
-                        <option value="0" selected>pruebas</option>
+                        <!-- <option value="0" selected>pruebas</option> -->
+                        {% for indicador in indicadores_first %}
+                            <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -208,6 +217,38 @@
         </div>
     </div>
 
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+    <script>
+        // Actualización de dropdownlist
+        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+        
+        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
+            // console.log('update_indicador_dropdownlist')
+            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
+            var url = "{% url 'baseApp:ajax_load_indicadores' %}";
+            var dimensionId = $(dimension_dropdown_id).val();
+
+            if (dimensionId == 'personalizado') {
+                $(indicador_dropdown_id).html('<option value="">----------</option>');
+            } else {
+                $.ajax({
+                    url: url,
+                    data: { 'dimensionId': dimensionId },
+                    success: function (data) {
+                        $(indicador_dropdown_id).html(data);
+                    }
+                });
+            }            
+            $(indicador_dropdown_id + " option:first").attr('selected','selected');
+        }
+
+        $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); });
+        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
+    </script>
+
     <script>
         function controlObjetos() {
             var section1 = document.getElementById("section1"); // Presentar - Mapa
@@ -257,52 +298,6 @@
         };
         controlObjetos();
     </script>
-    
-    <script>
-        var selection = [];
-        // lectura de indicadores en formato json para el multiselect
-        var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
-
-        function filtroMultiselect(elemento) { 
-            return selection.includes(elemento.pk.toString());
-        }
-        
-        function indicadorPersonalizado() {
-            // console.log('function indicadorPersonalizado()');
-            var dimension = document.getElementById('selection_dimension_5');
-            var dimension_value = dimension.options[dimension.selectedIndex].value;
-                
-            selection = $('#multipleSelect').val();
-            var data_multiselect = indicadores_json.filter(filtroMultiselect)
-
-            var selection__ind_pk = [];
-            var selection__ind_name = [];
-            for(var i=0; i < data_multiselect.length; i++){
-               selection__ind_pk.push(data_multiselect[i].pk);
-               selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
-            }
-
-            // console.log('-----')
-            // console.log('selection:', selection)
-            // console.log('data_multiselect:', data_multiselect)
-            // console.log('selection__ind_pk:', selection__ind_pk)
-            // console.log('selection__ind_name:', selection__ind_name)
-            
-            var nueva_selection_indicador = document.getElementById("section4");
-            section4.classList.remove("visible");
-            section4.classList.add("hidden");
-
-            if (dimension_value == 'personalizado') {
-                document.getElementById("selection_indicador_5").disabled = true;
-                section4.classList.remove("hidden");
-                section4.classList.add("visible");
-            } else {
-                document.getElementById("selection_indicador_5").disabled = false;
-            }
-            
-        };
-        indicadorPersonalizado()
-    </script>
 
     <script>
         function filtroDepartamental_1(elemento) {
@@ -317,8 +312,49 @@
     </script>
 
     <script>
+        function get_indicadores_data_municipal(departamento, dimension, indicador) {
+            // console.log('get_indicadores_data_municipal')            
+            // console.log('------------------------------')
+            // console.log('departamento:', departamento)
+            // console.log('dimension:', dimension)
+            // console.log('indicador:', indicador)
+            // console.log('------------------------------')
+
+            $.ajax({
+                url: '{% url "baseApp:ajax_get_indicadores_data_municipal" %}',
+                data: {
+                    'departamento': departamento,
+                    'dimension': dimension,
+                    'indicador': indicador
+                },
+                dataType: 'json',
+
+                success: function (data) {
+                    // var latitud = JSON.parse(data.latitud);
+                    // var longitud = JSON.parse(data.longitud);
+                    // var radio = JSON.parse(data.radio);
+                    // var color = JSON.parse(JSON.stringify(data.color));
+                    // var circle = L.circle([latitud, longitud], {
+                    //     color: color,
+                    //     fillColor: color,
+                    //     fillOpacity: 0.5,
+                    //     radius: radio
+                    // }).addTo(map);
+
+                    console.log('-------------------------');
+                    console.log('filtered_data:', data);
+                },
+
+                error: function (res) {
+                    console.log(res.responseText);
+                }
+            });
+        }
+    </script>
+    
+    <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Mapas
+        // ::: Variables mapas
         
         function polystyle(feature) {
             return {
@@ -332,31 +368,23 @@
         
         var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         // https://leafletjs.com/reference.html
-
+    </script>
+    
+    <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // ::: Carga mapa 1
 
         var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
-       
-        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map2);
-        
-        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
-        
-         // https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.FeatureGroup/
+
+        // https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.FeatureGroup/
         var layerGroup1 = L.featureGroup()
-        var layerGroup2 = L.featureGroup()
-        var layerGroup3 = L.featureGroup()
-        
+
         map1.addLayer(layerGroup1);
-        map2.addLayer(layerGroup2);
-        map3.addLayer(layerGroup3);
-
-        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
+        
         function updateGraph_1() {
             // console.log("updateGraph_1");
+            get_indicadores_data_municipal(selection_departamento_1.value, selection_dimension_1.value, selection_indicador_1.value)
             layerGroup1.clearLayers();
 
             $.getJSON(polyData, function (data) {
@@ -364,7 +392,7 @@
                 if (selection_departamento_1.value != 'todos') {
                     filtered_data = data['features'].filter(filtroDepartamental_1);
                 }
-                console.log('filtered_data_1:', filtered_data);
+                console.log('filtered_shapes_1:', filtered_data);
 
                 var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
                 shape_data_1.addTo(layerGroup1)
@@ -372,48 +400,9 @@
                 map1.flyToBounds(shape_data_1.getBounds());
             });
         }
-
-        function updateGraph_2() {
-            // console.log("updateGraph_2");
-            layerGroup2.clearLayers();
-
-            $.getJSON(polyData, function (data) {
-                var filtered_data = data
-                if (selection_departamento_2.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental_2);
-                }
-                console.log('filtered_data_2:', filtered_data);
-
-                var shape_data_2 = L.geoJson(filtered_data, {style: polystyle});
-                shape_data_2.addTo(layerGroup2)
-
-                map2.flyToBounds(shape_data_2.getBounds());
-            });
-        }
-
-        function updateGraph_3() {
-            // console.log("updateGraph_2");
-            layerGroup3.clearLayers();
-
-            $.getJSON(polyData, function (data) {
-                var filtered_data = data
-                if (selection_departamento_3.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental_3);
-                }
-                console.log('filtered_data_3:', filtered_data);
-
-                var shape_data_3 = L.geoJson(filtered_data, {style: polystyle});
-                shape_data_3.addTo(layerGroup3)
-
-                map3.flyToBounds(shape_data_3.getBounds());
-            });
-        }
-
         updateGraph_1();
-        updateGraph_2();
-        updateGraph_3();
     </script>
-
+    
     <script>
         data = [
             {
@@ -467,39 +456,6 @@
         Plotly.newPlot("radar2", data, layout)
     </script>
 
-    <script>
-        // Actualización de dropdownlist
-        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
-        
-        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
-            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
-            var url = "{% url 'baseApp:ajax_load_indicadores' %}";
-            var dimensionId = $(dimension_dropdown_id).val();
-
-            if (dimensionId == 'personalizado') {
-                $(indicador_dropdown_id).html('<option value="">----------</option>');
-            } else {
-                $.ajax({
-                    url: url,
-                    data: { 'dimensionId': dimensionId },
-                    success: function (data) {
-                        $(indicador_dropdown_id).html(data);
-                    }
-                });
-            }
-        }
-
-        $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); });
-        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
-        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
-        $("#selection_dimension_5").change(function () { update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5"); });
-
-        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
-        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
-        update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
-    </script>
-
     <script src="{% static 'js/virtual-select.min.js' %}"></script>
     <script>
         VirtualSelect.init({ 
@@ -509,6 +465,122 @@
         document.getElementById('multipleSelect').addEventListener('change', function() {
             indicadorPersonalizado();
           });
+    </script>
+
+    <script>
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // ::: Carga mapa 2
+
+        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map2);
+        
+        var layerGroup2 = L.featureGroup()
+
+        map2.addLayer(layerGroup2);
+
+        function updateGraph_2() {
+            // console.log("updateGraph_2");
+            layerGroup2.clearLayers();
+
+            $.getJSON(polyData, function (data) {
+                var filtered_data = data
+                if (selection_departamento_2.value != 'todos') {
+                    filtered_data = data['features'].filter(filtroDepartamental_2);
+                }
+                console.log('filtered_shapes_2:', filtered_data);
+
+                var shape_data_2 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_2.addTo(layerGroup2)
+
+                map2.flyToBounds(shape_data_2.getBounds());
+            });
+        }
+        updateGraph_2();
+
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // ::: Carga mapa 3
+
+        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
+        
+        var layerGroup3 = L.featureGroup()
+
+        map3.addLayer(layerGroup3);
+
+        function updateGraph_3() {
+            // console.log("updateGraph_3");
+            layerGroup3.clearLayers();
+
+            $.getJSON(polyData, function (data) {
+                var filtered_data = data
+                if (selection_departamento_3.value != 'todos') {
+                    filtered_data = data['features'].filter(filtroDepartamental_3);
+                }
+                console.log('filtered_shapes_3:', filtered_data);
+
+                var shape_data_3 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_3.addTo(layerGroup3)
+
+                map3.flyToBounds(shape_data_3.getBounds());
+            });
+        }
+        updateGraph_3();
+    </script>
+
+    <script>
+        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
+        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
+        $("#selection_dimension_5").change(function () { update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5"); });
+
+        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
+        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
+        update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
+    </script>
+    
+    <script>
+        var selection = [];
+        // lectura de indicadores en formato json para el multiselect
+        var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
+
+        function filtroMultiselect(elemento) { 
+            return selection.includes(elemento.pk.toString());
+        }
+        
+        function indicadorPersonalizado() {
+            // console.log('function indicadorPersonalizado()');
+            var dimension = document.getElementById('selection_dimension_5');
+            var dimension_value = dimension.options[dimension.selectedIndex].value;
+                
+            selection = $('#multipleSelect').val();
+            var data_multiselect = indicadores_json.filter(filtroMultiselect)
+
+            var selection__ind_pk = [];
+            var selection__ind_name = [];
+            for(var i=0; i < data_multiselect.length; i++){
+               selection__ind_pk.push(data_multiselect[i].pk);
+               selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
+            }
+
+            // console.log('-----')
+            // console.log('selection:', selection)
+            // console.log('data_multiselect:', data_multiselect)
+            // console.log('selection__ind_pk:', selection__ind_pk)
+            // console.log('selection__ind_name:', selection__ind_name)
+            
+            var nueva_selection_indicador = document.getElementById("section4");
+            section4.classList.remove("visible");
+            section4.classList.add("hidden");
+
+            if (dimension_value == 'personalizado') {
+                document.getElementById("selection_indicador_5").disabled = true;
+                section4.classList.remove("hidden");
+                section4.classList.add("visible");
+            } else {
+                document.getElementById("selection_indicador_5").disabled = false;
+            }
+            
+        };
+        indicadorPersonalizado()
     </script>
 
 {% endblock %}

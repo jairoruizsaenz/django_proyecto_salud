@@ -50,7 +50,10 @@ class Municipio(models.Model):
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
     divipola = models.CharField(max_length=5, unique=True)
     nombre = models.CharField(null=False, default='', max_length=255)
-    
+
+    class Meta:
+        ordering = ['nombre']
+
     def __str__(self):
         return f"{self.nombre} ({self.departamento.nombre})"
 
@@ -61,6 +64,7 @@ class Dimension(models.Model):
     class Meta:
         verbose_name = "Dimensión"
         verbose_name_plural = "Dimensiones"
+        ordering = ['nombre']
 
     def __str__(self):
         return self.nombre
@@ -73,6 +77,7 @@ class Indicador(models.Model):
     class Meta:
         verbose_name = "Indicador"
         verbose_name_plural = "Indicadores"
+        ordering = ['nombre']
 
     def __str__(self):
         return f"{self.nombre} ({self.dimension.nombre})"
@@ -86,6 +91,7 @@ class RegistroIndiceMunicipal(models.Model):
     class Meta:
         verbose_name = "Registro índice - municipal"
         verbose_name_plural = "Registros índices - municipal"
+        ordering = ['indicador', 'municipio']
 
     def __str__(self):
-        return f"{self.nombre} ({self.dimension.nombre})"
+        return f"{self.indicador} - {self.municipio}"

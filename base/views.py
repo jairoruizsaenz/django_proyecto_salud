@@ -1,21 +1,83 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.core import serializers
 from .forms import Punto_Salud_Create_Form
 import random
 from .models import *
+import pandas as pd
+import json
 
-# def cargar_datos(request):    
-#     lista_regiones = ['Africa Sub-sahariana','América latina y el caribe','Asia Oriental y Pacifico','Asia del sur','Europa y Asia central','Medio Oriente y Africa del norte','Norteamérica']
+# def get_indicadores_data_municipal(request):
+#     departamento = request.GET.get('departamento', None)
+#     dimension = request.GET.get('dimension', None)
+#     indicador = request.GET.get('indicador', None)
 
-#     lista_paises = ['Albania','Alemania','Andorra','Angola','Antigua y Barbuda','Arabia Saudita','Argelia','Argentina','Armenia','Australia','Austria','Azerbaiyán','Bahamas','Bahrein','Bangladesh','Barbados','Belarús','Belice','Benin','Bhután','Bolivia (Estado Plurinacional de)','Bosnia y Herzegovina','Botswana','Brasil','Brunei Darussalam','Bulgaria','Burkina Faso','Burundi','Bélgica','Cabo Verde','Camboya','Camerún','Canadá','Chad','Chequia','Chile','China','Chipre','Colombia','Comoras','Congo','Costa Rica','Croacia','Cuba','Dinamarca','Djibouti','Dominica','Ecuador','Egipto','El Salvador','Emiratos Árabes Unidos','Eritrea','Eslovaquia','Eslovenia','España','Estados Unidos de América','Estonia','Eswatini','Etiopía','Federación de Rusia','Fiji','Filipinas','Finlandia','Francia','Gabón','Gambia','Georgia','Ghana','Granada','Grecia','Guatemala','Guinea','Guinea Ecuatorial','Guinea-Bissau','Guyana','Haití','Honduras','Hungría','India','Indonesia','Iraq','Irlanda','Irán (República Islámica del)','Islandia','Islas Cook','Islas Feroe','Islas Marshall','Islas Salomón','Israel','Italia','Jamaica','Japón','Jordania','Kazajstán','Kenya','Kirguistán','Kiribati','Kuwait','Lesotho','Letonia','Liberia','Libia','Lituania','Luxemburgo','Líbano','Macedonia del Norte','Madagascar','Malasia','Malawi','Maldivas','Malta','Malí','Marruecos','Mauricio','Mauritania','Micronesia (Estados Federados de)','Mongolia','Montenegro','Mozambique','Myanmar','México','Mónaco','Namibia','Nauru','Nepal','Nicaragua','Nigeria','Niue','Noruega','Nueva Zelandia','Níger','Omán','Pakistán','Palau','Panamá','Papua Nueva Guinea','Paraguay','Países Bajos','Perú','Polonia','Portugal','Qatar','Reino Unido de Gran Bretaña e Irlanda del Norte','República Centroafricana','República Democrática Popular Lao','República Democrática del Congo','República Dominicana','República Popular Democrática de Corea','República Unida de Tanzanía','República de Corea','República de Moldova','República Árabe Siria','Rumania','Rwanda','Saint Kitts y Nevis','Samoa','San Marino','San Vicente y las Granadinas','Santa Lucía','Santo Tomé y Príncipe','Senegal','Serbia','Seychelles','Sierra Leona','Singapur','Somalia','Sri Lanka','Sudáfrica','Sudán','Sudán del Sur','Suecia','Suiza','Suriname','Tailandia','Tayikistán','Timor-Leste','Togo','Tokelau','Tonga','Trinidad y Tabago','Turkmenistán','Turquía','Tuvalu','Túnez','Ucrania','Uganda','Uruguay','Uzbekistán','Vanuatu','Venezuela (República Bolivariana de)','Vietnam','Yemen','Zambia','Zimbabwe']
+#     # values = RegistroIndiceMunicipal.objects.filter(Q(usuario_remitente = usuario, usuario_destinatario = usuario_chat) | Q(usuario_remitente = usuario_chat, usuario_destinatario = usuario))
+#     data = RegistroIndiceMunicipal.objects.all()
+
+#     return JsonResponse(serializers.serialize('json', data), safe=False)
+
+
+def get_indicadores_data_municipal(request):
+    departamento = request.GET.get('departamento', None)
+    dimension = request.GET.get('dimension', None)
+    indicador = request.GET.get('indicador', None)
+
+    # print('departamento:', departamento)
+    # print('dimension:', dimension)
+    # print('indicador:', indicador)
+
+    if departamento == 'todos':
+        departamentos = Departamento.objects.all()
+    else:
+        departamentos = Departamento.objects.filter(divipola=departamento)
+
+    departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+    df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
     
-#     for region in lista_regiones:
-#         Region.objects.create(name=region)
+    registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador=indicador)
+    registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+    df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
 
-#     for pais in lista_paises:
-#         Pais.objects.create(name=pais)
+    municipios = Municipio.objects.all()
+    municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+    df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
 
-#     return HttpResponse('Carga de datos completa')
+    # indicadores = Indicador.objects.filter(pk=int(indicador))
+    indicadores = Indicador.objects.all()
+    indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+    df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+    # dimensiones = Dimension.objects.filter(pk=int(dimension))
+    dimensiones = Dimension.objects.all()
+    dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+    df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+
+    df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
+    df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+    df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
+    df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
+
+    # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
+    # df_temp.rename(columns={
+    #     'divipola_departamento':'DPTO_CCDGO', 
+    #     'divipola_municipio':'MPIO_CCNCT',
+    #     'nombre_departamento':'DPTO_CNMBR',
+    #     'nombre_dimension':'DIMENSION',
+    #     'nombre_indicador':'INDICADOR',
+    #     'nombre_municipio':'MPIO_CNMBR',
+    #     'valor':'VALOR',
+    # }, inplace=True)
+
+    data = {}
+    data['filter_records']=df_temp.to_dict('records')
+
+    return JsonResponse(data, safe=False)
+
+    # print(df_temp)
+    # data = {'termino_busqueda':termino_busqueda, 'lista_resultado':json.dumps(lista_bigramas_filtrada), 'lenght_busqueda':lenght_busqueda}
+    # return JsonResponse(data)
+
 
 def load_indicadores(request):
     dimension_id = request.GET.get('dimensionId')
@@ -34,10 +96,13 @@ def nacional(request):
     return render(request, 'base/nacional.html', context)
 
 
-from django.core import serializers
 def departamental(request):
     departamentos = Departamento.objects.all()
     dimensiones = Dimension.objects.all()
+    
+    dimensiones_first = Dimension.objects.all().first()
+    indicadores_first = Indicador.objects.filter(dimension=dimensiones_first)
+
     indicadores = Indicador.objects.all()
     indicadores_json = serializers.serialize("json", indicadores)
 
@@ -46,7 +111,8 @@ def departamental(request):
         'departamentos':departamentos,
         'dimensiones':dimensiones,
         'indicadores':indicadores,
-        'indicadores_json':indicadores_json
+        'indicadores_json':indicadores_json,
+        'indicadores_first':indicadores_first
     }
     return render(request, 'base/departamental.html', context)
 
@@ -132,7 +198,6 @@ def agregar_punto(request):
     longitud = request.GET.get('longitud', None)
     radio = random.randint(20, 100)
     color = random.choice(['#ba181b', '#0077b6', '#8ac926'])
-    print('Hola')
 
     data = {'latitud':latitud, 'longitud':longitud, 'radio':radio, 'color':color}    
     return JsonResponse(data)
