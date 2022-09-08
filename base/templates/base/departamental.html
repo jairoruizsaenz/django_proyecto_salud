@@ -58,7 +58,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="myFunction(this)">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change()">
                         <option value="000">- prueba -</option>
                     </select>
                 </div>
@@ -228,59 +228,31 @@
 
     <!-- update_indicador_dropdownlist -->
     <script>
-        // Actualización de dropdownlist
-        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
-        
-        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
-            console.log('++ update_indicador_dropdownlist')
-            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
-            var url = "{% url 'baseApp:ajax_load_indicadores' %}";
+        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {
+            // console.log('++ update_indicador_dropdownlist')
             var dimensionId = $(dimension_dropdown_id).val();
 
             if (dimensionId == 'personalizado') {
                 $(indicador_dropdown_id).html('<option value="">----------</option>');
             } else {
                 $.ajax({
-                    url: url,
+                    url: "{% url 'baseApp:ajax_load_indicadores' %}",
                     data: { 'dimensionId': dimensionId },
                     success: function (data) {
-                        select = document.getElementById('selection_indicador_1');
-                        select.options.length = 0;
-
                         $(indicador_dropdown_id).empty();
                         $(indicador_dropdown_id).html(data);
                         $(indicador_dropdown_id).trigger("change");
                     }
                 });
             }
-
-            // $(indicador_dropdown_id).find('option').filter(':selected').prop('selected', true);
-            // console.log('jairo:', $(indicador_dropdown_id + " option:selected" ).text());
-
-            // $(indicador_dropdown_id).find('option:first').prop('selected',true).trigger('change')
-            // var test = $(indicador_dropdown_id).find('option').filter(':selected').text();            
-            // console.log('   selected option:', test)
         }
-
-        {% comment %} a_dropdown.value = a_dropdown.options[0].value {% endcomment %}
-
-        {% comment %} $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); }); {% endcomment %}
-        // update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
     </script>
 
 
     <!-- EventListener -->
     <script>
-
-        function myFunction(selection) {
-            var selectionValue = selection.options[selection.selectedIndex].value;
-            var selectionText = selection.options[selection.selectedIndex].text;
-            console.log('+-+-+-+-  ', selectionText, '(', selectionValue, ')')
-        }
-
         function printValues() {
-            console.log('-- printValues --------')
-
+            // console.log('-- printValues --------')
             var e1 = document.getElementById("selection_departamento_1");
             var value1 = e1.value;
             var text1 = e1.options[e1.selectedIndex].text;
@@ -293,40 +265,35 @@
             var value3 = e3.value;
             var text3 = e3.options[e3.selectedIndex].text;
 
-            test_1 = $("#selection_indicador_1 :selected").text();
-            test_2 = $("#selection_indicador_1 :selected").val();
-            test_3 = $("#selection_indicador_1").val();
+            // console.log('Departamento:', text1, '(', value1, ')')
+            // console.log('   Dimensión:', text2, '(', value2, ')')
+            // console.log('   Indicador:', text3, '(', value3, ')')
+            // console.log('-----------------------')
 
-            console.log('Departamento:', text1, '(', value1, ')')
-            console.log('   Dimensión:', text2, '(', value2, ')')
-            console.log('   Indicador:', text3, '(', value3, ')')
-            console.log('-----------------------')
-            console.log('   test_1:', test_1)
-            console.log('   test_2:', test_2)
-            console.log('   test_3:', test_3)
-            console.log('-----------------------')
+            console.log(text1, ' - ', text2, ' - ', text3);
         }
 
         function departamento_change() {
-            console.log('-- dpto change --------')
-            printValues()
+            // console.log('-- dpto change --------');
+            updateMap_1();
+            printValues();
         }
-
+        
         function dimension_change() {
-            console.log('-- dim change --------')
+            // console.log('-- dim change ---------');
             update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-            printValues()
+            // printValues();
         }
 
         function indicador_change() {
-            console.log('-- indi change --------')
-            // printValues()
+            // console.log('-- indi change --------');
+            printValues();
         }
 
         document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(); });
         document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(); });
-        document.getElementById('selection_indicador_1').addEventListener('change', function() { indicador_change(); });
-        printValues()
+        
+        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
     </script>
 
 
@@ -402,7 +369,7 @@
     </script>
 
 
-    <!-- Carga mapa 1 y updateGraph_1() -->
+    <!-- Carga mapa 1 y updateMap_1() -->
     <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         // ::: Carga mapa 1
@@ -414,13 +381,9 @@
         var layerGroup1 = L.featureGroup()
         map1.addLayer(layerGroup1);
         
-        function updateGraph_1() {
-            console.log("-- updateGraph_1");
-            // console.log("selection_departamento_1.value", selection_departamento_1.value);
-            // console.log("selection_dimension_1.value", selection_dimension_1.value);
-            // console.log("selection_indicador_1.value", selection_indicador_1.value);
+        function updateMap_1() {
+            console.log("-- updateMap_1");
 
-            // document.querySelector('#selection_indicador_1').querySelector('option')[0].selected = 'selected'
             // get_indicadores_data_municipal(selection_departamento_1.value, selection_dimension_1.value, selection_indicador_1.value)
             
             layerGroup1.clearLayers();
@@ -437,7 +400,7 @@
                 map1.flyToBounds(shape_data_1.getBounds());
             });
         }
-        // updateGraph_1();
+        updateMap_1();
     </script>
 
 
