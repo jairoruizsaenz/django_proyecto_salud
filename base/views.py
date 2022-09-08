@@ -39,7 +39,7 @@ def get_indicadores_data_municipal(request):
     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
 
-    municipios = Municipio.objects.all()
+    municipios = Municipio.objects.filter(departamento__in=departamentos)
     municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
     df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
 
@@ -57,6 +57,8 @@ def get_indicadores_data_municipal(request):
     df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
+
+    print(df_temp)
 
     # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
     # df_temp.rename(columns={
@@ -110,9 +112,10 @@ def departamental(request):
         'mensaje':'Vista departamental',
         'departamentos':departamentos,
         'dimensiones':dimensiones,
+        
+        'indicadores_first':indicadores_first,
         'indicadores':indicadores,
-        'indicadores_json':indicadores_json,
-        'indicadores_first':indicadores_first
+        'indicadores_json':indicadores_json
     }
     return render(request, 'base/departamental.html', context)
 
