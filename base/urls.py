@@ -13,7 +13,8 @@ urlpatterns = [
     path('pruebas/', pruebas, name='pruebas'),
     path('prueba_mapas/agregar_punto/', agregar_punto, name='agregar_punto'),
     
-    path('ajax/get-indicadores-data-municipal/', get_indicadores_data_municipal, name='ajax_get_indicadores_data_municipal'),
     path('ajax/load-indicadores/', load_indicadores, name='ajax_load_indicadores'),
     path('ajax/load-municipios/', load_municipios, name='ajax_load_municipios'),
+    path('ajax/get-indicadores-data-municipal-map/', get_indicadores_data_municipal_map, name='ajax_get_indicadores_data_municipal_map'),
+    path('ajax/get-dimensiones-data-departamental-radar/', get_dimensiones_data_departamental_radar, name='ajax_get_dimensiones_data_departamental_radar'),
 ]

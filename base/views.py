@@ -18,14 +18,10 @@ import json
 #     return JsonResponse(serializers.serialize('json', data), safe=False)
 
 
-def get_indicadores_data_municipal(request):
+def get_indicadores_data_municipal_map(request):
     departamento = request.GET.get('departamento', None)
     dimension = request.GET.get('dimension', None)
     indicador = request.GET.get('indicador', None)
-
-    # print('departamento:', departamento)
-    # print('dimension:', dimension)
-    # print('indicador:', indicador)
 
     if departamento == 'todos':
         departamentos = Departamento.objects.all()
@@ -35,21 +31,19 @@ def get_indicadores_data_municipal(request):
     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
     
+    municipios = Municipio.objects.filter(departamento__in=departamentos)
+    municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+    df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+    
     registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador=indicador)
     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
 
-    municipios = Municipio.objects.filter(departamento__in=departamentos)
-    municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
-    df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
-
-    # indicadores = Indicador.objects.filter(pk=int(indicador))
-    indicadores = Indicador.objects.all()
+    indicadores = Indicador.objects.filter(pk=indicador)
     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
     df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 
-    # dimensiones = Dimension.objects.filter(pk=int(dimension))
-    dimensiones = Dimension.objects.all()
+    dimensiones = Dimension.objects.filter(pk=dimension)
     dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
     df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
 
@@ -75,10 +69,61 @@ def get_indicadores_data_municipal(request):
     data['filter_records']=df_temp.to_dict('records')
 
     return JsonResponse(data, safe=False)
+    
 
+def get_dimensiones_data_departamental_radar(request):
+    departamento = request.GET.get('departamento', None)
+    dimension = request.GET.get('dimension', None)
+
+    if departamento == 'todos':
+        departamentos = Departamento.objects.all()
+    else:
+        departamentos = Departamento.objects.filter(divipola=departamento)
+
+    departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+    df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+    
+    municipios = Municipio.objects.filter(departamento__in=departamentos)
+    municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+    df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+    
+    registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador__dimension__in=dimension)
+    registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+    df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
+
+    indicadores = Indicador.objects.filter(dimension=dimension)
+    indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+    df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+    df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
+    df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+    df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
+
+    df_temp = df_temp[['nombre_indicador', 'valor']]
+    df_temp = df_temp.groupby(['nombre_indicador']).mean()
+   
+    # print('----------------------------')
     # print(df_temp)
-    # data = {'termino_busqueda':termino_busqueda, 'lista_resultado':json.dumps(lista_bigramas_filtrada), 'lenght_busqueda':lenght_busqueda}
-    # return JsonResponse(data)
+    # print('----------------------------')
+
+    try:
+        headers = list(df_temp.index)
+        values = list(df_temp.iloc[:, 0])
+
+        headers.append(headers[0])
+        values.append(values[0])
+    
+    except Exception as e: 
+        print(e)
+        headers = ['']
+        values = [0]
+
+    data = {}
+    data['headers']=headers
+    data['values']=values
+
+    return JsonResponse(data, safe=False)
+
 
 
 def load_indicadores(request):

@@ -47,7 +47,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
-                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
+                    <!-- <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change()">
-                        <option value="000">- prueba -</option>
+                        <option value="default">default</option>
                     </select>
                 </div>
             </div>
@@ -249,74 +249,40 @@
     </script>
 
 
-    <!-- EventListener -->
-    <script>
-        function printValues() {
-            // console.log('-- printValues --------')
-            var e1 = document.getElementById("selection_departamento_1");
-            var value1 = e1.value;
-            var text1 = e1.options[e1.selectedIndex].text;
-
-            var e2 = document.getElementById("selection_dimension_1");
-            var value2 = e2.value;
-            var text2 = e2.options[e2.selectedIndex].text;
-
-            var e3 = document.getElementById("selection_indicador_1");
-            var value3 = e3.value;
-            var text3 = e3.options[e3.selectedIndex].text;
-
-            // console.log('Departamento:', text1, '(', value1, ')')
-            // console.log('   Dimensión:', text2, '(', value2, ')')
-            // console.log('   Indicador:', text3, '(', value3, ')')
-            // console.log('-----------------------')
-
-            console.log(text1, ' - ', text2, ' - ', text3);
-        }
-
-        function departamento_change() {
-            // console.log('-- dpto change --------');
-            updateMap_1();
-            printValues();
-        }
-        
-        function dimension_change() {
-            // console.log('-- dim change ---------');
-            update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-            // printValues();
-        }
-
-        function indicador_change() {
-            // console.log('-- indi change --------');
-            printValues();
-        }
-
-        document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(); });
-        document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(); });
-        
-        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-    </script>
-
-
     <!-- filtroDepartamental -->
-    <script>
-        function filtroDepartamental_1(elemento) {
-            return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
+    <script>        
+        function filtroDepartamental({selection}) {
+            return function filter(item) {
+                if (selection == 1) {
+                    return item['properties'].DPTO_CCDGO == selection_departamento_1.value;
+                } else if (selection == 2) {
+                    return item['properties'].DPTO_CCDGO == selection_departamento_2.value;
+                } else if (selection == 3) {
+                    return item['properties'].DPTO_CCDGO == selection_departamento_3.value;
+                } else {
+                    console.log('Error - filtroDepartamental')
+                }
+            };
         }
-        function filtroDepartamental_2(elemento) {
-            return elemento['properties'].DPTO_CCDGO == selection_departamento_2.value;
-        }
-        function filtroDepartamental_3(elemento) {
-            return elemento['properties'].DPTO_CCDGO == selection_departamento_3.value;
-        }
+
+        // function filtroDepartamental_1(elemento) {
+        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
+        // }
+        // function filtroDepartamental_2(elemento) {
+        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_2.value;
+        // }
+        // function filtroDepartamental_3(elemento) {
+        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_3.value;
+        // }
     </script>
 
 
     <!-- get_indicadores_data_municipal -->
     <script>
-        function get_indicadores_data_municipal(departamento, dimension, indicador) {
-
+        function get_indicadores_data_municipal_map(departamento, dimension, indicador) {
+            console.log("-- get_indicadores_data_municipal_map");
             $.ajax({
-                url: '{% url "baseApp:ajax_get_indicadores_data_municipal" %}',
+                url: '{% url "baseApp:ajax_get_indicadores_data_municipal_map" %}',
                 data: {
                     'departamento': departamento,
                     'dimension': dimension,
@@ -339,6 +305,48 @@
                     console.log('-------------------------');
                     console.log('filtered_data:', data);
                     console.log('-------------------------');
+                },
+
+                error: function (res) {
+                    console.log(res.responseText);
+                }
+            });
+        }
+    </script>
+
+
+    <!-- get_dimensiones_data_departamental_radar -->
+    <script>
+        function get_dimensiones_data_departamental_radar(departamento, dimension) {
+            console.log("-- get_dimensiones_data_departamental_radar");
+            $.ajax({
+                url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar" %}',
+                data: {
+                    'departamento': departamento,
+                    'dimension': dimension,
+                },
+                dataType: 'json',
+
+                success: function (data) {
+                    // var latitud = JSON.parse(data.latitud);
+                    // var longitud = JSON.parse(data.longitud);
+                    // var radio = JSON.parse(data.radio);
+                    // var color = JSON.parse(JSON.stringify(data.color));
+                    // var circle = L.circle([latitud, longitud], {
+                    //     color: color,
+                    //     fillColor: color,
+                    //     fillOpacity: 0.5,
+                    //     radius: radio
+                    // }).addTo(map);
+
+                    updateRadar('radar1', data.headers, data.values);
+                    
+                    // console.log('-------------------------');
+                    // console.log('radar_data:', data);
+                    // console.log('headers:', data.headers);
+                    // console.log('values:', data.values);                    
+                    // console.log('-------------------------');
+                    
                 },
 
                 error: function (res) {
@@ -390,7 +398,7 @@
             $.getJSON(polyData, function (data) {
                 var filtered_data = data
                 if (selection_departamento_1.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental_1);
+                    filtered_data = data['features'].filter(filtroDepartamental({selection: 1}));
                 }
                 // console.log('filtered_shapes_1:', filtered_data);
 
@@ -480,29 +488,31 @@
         update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
     </script> {% endcomment %}
     
+    <script>
+        function updateRadar(graph, headers, values) {
+            Plotly.restyle(graph, 'theta', [headers]);
+            Plotly.restyle(graph, 'r', [values]);
+        }
+    </script>
 
     <!-- Plotly radar1 -->
     <script>
-        data = [
-            {
-                type: 'scatterpolar',
-                r: [39, 28, 8, 7, 28, 39],
-                theta: ['A','B','C', 'D', 'E', 'A'],
-                fill: 'toself'
-            }
-        ]
+        data = [{
+            type: 'scatterpolar',
+            r: [0], theta: [''], fill: 'toself'
+        }]
           
         layout = {
             polar: {
                 radialaxis: {
                     visible: true,
-                    range: [0, 50]
+                    range: [0, 100]
                 }
             },
             showlegend: false
         }
           
-        Plotly.newPlot("radar1", data, layout)
+        Plotly.newPlot("radar1", data, layout)        
     </script>
 
 
@@ -649,6 +659,52 @@
             }            
         };
         Show_Hide_Sections();
+    </script>
+
+
+    <!-- EventListener -->
+    <script>
+        function updateGraphs() {
+            // console.log('-- updateGraphs --------')
+            var dep1 = document.getElementById("selection_departamento_1");
+            var dep1_value = dep1.value;
+            var dep1_text = dep1.options[dep1.selectedIndex].text;
+
+            var dim1 = document.getElementById("selection_dimension_1");
+            var dim1_value = dim1.value;
+            var dim1_text = dim1.options[dim1.selectedIndex].text;
+
+            var ind1 = document.getElementById("selection_indicador_1");
+            var ind1_value = ind1.value;
+            var ind1_text = ind1.options[ind1.selectedIndex].text;
+
+            console.log(dep1_text, ' - ', dim1_text, ' - ', ind1_text);
+            updateMap_1();
+
+            // get_indicadores_data_municipal_map(dep1_value, dim1_value, ind1_value);
+            get_dimensiones_data_departamental_radar(dep1_value, dim1_value)
+        }
+
+        function departamento_change() {
+            // console.log('-- dpto change --------');
+            updateGraphs();
+        }
+        
+        function dimension_change() {
+            // console.log('-- dim change ---------');
+            update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
+            // updateGraphs();
+        }
+
+        function indicador_change() {
+            // console.log('-- indi change --------');
+            updateGraphs();
+        }
+
+        document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(); });
+        document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(); });
+        
+        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
     </script>
 
 {% endblock %}
