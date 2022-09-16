@@ -254,7 +254,9 @@
         function filtroDepartamental({selection}) {
             return function filter(item) {
                 if (selection == 1) {
-                    return item['properties'].DPTO_CCDGO == selection_departamento_1.value;
+                    var temp = item                    
+                    temp['properties'].INDICADOR = 5
+                    return temp['properties'].DPTO_CCDGO == selection_departamento_1.value;
                 } else if (selection == 2) {
                     return item['properties'].DPTO_CCDGO == selection_departamento_2.value;
                 } else if (selection == 3) {
@@ -360,15 +362,30 @@
     <!-- variables mapas -->
     <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Variables mapas
-        
+        // ::: Variables y funciones generales mapas
+
+        // https://leafletjs.com/examples/choropleth/
+
+        function getColor(d) {
+            var d = parseInt(d);
+            return d > 900 ? '#1f77b4' :
+                   d > 800 ? '#ff7f0e' :
+                   d > 700 ? '#2ca02c' :
+                   d > 600 ? '#d62728' :
+                   d > 500 ? '#9467bd' :
+                   d > 400 ? '#8c564b' :
+                   d > 300 ? '#e377c2' :
+                   d > 200 ? '#7f7f7f' :
+                   d > 100 ? '#bcbd22' :
+                              '#17becf';
+        }
         function polystyle(feature) {
             return {
-                fillColor: 'red',
+                fillColor: getColor(feature.properties.MPIO_CCDGO),
                 weight: 0.8,
                 opacity: 1,
-                color: 'white',  //Outline color
-                fillOpacity: 0.5
+                color: 'white',
+                fillOpacity: 0.7
             };
         }
         
@@ -400,7 +417,8 @@
                 if (selection_departamento_1.value != 'todos') {
                     filtered_data = data['features'].filter(filtroDepartamental({selection: 1}));
                 }
-                // console.log('filtered_shapes_1:', filtered_data);
+                console.log('filtered_data:', filtered_data);
+                // MPIO_CCDGO
 
                 var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
                 shape_data_1.addTo(layerGroup1)
