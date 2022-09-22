@@ -254,9 +254,7 @@
         function filtroDepartamental({selection}) {
             return function filter(item) {
                 if (selection == 1) {
-                    var temp = item                    
-                    temp['properties'].INDICADOR = 5
-                    return temp['properties'].DPTO_CCDGO == selection_departamento_1.value;
+                    return item['properties'].DPTO_CCDGO == selection_departamento_1.value;
                 } else if (selection == 2) {
                     return item['properties'].DPTO_CCDGO == selection_departamento_2.value;
                 } else if (selection == 3) {
@@ -281,10 +279,13 @@
 
     <!-- get_indicadores_data_municipal -->
     <script>
-        function get_indicadores_data_municipal_map(departamento, dimension, indicador) {
+        function get_indicadores_data_municipal_map(filtered_data, departamento, dimension, indicador) {
             console.log("-- get_indicadores_data_municipal_map");
+            var results;
+
             $.ajax({
                 url: '{% url "baseApp:ajax_get_indicadores_data_municipal_map" %}',
+                async: false,
                 data: {
                     'departamento': departamento,
                     'dimension': dimension,
@@ -293,26 +294,20 @@
                 dataType: 'json',
 
                 success: function (data) {
-                    // var latitud = JSON.parse(data.latitud);
-                    // var longitud = JSON.parse(data.longitud);
-                    // var radio = JSON.parse(data.radio);
-                    // var color = JSON.parse(JSON.stringify(data.color));
-                    // var circle = L.circle([latitud, longitud], {
-                    //     color: color,
-                    //     fillColor: color,
-                    //     fillOpacity: 0.5,
-                    //     radius: radio
-                    // }).addTo(map);
+                    const merged = filtered_data.map(location => {
+                        const divipola = location.properties.MPIO_CCNCT;
+                        const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
 
-                    console.log('-------------------------');
-                    console.log('filtered_data:', data);
-                    console.log('-------------------------');
+                        return otherRecord ? {...location, ...otherRecord} : location;
+                    });
+                    results = merged;
                 },
 
                 error: function (res) {
-                    console.log(res.responseText);
+                    console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
                 }
             });
+            return results;            
         }
     </script>
 
@@ -365,23 +360,59 @@
         // ::: Variables y funciones generales mapas
 
         // https://leafletjs.com/examples/choropleth/
+       
+        function highlightFeature(e) {
+            var layer = e.target;
+        
+            layer.setStyle({
+                weight: 5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
+        
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+            // console.log('layer.feature:', layer.feature)
+            info.update(layer.feature);
+        }
+
+        function resetHighlight(e) {
+            shape_data_1.resetStyle(e.target);
+            info.update();
+        }
+
+        {% comment %} function zoomToFeature(e) {
+            console.log(e);
+        } {% endcomment %}
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                // click: zoomToFeature
+            });
+        }
 
         function getColor(d) {
             var d = parseInt(d);
-            return d > 900 ? '#1f77b4' :
-                   d > 800 ? '#ff7f0e' :
-                   d > 700 ? '#2ca02c' :
-                   d > 600 ? '#d62728' :
-                   d > 500 ? '#9467bd' :
-                   d > 400 ? '#8c564b' :
-                   d > 300 ? '#e377c2' :
-                   d > 200 ? '#7f7f7f' :
-                   d > 100 ? '#bcbd22' :
-                              '#17becf';
+            return d > 90 ? '#1f77b4' :
+                   d > 80 ? '#ff7f0e' :
+                   d > 70 ? '#2ca02c' :
+                   d > 60 ? '#d62728' :
+                   d > 50 ? '#9467bd' :
+                   d > 40 ? '#8c564b' :
+                   d > 30 ? '#e377c2' :
+                   d > 20 ? '#7f7f7f' :
+                   d > 10 ? '#bcbd22' :
+                   d > 0 ? '#17becf' :
+                              '#ababab';
         }
         function polystyle(feature) {
             return {
-                fillColor: getColor(feature.properties.MPIO_CCDGO),
+                // fillColor: getColor(feature.properties.MPIO_CCDGO),
+                fillColor: getColor(feature.valor_indicador),
                 weight: 0.8,
                 opacity: 1,
                 color: 'white',
@@ -406,6 +437,7 @@
         var layerGroup1 = L.featureGroup()
         map1.addLayer(layerGroup1);
         
+        var shape_data_1;
         function updateMap_1() {
             console.log("-- updateMap_1");
 
@@ -417,16 +449,77 @@
                 if (selection_departamento_1.value != 'todos') {
                     filtered_data = data['features'].filter(filtroDepartamental({selection: 1}));
                 }
-                console.log('filtered_data:', filtered_data);
+                else {
+                    filtered_data = filtered_data.features;
+                }
+                // console.log('filtered_data:', filtered_data);
                 // MPIO_CCDGO
+                
+                var dep1 = document.getElementById("selection_departamento_1");
+                var dep1_value = dep1.value;
+                var dep1_text = dep1.options[dep1.selectedIndex].text;
+    
+                var dim1 = document.getElementById("selection_dimension_1");
+                var dim1_value = dim1.value;
+                var dim1_text = dim1.options[dim1.selectedIndex].text;
+    
+                var ind1 = document.getElementById("selection_indicador_1");
+                var ind1_value = ind1.value;
+                var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-                var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
+                filtered_data = get_indicadores_data_municipal_map(filtered_data, dep1_value, dim1_value, ind1_value);
+                console.log('filtered_data:', filtered_data);
+
+                // var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
+                shape_data_1 = L.geoJson(filtered_data, { style: polystyle, onEachFeature: onEachFeature });
                 shape_data_1.addTo(layerGroup1)
-
                 map1.flyToBounds(shape_data_1.getBounds());
             });
         }
-        updateMap_1();
+
+        var info = L.control();
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+
+            var ind1 = document.getElementById("selection_indicador_1");
+            var ind1_value = ind1.value;
+            var ind1_text = ind1.options[ind1.selectedIndex].text;
+
+            this._div.innerHTML = '' +  (props ? '<b>' 
+                + props.properties.MPIO_CNMBR + '</b><br>' 
+                + ind1_text + '<br>'
+                + props.valor_indicador + '' + '<br>'
+                : 'Pase el cursor por el mapa');
+        };
+
+        info.addTo(map1);
+
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'info legend'),
+                grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+                labels = [];
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+
+            return div;
+        };
+
+        legend.addTo(map1);
+
+        // updateMap_1();
     </script>
 
 
@@ -696,6 +789,8 @@
             var ind1_value = ind1.value;
             var ind1_text = ind1.options[ind1.selectedIndex].text;
 
+            console.log('-------------------------------------------');
+            console.log('-------------------------------------------');
             console.log(dep1_text, ' - ', dim1_text, ' - ', ind1_text);
             updateMap_1();
 
