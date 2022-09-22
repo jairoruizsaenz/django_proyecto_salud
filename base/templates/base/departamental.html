@@ -80,11 +80,7 @@
         </div>
     </div>
 
-    <div id="section2"></div> <!-- Borrar -->
-    <div id="section3"></div> <!-- Borrar -->
-
-    <!-- Comparar - Mapa -->
-    {% comment %}
+    <!-- Comparar - Mapa -->    
     <div id="section2">
         <div class="row">
             <p style="color:red;">section2</p>
@@ -154,11 +150,8 @@
             </div>
         </div>
     </div>
-    {% endcomment %}
-
 
     <!-- Comparar - Radar -->
-    {% comment %}
     <div id="section3">
         <div class="row">
             <p style="color:red;">section3</p>
@@ -220,7 +213,6 @@
             </div>
         </div>
     </div>
-    {% endcomment %}
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
@@ -248,7 +240,6 @@
         }
     </script>
 
-
     <!-- filtroDepartamental -->
     <script>        
         function filtroDepartamental({selection}) {
@@ -264,18 +255,7 @@
                 }
             };
         }
-
-        // function filtroDepartamental_1(elemento) {
-        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_1.value;
-        // }
-        // function filtroDepartamental_2(elemento) {
-        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_2.value;
-        // }
-        // function filtroDepartamental_3(elemento) {
-        //     return elemento['properties'].DPTO_CCDGO == selection_departamento_3.value;
-        // }
     </script>
-
 
     <!-- get_indicadores_data_municipal -->
     <script>
@@ -307,15 +287,14 @@
                     console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
                 }
             });
-            return results;            
+            return results;
         }
     </script>
-
 
     <!-- get_dimensiones_data_departamental_radar -->
     <script>
         function get_dimensiones_data_departamental_radar(departamento, dimension) {
-            console.log("-- get_dimensiones_data_departamental_radar");
+            // console.log("-- get_dimensiones_data_departamental_radar");
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar" %}',
                 data: {
@@ -325,25 +304,13 @@
                 dataType: 'json',
 
                 success: function (data) {
-                    // var latitud = JSON.parse(data.latitud);
-                    // var longitud = JSON.parse(data.longitud);
-                    // var radio = JSON.parse(data.radio);
-                    // var color = JSON.parse(JSON.stringify(data.color));
-                    // var circle = L.circle([latitud, longitud], {
-                    //     color: color,
-                    //     fillColor: color,
-                    //     fillOpacity: 0.5,
-                    //     radius: radio
-                    // }).addTo(map);
 
                     updateRadar('radar1', data.headers, data.values);
-                    
                     // console.log('-------------------------');
                     // console.log('radar_data:', data);
                     // console.log('headers:', data.headers);
-                    // console.log('values:', data.values);                    
+                    // console.log('values:', data.values);
                     // console.log('-------------------------');
-                    
                 },
 
                 error: function (res) {
@@ -353,24 +320,21 @@
         }
     </script>
 
-
     <!-- variables mapas -->
     <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         // ::: Variables y funciones generales mapas
 
-        // https://leafletjs.com/examples/choropleth/
-       
         function highlightFeature(e) {
             var layer = e.target;
-        
+
             layer.setStyle({
                 weight: 5,
                 color: '#666',
                 dashArray: '',
                 fillOpacity: 0.7
             });
-        
+
             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                 layer.bringToFront();
             }
@@ -383,9 +347,9 @@
             info.update();
         }
 
-        {% comment %} function zoomToFeature(e) {
-            console.log(e);
-        } {% endcomment %}
+        // function zoomToFeature(e) {
+        //     console.log(e);
+        // }
 
         function onEachFeature(feature, layer) {
             layer.on({
@@ -419,13 +383,13 @@
                 fillOpacity: 0.7
             };
         }
-        
+
         var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         // https://leafletjs.com/reference.html
     </script>
 
 
-    <!-- Carga mapa 1 y updateMap_1() -->
+    <!-- Carga mapa 1 y updateMap_1 -->
     <script>
         // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         // ::: Carga mapa 1
@@ -433,16 +397,12 @@
         var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
 
-        // https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.FeatureGroup/
         var layerGroup1 = L.featureGroup()
         map1.addLayer(layerGroup1);
-        
-        var shape_data_1;
-        function updateMap_1() {
-            console.log("-- updateMap_1");
 
-            // get_indicadores_data_municipal(selection_departamento_1.value, selection_dimension_1.value, selection_indicador_1.value)
-            
+        var shape_data_1;
+        function updateMap_1(dep_value, dim_value, ind_value) {
+            console.log("-- updateMap_1");
             layerGroup1.clearLayers();
             $.getJSON(polyData, function (data) {
                 var filtered_data = data
@@ -452,30 +412,18 @@
                 else {
                     filtered_data = filtered_data.features;
                 }
-                // console.log('filtered_data:', filtered_data);
-                // MPIO_CCDGO
-                
-                var dep1 = document.getElementById("selection_departamento_1");
-                var dep1_value = dep1.value;
-                var dep1_text = dep1.options[dep1.selectedIndex].text;
-    
-                var dim1 = document.getElementById("selection_dimension_1");
-                var dim1_value = dim1.value;
-                var dim1_text = dim1.options[dim1.selectedIndex].text;
-    
-                var ind1 = document.getElementById("selection_indicador_1");
-                var ind1_value = ind1.value;
-                var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-                filtered_data = get_indicadores_data_municipal_map(filtered_data, dep1_value, dim1_value, ind1_value);
+                filtered_data = get_indicadores_data_municipal_map(filtered_data, dep_value, dim_value, ind_value);
                 console.log('filtered_data:', filtered_data);
 
-                // var shape_data_1 = L.geoJson(filtered_data, {style: polystyle});
                 shape_data_1 = L.geoJson(filtered_data, { style: polystyle, onEachFeature: onEachFeature });
                 shape_data_1.addTo(layerGroup1)
                 map1.flyToBounds(shape_data_1.getBounds());
             });
         }
+
+        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // Etiqueta de datos
 
         var info = L.control();
         info.onAdd = function (map) {
@@ -484,9 +432,7 @@
             return this._div;
         };
 
-        // method that we will use to update the control based on feature properties passed
         info.update = function (props) {
-
             var ind1 = document.getElementById("selection_indicador_1");
             var ind1_value = ind1.value;
             var ind1_text = ind1.options[ind1.selectedIndex].text;
@@ -497,12 +443,12 @@
                 + props.valor_indicador + '' + '<br>'
                 : 'Pase el cursor por el mapa');
         };
-
         info.addTo(map1);
 
+        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // Leyenda
         var legend = L.control({position: 'bottomright'});
         legend.onAdd = function (map) {
-
             var div = L.DomUtil.create('div', 'info legend'),
                 grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
                 labels = [];
@@ -516,10 +462,8 @@
 
             return div;
         };
-
         legend.addTo(map1);
-
-        // updateMap_1();
+        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     </script>
 
 
@@ -555,7 +499,7 @@
         updateGraph_2();
     </script>
     {% endcomment %}
-    
+
     <!-- Carga mapa 3 y updateGraph_3() -->
     {% comment %}
     <script>
@@ -564,7 +508,7 @@
 
         var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
-        
+
         var layerGroup3 = L.featureGroup()
         map3.addLayer(layerGroup3);
 
@@ -598,7 +542,7 @@
         update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
         update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
     </script> {% endcomment %}
-    
+
     <script>
         function updateRadar(graph, headers, values) {
             Plotly.restyle(graph, 'theta', [headers]);
@@ -612,7 +556,6 @@
             type: 'scatterpolar',
             r: [0], theta: [''], fill: 'toself'
         }]
-          
         layout = {
             polar: {
                 radialaxis: {
@@ -622,8 +565,7 @@
             },
             showlegend: false
         }
-          
-        Plotly.newPlot("radar1", data, layout)        
+        Plotly.newPlot("radar1", data, layout)
     </script>
 
 
@@ -725,14 +667,14 @@
     <script>
         function Show_Hide_Sections() {
             var section1 = document.getElementById("section1"); // Presentar - Mapa
-            var section2 = document.getElementById("section2"); // Comparar  - Mapa            
+            var section2 = document.getElementById("section2"); // Comparar  - Mapa
             var section3 = document.getElementById("section3"); // Comparar  - Radar
 
             var tipo_grafico = document.getElementById('selection_tipo_grafico');
             var tipo_grafico_value = tipo_grafico.options[tipo_grafico.selectedIndex].value;
-            
+
             var selection_tipo_grafico_group = document.getElementById('selection_tipo_grafico_group');
-            
+
             var compareCheck = document.getElementById('compareCheck');
             var compareCheck_value = compareCheck.checked;
 
@@ -745,29 +687,29 @@
             }
 
             section1.classList.remove("visible");
-            section2.classList.remove("visible");            
+            section2.classList.remove("visible");
             section3.classList.remove("visible");
 
             section1.classList.add("hidden");
-            section2.classList.add("hidden");            
+            section2.classList.add("hidden");
             section3.classList.add("hidden");
 
             if (compareCheck_value == false) {
                 // console.log('Map - show')
                 section1.classList.add("visible");
-                section1.classList.remove("hidden");                
+                section1.classList.remove("hidden");
             } else {
 
                 if (tipo_grafico_value == 'map') {
                     // console.log('Map - compare')
                     section2.classList.add("visible");
-                    section2.classList.remove("hidden");                
+                    section2.classList.remove("hidden");
                 } else if (tipo_grafico_value == 'radar') {
                     // console.log('Radar - compare')
                     section3.classList.add("visible");
-                    section3.classList.remove("hidden");                
+                    section3.classList.remove("hidden");
                 }
-            }            
+            }
         };
         Show_Hide_Sections();
     </script>
@@ -789,12 +731,10 @@
             var ind1_value = ind1.value;
             var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-            console.log('-------------------------------------------');
-            console.log('-------------------------------------------');
-            console.log(dep1_text, ' - ', dim1_text, ' - ', ind1_text);
-            updateMap_1();
+            // console.log('-------------------------------------------');
+            // console.log(dep1_text, ' - ', dim1_text, ' - ', ind1_text);
 
-            // get_indicadores_data_municipal_map(dep1_value, dim1_value, ind1_value);
+            updateMap_1(dep1_value, dim1_value, ind1_value);
             get_dimensiones_data_departamental_radar(dep1_value, dim1_value)
         }
 
@@ -806,7 +746,6 @@
         function dimension_change() {
             // console.log('-- dim change ---------');
             update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-            // updateGraphs();
         }
 
         function indicador_change() {
@@ -816,7 +755,7 @@
 
         document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(); });
         document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(); });
-        
+
         update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
     </script>
 
