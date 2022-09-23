@@ -58,7 +58,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change()">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
                         <option value="default">default</option>
                     </select>
                 </div>
@@ -96,7 +96,8 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_2">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}">
+                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -104,7 +105,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onChange="indicador_change(2)">
                         <!-- <option value="0">pruebas</option> -->
                         {% for indicador in indicadores_first %}
                             <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
@@ -128,7 +129,8 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_dimension_3">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}">
+                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -136,7 +138,7 @@
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3">
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onChange="indicador_change(3)">
                         <!-- <option value="0">pruebas</option> -->
                         {% for indicador in indicadores_first %}
                             <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
@@ -169,7 +171,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_5">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()">
+                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()"> {% endcomment %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
@@ -215,7 +218,8 @@
     </div>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script src="{% static 'js/departamental_func_iniciales.js' %}"></script>
+    <script src="{% static 'js/departamental_radar.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
     <!-- update_indicador_dropdownlist -->
@@ -240,27 +244,10 @@
         }
     </script>
 
-    <!-- filtroDepartamental -->
-    <script>        
-        function filtroDepartamental({selection}) {
-            return function filter(item) {
-                if (selection == 1) {
-                    return item['properties'].DPTO_CCDGO == selection_departamento_1.value;
-                } else if (selection == 2) {
-                    return item['properties'].DPTO_CCDGO == selection_departamento_2.value;
-                } else if (selection == 3) {
-                    return item['properties'].DPTO_CCDGO == selection_departamento_3.value;
-                } else {
-                    console.log('Error - filtroDepartamental')
-                }
-            };
-        }
-    </script>
-
     <!-- get_indicadores_data_municipal -->
     <script>
         function get_indicadores_data_municipal_map(filtered_data, departamento, dimension, indicador) {
-            console.log("-- get_indicadores_data_municipal_map");
+            // console.log("-- get_indicadores_data_municipal_map");
             var results;
 
             $.ajax({
@@ -277,12 +264,10 @@
                     const merged = filtered_data.map(location => {
                         const divipola = location.properties.MPIO_CCNCT;
                         const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
-
                         return otherRecord ? {...location, ...otherRecord} : location;
                     });
                     results = merged;
                 },
-
                 error: function (res) {
                     console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
                 }
@@ -304,7 +289,6 @@
                 dataType: 'json',
 
                 success: function (data) {
-
                     updateRadar('radar1', data.headers, data.values);
                     // console.log('-------------------------');
                     // console.log('radar_data:', data);
@@ -312,7 +296,6 @@
                     // console.log('values:', data.values);
                     // console.log('-------------------------');
                 },
-
                 error: function (res) {
                     console.log(res.responseText);
                 }
@@ -320,218 +303,12 @@
         }
     </script>
 
-    <!-- variables mapas -->
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script>
-        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Variables y funciones generales mapas
-
-        function highlightFeature(e) {
-            var layer = e.target;
-
-            layer.setStyle({
-                weight: 5,
-                color: '#666',
-                dashArray: '',
-                fillOpacity: 0.7
-            });
-
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-            // console.log('layer.feature:', layer.feature)
-            info.update(layer.feature);
-        }
-
-        function resetHighlight(e) {
-            shape_data_1.resetStyle(e.target);
-            info.update();
-        }
-
-        // function zoomToFeature(e) {
-        //     console.log(e);
-        // }
-
-        function onEachFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-                // click: zoomToFeature
-            });
-        }
-
-        function getColor(d) {
-            var d = parseInt(d);
-            return d > 90 ? '#1f77b4' :
-                   d > 80 ? '#ff7f0e' :
-                   d > 70 ? '#2ca02c' :
-                   d > 60 ? '#d62728' :
-                   d > 50 ? '#9467bd' :
-                   d > 40 ? '#8c564b' :
-                   d > 30 ? '#e377c2' :
-                   d > 20 ? '#7f7f7f' :
-                   d > 10 ? '#bcbd22' :
-                   d > 0 ? '#17becf' :
-                              '#ababab';
-        }
-        function polystyle(feature) {
-            return {
-                // fillColor: getColor(feature.properties.MPIO_CCDGO),
-                fillColor: getColor(feature.valor_indicador),
-                weight: 0.8,
-                opacity: 1,
-                color: 'white',
-                fillOpacity: 0.7
-            };
-        }
-
         var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-        // https://leafletjs.com/reference.html
     </script>
-
-
-    <!-- Carga mapa 1 y updateMap_1 -->
-    <script>
-        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Carga mapa 1
-
-        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
-
-        var layerGroup1 = L.featureGroup()
-        map1.addLayer(layerGroup1);
-
-        var shape_data_1;
-        function updateMap_1(dep_value, dim_value, ind_value) {
-            console.log("-- updateMap_1");
-            layerGroup1.clearLayers();
-            $.getJSON(polyData, function (data) {
-                var filtered_data = data
-                if (selection_departamento_1.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental({selection: 1}));
-                }
-                else {
-                    filtered_data = filtered_data.features;
-                }
-
-                filtered_data = get_indicadores_data_municipal_map(filtered_data, dep_value, dim_value, ind_value);
-                console.log('filtered_data:', filtered_data);
-
-                shape_data_1 = L.geoJson(filtered_data, { style: polystyle, onEachFeature: onEachFeature });
-                shape_data_1.addTo(layerGroup1)
-                map1.flyToBounds(shape_data_1.getBounds());
-            });
-        }
-
-        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // Etiqueta de datos
-
-        var info = L.control();
-        info.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-            this.update();
-            return this._div;
-        };
-
-        info.update = function (props) {
-            var ind1 = document.getElementById("selection_indicador_1");
-            var ind1_value = ind1.value;
-            var ind1_text = ind1.options[ind1.selectedIndex].text;
-
-            this._div.innerHTML = '' +  (props ? '<b>' 
-                + props.properties.MPIO_CNMBR + '</b><br>' 
-                + ind1_text + '<br>'
-                + props.valor_indicador + '' + '<br>'
-                : 'Pase el cursor por el mapa');
-        };
-        info.addTo(map1);
-
-        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // Leyenda
-        var legend = L.control({position: 'bottomright'});
-        legend.onAdd = function (map) {
-            var div = L.DomUtil.create('div', 'info legend'),
-                grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
-                labels = [];
-
-            // loop through our density intervals and generate a label with a colored square for each interval
-            for (var i = 0; i < grades.length; i++) {
-                div.innerHTML +=
-                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-            }
-
-            return div;
-        };
-        legend.addTo(map1);
-        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    </script>
-
-
-    <!-- Carga mapa 2 y updateGraph_2() -->
-    {% comment %}
-    <script>
-        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Carga mapa 2
-
-        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map2);
-
-        var layerGroup2 = L.featureGroup()
-        map2.addLayer(layerGroup2);
-
-        function updateGraph_2() {
-            // console.log("updateGraph_2");
-            layerGroup2.clearLayers();
-
-            $.getJSON(polyData, function (data) {
-                var filtered_data = data
-                if (selection_departamento_2.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental_2);
-                }
-                // console.log('filtered_shapes_2:', filtered_data);
-
-                var shape_data_2 = L.geoJson(filtered_data, {style: polystyle});
-                shape_data_2.addTo(layerGroup2)
-
-                map2.flyToBounds(shape_data_2.getBounds());
-            });
-        }
-        updateGraph_2();
-    </script>
-    {% endcomment %}
-
-    <!-- Carga mapa 3 y updateGraph_3() -->
-    {% comment %}
-    <script>
-        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        // ::: Carga mapa 3
-
-        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
-
-        var layerGroup3 = L.featureGroup()
-        map3.addLayer(layerGroup3);
-
-        function updateGraph_3() {
-            // console.log("updateGraph_3");
-            layerGroup3.clearLayers();
-
-            $.getJSON(polyData, function (data) {
-                var filtered_data = data
-                if (selection_departamento_3.value != 'todos') {
-                    filtered_data = data['features'].filter(filtroDepartamental_3);
-                }
-                // console.log('filtered_shapes_3:', filtered_data);
-
-                var shape_data_3 = L.geoJson(filtered_data, {style: polystyle});
-                shape_data_3.addTo(layerGroup3)
-
-                map3.flyToBounds(shape_data_3.getBounds());
-            });
-        }
-        updateGraph_3();
-    </script>
-    {% endcomment %}
+    <script src="{% static 'js/departamental_mapas.js' %}"></script>
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
     {% comment %} <script>
         $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
@@ -543,220 +320,16 @@
         update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
     </script> {% endcomment %}
 
-    <script>
-        function updateRadar(graph, headers, values) {
-            Plotly.restyle(graph, 'theta', [headers]);
-            Plotly.restyle(graph, 'r', [values]);
-        }
-    </script>
-
-    <!-- Plotly radar1 -->
-    <script>
-        data = [{
-            type: 'scatterpolar',
-            r: [0], theta: [''], fill: 'toself'
-        }]
-        layout = {
-            polar: {
-                radialaxis: {
-                    visible: true,
-                    range: [0, 100]
-                }
-            },
-            showlegend: false
-        }
-        Plotly.newPlot("radar1", data, layout)
-    </script>
-
-
-    <!-- Plotly radar2 -->
-    {% comment %}
-    <script>
-        data = [
-            {
-                type: 'scatterpolar',
-                r: [39, 28, 8, 7, 28, 39],
-                theta: ['A','B','C', 'D', 'E', 'A'],
-                fill: 'toself',
-                name: 'Group A'
-            },
-            {
-                type: 'scatterpolar',
-                r: [1.5, 10, 39, 31, 15, 1.5],
-                theta: ['A','B','C', 'D', 'E', 'A'],
-                fill: 'toself',
-                name: 'Group B'
-            }
-        ]
-            
-        layout = {
-            polar: {
-                radialaxis: {
-                    visible: true,
-                    range: [0, 50]
-                }
-            }
-        }
-            
-        Plotly.newPlot("radar2", data, layout)
-    </script>
-    {% endcomment %}
-
-
-    <!-- multiselect -->
-    {% comment %}
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script src="{% static 'js/virtual-select.min.js' %}"></script>
+
     <script>
-        var selection = [];
         // lectura de indicadores en formato json para el multiselect
         var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
-
-        function filtroMultiselect(elemento) { 
-            return selection.includes(elemento.pk.toString());
-        }
-        
-        function indicadorPersonalizado() {
-            // console.log('function indicadorPersonalizado()');
-            var dimension = document.getElementById('selection_dimension_5');
-            var dimension_value = dimension.options[dimension.selectedIndex].value;
-                
-            selection = $('#multipleSelect').val();
-            var data_multiselect = indicadores_json.filter(filtroMultiselect)
-
-            var selection__ind_pk = [];
-            var selection__ind_name = [];
-            for(var i=0; i < data_multiselect.length; i++){
-               selection__ind_pk.push(data_multiselect[i].pk);
-               selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
-            }
-
-            // console.log('-----')
-            // console.log('selection:', selection)
-            // console.log('data_multiselect:', data_multiselect)
-            // console.log('selection__ind_pk:', selection__ind_pk)
-            // console.log('selection__ind_name:', selection__ind_name)
-            
-            var nueva_selection_indicador = document.getElementById("section4");
-            section4.classList.remove("visible");
-            section4.classList.add("hidden");
-
-            if (dimension_value == 'personalizado') {
-                document.getElementById("selection_indicador_5").disabled = true;
-                section4.classList.remove("hidden");
-                section4.classList.add("visible");
-            } else {
-                document.getElementById("selection_indicador_5").disabled = false;
-            }
-            
-        };
-
-        VirtualSelect.init({ 
-            ele: '#multipleSelect'
-        });
-
-        document.getElementById('multipleSelect').addEventListener('change', function() {
-            indicadorPersonalizado();
-        });
-
-        indicadorPersonalizado()
-    </script>
-    {% endcomment %}
-
-
-    <!-- Show_Hide_Sections -->
-    <script>
-        function Show_Hide_Sections() {
-            var section1 = document.getElementById("section1"); // Presentar - Mapa
-            var section2 = document.getElementById("section2"); // Comparar  - Mapa
-            var section3 = document.getElementById("section3"); // Comparar  - Radar
-
-            var tipo_grafico = document.getElementById('selection_tipo_grafico');
-            var tipo_grafico_value = tipo_grafico.options[tipo_grafico.selectedIndex].value;
-
-            var selection_tipo_grafico_group = document.getElementById('selection_tipo_grafico_group');
-
-            var compareCheck = document.getElementById('compareCheck');
-            var compareCheck_value = compareCheck.checked;
-
-            if (compareCheck_value) {
-                selection_tipo_grafico_group.classList.add("visible");
-                selection_tipo_grafico_group.classList.remove("hidden");
-            } else {
-                selection_tipo_grafico_group.classList.add("hidden");
-                selection_tipo_grafico_group.classList.remove("visible");
-            }
-
-            section1.classList.remove("visible");
-            section2.classList.remove("visible");
-            section3.classList.remove("visible");
-
-            section1.classList.add("hidden");
-            section2.classList.add("hidden");
-            section3.classList.add("hidden");
-
-            if (compareCheck_value == false) {
-                // console.log('Map - show')
-                section1.classList.add("visible");
-                section1.classList.remove("hidden");
-            } else {
-
-                if (tipo_grafico_value == 'map') {
-                    // console.log('Map - compare')
-                    section2.classList.add("visible");
-                    section2.classList.remove("hidden");
-                } else if (tipo_grafico_value == 'radar') {
-                    // console.log('Radar - compare')
-                    section3.classList.add("visible");
-                    section3.classList.remove("hidden");
-                }
-            }
-        };
-        Show_Hide_Sections();
     </script>
 
+    <script src="{% static 'js/departamental_generales.js' %}"></script>
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
-    <!-- EventListener -->
-    <script>
-        function updateGraphs() {
-            // console.log('-- updateGraphs --------')
-            var dep1 = document.getElementById("selection_departamento_1");
-            var dep1_value = dep1.value;
-            var dep1_text = dep1.options[dep1.selectedIndex].text;
-
-            var dim1 = document.getElementById("selection_dimension_1");
-            var dim1_value = dim1.value;
-            var dim1_text = dim1.options[dim1.selectedIndex].text;
-
-            var ind1 = document.getElementById("selection_indicador_1");
-            var ind1_value = ind1.value;
-            var ind1_text = ind1.options[ind1.selectedIndex].text;
-
-            // console.log('-------------------------------------------');
-            // console.log(dep1_text, ' - ', dim1_text, ' - ', ind1_text);
-
-            updateMap_1(dep1_value, dim1_value, ind1_value);
-            get_dimensiones_data_departamental_radar(dep1_value, dim1_value)
-        }
-
-        function departamento_change() {
-            // console.log('-- dpto change --------');
-            updateGraphs();
-        }
-        
-        function dimension_change() {
-            // console.log('-- dim change ---------');
-            update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-        }
-
-        function indicador_change() {
-            // console.log('-- indi change --------');
-            updateGraphs();
-        }
-
-        document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(); });
-        document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(); });
-
-        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
-    </script>
 
 {% endblock %}
