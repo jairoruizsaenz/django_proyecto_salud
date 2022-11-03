@@ -1,0 +1,13 @@
+TODO:
+- agregar checkbox para mostrar indicadores en porcentaje o número (incluye tasas), para gráfico radar
+- comparar radares, sobreponer líneas
+
+FIXME:
+- corregir width de gráfico radar
+
+
+DONE:
+
+
+
+NOTE:

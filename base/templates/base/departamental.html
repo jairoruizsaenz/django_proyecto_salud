@@ -33,7 +33,7 @@
     <div id="section1">
         <div class="row">
             <p style="color:red;">section1</p>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1">
@@ -44,7 +44,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
                     <!-- <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
@@ -55,26 +55,31 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
-                        <option value="default">default</option>
-                    </select>
-                </div>
-            </div>
         </div>
         <div class="row" style="margin-top:16px;">
             <div class="col-md-6">
-                <div>
-                    map1
+                <div class="p-2" style="border: 1px solid #c2c3c4;">
+                    {% comment %} map1 {% endcomment %}
+                    <div class="form-group mb-3">
+                        <label for="selection_indicador_1">Indicador</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
+                            <option value="default">default</option>
+                        </select>
+                    </div>
                     <div id="map1" style="height: 480px;"></div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div>
-                    radar - presentar
-                    <div id="radar1" style="height: 480px;"></div>
+                <div class="p-2" style="border: 1px solid #c2c3c4;">
+                    {% comment %} radar - presentar {% endcomment %}
+                    <div class="form-group mb-3">
+                        <label for="selection_indicador_1">Tipo de indicadores</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_1" name="selection_tipo_indicador_1" onChange="indicador_change(1)">
+                            <option value="porcentual">Porcentuales</option>
+                            <option value="numerico">Numéricos</option>
+                        </select>
+                    </div>
+                    <div id="radar1" style="height: 480px; border: 1px solid red;"></div>
                 </div>
             </div>
         </div>

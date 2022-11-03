@@ -4,17 +4,17 @@
 
     function getColor(d) {
         var d = parseInt(d);
-        return d > 90 ? '#1f77b4' :
-               d > 80 ? '#ff7f0e' :
-               d > 70 ? '#2ca02c' :
-               d > 60 ? '#d62728' :
-               d > 50 ? '#9467bd' :
-               d > 40 ? '#8c564b' :
-               d > 30 ? '#e377c2' :
-               d > 20 ? '#7f7f7f' :
-               d > 10 ? '#bcbd22' :
-               d > 0 ? '#17becf' :
-                          '#ababab';
+        return d > 90 ? '#a50026' :
+               d > 80 ? '#d73027' :
+               d > 70 ? '#f46d43' :
+               d > 60 ? '#fdae61' :
+               d > 50 ? '#fee08b' :
+               d > 40 ? '#d9ef8b' :
+               d > 30 ? '#a6d96a' :
+               d > 20 ? '#66bd63' :
+               d > 10 ? '#1a9850' :
+               d > 0 ? '#006837' :
+                          '#575756';
     }
     function polystyle(feature) {
         return {

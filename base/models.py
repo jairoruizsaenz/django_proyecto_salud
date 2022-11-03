@@ -76,6 +76,7 @@ class Dimension(models.Model):
 class Indicador(models.Model):
     dimension = models.ForeignKey(Dimension, on_delete=models.CASCADE)
     nombre = models.CharField(null=False, default='', max_length=255)
+    es_porcentual = models.BooleanField(default=False)
     
     class Meta:
         verbose_name = "Indicador"

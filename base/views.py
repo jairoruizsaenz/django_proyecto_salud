@@ -17,22 +17,6 @@ import json
 
 #     return JsonResponse(serializers.serialize('json', data), safe=False)
 
-def upload_data_indicadores_municipales(request):
-
-    # RegistroIndiceMunicipal.objects.all().delete()
-
-    # df = pd.read_excel("C:\\Users\\jairoruiz\\Documents\\GitHub\\django_proyecto_salud\\data_inicial\\06_RegistroIndiceMunicipal.xlsx")
-
-    # for index, row in df.iterrows():
-    #     municipio = Municipio.objects.get(pk=row['municipio'])
-    #     indicador = Indicador.objects.get(pk=row['indicador'])
-    #     try:
-    #         nuevo_registro = RegistroIndiceMunicipal.objects.create(municipio=municipio, indicador=indicador, valor=row['valor'])
-    #     except Exception as e:
-    #         print('Error:', e)
-    
-    return HttpResponse("Se cargaron los datos")
-
 
 def get_indicadores_data_municipal_map(request):
     departamento = request.GET.get('departamento', None)
@@ -107,7 +91,7 @@ def get_dimensiones_data_departamental_radar(request):
     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
 
-    indicadores = Indicador.objects.filter(dimension=dimension)
+    indicadores = Indicador.objects.filter(dimension=dimension, es_porcentual=True)
     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
     df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 

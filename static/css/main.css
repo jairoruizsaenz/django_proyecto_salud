@@ -1,6 +1,13 @@
 :root {
-    --color-verde-dnp: #198754;
-    --light_gray: #f7f7f7 ;
+    --dnp-green: #198754;
+    --dnp-yellow:#ffb526;
+    --dnp-blue:#154a8a;
+    --dnp-red:#e31414;
+
+    --dark-gray:#575756;
+    --light_gray: #dddddd ;
+    /* --light_gray: #f7f7f7 ; */
+
     --dark_blue: #4866c8;
     --light_blue: #c9d2f2;
 
@@ -8,9 +15,13 @@
     --t_naranja: #fce4c2;
 }
 
+.amarillo { border-bottom: 8px solid var(--dnp-yellow); }
+.azul { border-bottom: 8px solid var(--dnp-blue); }
+.rojo { border-bottom: 8px solid var(--dnp-red); }
+
 body {
     /* background-color: #f9f9f9 !important; */
-    background-color: var(--light_gray) !important;
+    /* background-color: var(--light_gray) !important; */
     font-family: "Nunito", sans-serif;
     padding-top: 70px;
 }
@@ -88,7 +99,7 @@ body {
 }
 
 a.card:hover {
-    border: 1px solid var(--color-verde-dnp);
+    border: 1px solid var(--dnp-green);
     -webkit-transform: scale(1.005);
 }
 
@@ -104,7 +115,7 @@ a.boton:hover {
   text-decoration: underline;
 }
 
-.verde { color:var(--color-verde-dnp); }
+.verde { color:var(--dnp-green); }
 .rojo { color:#ff6b6b; }
 .amarillo { color:#ffbc49; }
 .azul { color:#0d6efd; }
@@ -115,7 +126,7 @@ span.separador {
 }
 
 table thead {
-    background-color: var(--color-verde-dnp) !important;
+    background-color: var(--dnp-green) !important;
     color: white;
 }
 
@@ -214,7 +225,7 @@ select.decorated option:hover {
     width: 30px;
     height: 30px;
     line-height: 30px;
-    border: 2px solid var(--color-verde-dnp);
+    border: 2px solid var(--dnp-green);
     display: block;
     text-align: center;
     margin: 0 auto 10px auto;
@@ -238,16 +249,16 @@ select.decorated option:hover {
 }
 
 .progressbar li.activado {
-    color:var(--color-verde-dnp);    
+    color:var(--dnp-green);    
 }
 
 .progressbar li.activado:before {    
-    background-color: var(--color-verde-dnp);
+    background-color: var(--dnp-green);
     color: white;
 }
 
 .progressbar li.activado + li:after {
-    background-color: var(--color-verde-dnp);
+    background-color: var(--dnp-green);
 }
 
 /* -------------------------------------------------- */
@@ -347,15 +358,23 @@ g.yAxis-divisions > g > line {
 }
 
 .collapsed {
-    color:var(--light_gray);
-    background-color: var(--color-verde-dnp);
+    color:var(--dnp-red);
+    background-color: var(--dnp-red);
 }
 
 .accordion-body {
-    background-color: var(--light_blue);
+    background-color: var(--dnp-red);
 }
 
 .accordion-button[aria-expanded="true"] {
-    color:var(--light_gray);
-    background-color: var(--dark_blue);
+    color:var(--dnp-red);
+    background-color: var(--dnp-red);
+}
+
+.navbar-dnp{
+    background-color: var(--light_gray) !important;
+}
+
+.navbar-dnp .navbar-nav .nav-link {
+    color: var(--dark-gray);
 }
