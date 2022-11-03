@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 from .forms import Punto_Salud_Create_Form
 import random
@@ -16,6 +16,22 @@ import json
 #     data = RegistroIndiceMunicipal.objects.all()
 
 #     return JsonResponse(serializers.serialize('json', data), safe=False)
+
+def upload_data_indicadores_municipales(request):
+
+    # RegistroIndiceMunicipal.objects.all().delete()
+
+    # df = pd.read_excel("C:\\Users\\jairoruiz\\Documents\\GitHub\\django_proyecto_salud\\data_inicial\\06_RegistroIndiceMunicipal.xlsx")
+
+    # for index, row in df.iterrows():
+    #     municipio = Municipio.objects.get(pk=row['municipio'])
+    #     indicador = Indicador.objects.get(pk=row['indicador'])
+    #     try:
+    #         nuevo_registro = RegistroIndiceMunicipal.objects.create(municipio=municipio, indicador=indicador, valor=row['valor'])
+    #     except Exception as e:
+    #         print('Error:', e)
+    
+    return HttpResponse("Se cargaron los datos")
 
 
 def get_indicadores_data_municipal_map(request):

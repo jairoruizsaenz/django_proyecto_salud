@@ -41,7 +41,10 @@ class Punto_Salud(models.Model):
 class Departamento(models.Model):    
     divipola = models.CharField(max_length=2, unique=True)
     nombre = models.CharField(null=False, default='', max_length=255)
-    
+
+    class Meta:
+        ordering = ['nombre']
+
     def __str__(self):
         return self.nombre
 
@@ -52,10 +55,10 @@ class Municipio(models.Model):
     nombre = models.CharField(null=False, default='', max_length=255)
 
     class Meta:
-        ordering = ['nombre']
+        ordering = ['departamento', 'nombre']
 
     def __str__(self):
-        return f"{self.nombre} ({self.departamento.nombre})"
+        return f"{self.departamento.nombre} - {self.nombre}"
 
 
 class Dimension(models.Model):    
@@ -77,10 +80,10 @@ class Indicador(models.Model):
     class Meta:
         verbose_name = "Indicador"
         verbose_name_plural = "Indicadores"
-        ordering = ['nombre']
+        ordering = ['dimension', 'nombre']
 
     def __str__(self):
-        return f"{self.nombre} ({self.dimension.nombre})"
+        return f"{self.dimension.nombre} - {self.nombre}"
 
 
 class RegistroIndiceMunicipal(models.Model):
@@ -89,9 +92,23 @@ class RegistroIndiceMunicipal(models.Model):
     valor = models.FloatField()
     
     class Meta:
-        verbose_name = "Registro índice - municipal"
-        verbose_name_plural = "Registros índices - municipal"
+        verbose_name = "Registro índice - Municipal"
+        verbose_name_plural = "Registros índices - Municipal"
         ordering = ['indicador', 'municipio']
 
     def __str__(self):
         return f"{self.indicador} - {self.municipio}"
+
+
+class RegistroIndiceDepartamental(models.Model):
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
+    valor = models.FloatField()
+    
+    class Meta:
+        verbose_name = "Registro índice - Departamental"
+        verbose_name_plural = "Registros índices - Departamental"
+        ordering = ['indicador', 'departamento']
+
+    def __str__(self):
+        return f"{self.indicador} - {self.departamento}"
