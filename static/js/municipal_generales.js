@@ -9,7 +9,8 @@
     }
     
     function hide_show_indicadorPersonalizado() {
-        console.log('function hide_show_indicadorPersonalizado()');
+        // console.log('function hide_show_indicadorPersonalizado()');
+
         var dimension = document.getElementById('selection_dimension_4');
         var dimension_value = dimension.options[dimension.selectedIndex].value;
         
@@ -27,7 +28,8 @@
     };
 
     function indicadorPersonalizado() {
-        console.log('function indicadorPersonalizado()');
+        // console.log('function indicadorPersonalizado()');
+
         selection = $('#multipleSelect').val();
         var data_multiselect = indicadores_json.filter(filtroMultiselect)
 
@@ -35,7 +37,7 @@
         var selection__ind_name = [];
         for(var i=0; i < data_multiselect.length; i++){
             selection__ind_pk.push(data_multiselect[i].pk);
-            selection__ind_name.push(data_multiselect[i]['fields'].nombre);               
+            selection__ind_name.push(data_multiselect[i]['fields'].nombre);
         }
 
         // console.log('-----')
@@ -50,7 +52,8 @@
         ele: '#multipleSelect'
     });
 
-    document.getElementById('selection_dimension_4').addEventListener('change', function() { hide_show_indicadorPersonalizado(); });
+    // FIXME:quitar comentario de linea siguiente
+    // document.getElementById('selection_dimension_4').addEventListener('change', function() { hide_show_indicadorPersonalizado(); });
     document.getElementById('multipleSelect').addEventListener('change', function() { indicadorPersonalizado(); });
     
     indicadorPersonalizado();

@@ -359,17 +359,18 @@ g.yAxis-divisions > g > line {
 }
 
 .collapsed {
-    color:var(--dnp-red);
-    background-color: var(--dnp-red);
+    color: var(--dark_gray);
+    background-color: var(--light_gray);
+    border-bottom: 1px solid #575756;
 }
 
 .accordion-body {
-    background-color: var(--dnp-red);
+    background-color: white;
 }
 
 .accordion-button[aria-expanded="true"] {
-    color:var(--dnp-red);
-    background-color: var(--dnp-red);
+    color:var(--light_gray);
+    background-color: var(--dark-gray);
 }
 
 .navbar-dnp{
