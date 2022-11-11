@@ -8,11 +8,26 @@
         return selection.includes(elemento.pk.toString());
     }
     
-    function indicadorPersonalizado() {
-        // console.log('function indicadorPersonalizado()');
-        var dimension = document.getElementById('selection_dimension_5');
+    function hide_show_indicadorPersonalizado() {
+        console.log('function hide_show_indicadorPersonalizado()');
+        var dimension = document.getElementById('selection_dimension_4');
         var dimension_value = dimension.options[dimension.selectedIndex].value;
-            
+        
+        var section4 = document.getElementById("section4");
+        section4.classList.remove("visible");
+        section4.classList.add("hidden");
+
+        if (dimension_value == 'personalizado') {
+            document.getElementById("selection_indicador_4").disabled = true;
+            section4.classList.remove("hidden");
+            section4.classList.add("visible");
+        } else {
+            document.getElementById("selection_indicador_4").disabled = false;
+        }
+    };
+
+    function indicadorPersonalizado() {
+        console.log('function indicadorPersonalizado()');
         selection = $('#multipleSelect').val();
         var data_multiselect = indicadores_json.filter(filtroMultiselect)
 
@@ -28,31 +43,19 @@
         // console.log('data_multiselect:', data_multiselect)
         // console.log('selection__ind_pk:', selection__ind_pk)
         // console.log('selection__ind_name:', selection__ind_name)
-        
-        var nueva_selection_indicador = document.getElementById("section4");
-        section4.classList.remove("visible");
-        section4.classList.add("hidden");
 
-        if (dimension_value == 'personalizado') {
-            document.getElementById("selection_indicador_5").disabled = true;
-            section4.classList.remove("hidden");
-            section4.classList.add("visible");
-        } else {
-            document.getElementById("selection_indicador_5").disabled = false;
-        }
-        
     };
 
     VirtualSelect.init({ 
         ele: '#multipleSelect'
     });
 
-    document.getElementById('multipleSelect').addEventListener('change', function() {
-        indicadorPersonalizado();
-    });
-
-    indicadorPersonalizado()
-
+    document.getElementById('selection_dimension_4').addEventListener('change', function() { hide_show_indicadorPersonalizado(); });
+    document.getElementById('multipleSelect').addEventListener('change', function() { indicadorPersonalizado(); });
+    
+    indicadorPersonalizado();
+    hide_show_indicadorPersonalizado();
+    console.log('---------------');
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // <!-- Show_Hide_Sections -->
@@ -165,6 +168,9 @@
 
             updateMap_3(dep_value, dim_value, ind_value);
             get_dimensiones_data_departamental_radar(dep_value, dim_value)
+
+        } else if (index == 4) {            
+            console.log('Update radar');
         }
         // console.log('-------------------------------------------');
         // console.log(dep_text, ' - ', dim_text, ' - ', ind_text);
@@ -183,6 +189,8 @@
             update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
         } else if (index == 3) {
             update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
+        } else if (index == 4) {
+            update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
         }
     }
 
@@ -200,7 +208,11 @@
     document.getElementById('selection_departamento_3').addEventListener('change', function() { departamento_change(3); });
     document.getElementById('selection_dimension_3').addEventListener('change', function() { dimension_change(3); });
 
+    document.getElementById('selection_departamento_4').addEventListener('change', function() { departamento_change(4); });
+    document.getElementById('selection_dimension_4').addEventListener('change', function() { dimension_change(4); });
+
     update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");
     update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
     update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
+    update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
     

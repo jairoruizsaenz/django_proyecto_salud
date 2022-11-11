@@ -11,6 +11,12 @@
         r: [0], theta: [''], fill: 'toself'
     }]
     layout = {
+        margin: {
+            l: 40,
+            r: 40,
+            b: 40,
+            t: 40,
+        },
         polar: {
             radialaxis: {
                 visible: true,

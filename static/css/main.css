@@ -67,6 +67,7 @@ body {
 .vscomp-toggle-button {
     padding: 10px 30px 10px 10px;
     border-radius: 5px;
+    border-color: #ced4da;
     max-height: 31px !important;
 }
 

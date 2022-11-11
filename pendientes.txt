@@ -5,9 +5,8 @@ TODO:
 - escala de colores mapas (indicadores numéricos) 
 
 FIXME:
-- corregir width de gráfico radar
-- parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
 
+- corregir width de gráfico radar
 
 DONE:
 
@@ -17,5 +16,6 @@ DONE:
     Municipal > Por manzana
 
 - cambiar tile mapas
+- parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
 
 NOTE:

@@ -2,7 +2,7 @@
     // ::: Variables y funciones generales mapas
 
     function getColor(d) {
-        var d = parseInt(d);
+        var d = parseFloat(d);
         return d > 90 ? '#a50026' :
                d > 80 ? '#d73027' :
                d > 70 ? '#f46d43' :
@@ -109,7 +109,7 @@
         this._div.innerHTML = '' +  (props ? '<b>' 
             + props.properties.MPIO_CNMBR + '</b><br>' 
             + ind1_text + '<br>'
-            + props.valor_indicador + '' + '<br>'
+            + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
     info_1.addTo(map1);
