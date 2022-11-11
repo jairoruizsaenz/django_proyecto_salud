@@ -17,5 +17,6 @@ DONE:
 
 - cambiar tile mapas
 - parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
+. corregir escalas en radar
 
 NOTE:
