@@ -5,3 +5,8 @@ __pycache__/
 env/
 
 temp_borrar/
+data_inicial/
+
+.xlsx
+.csv
+
