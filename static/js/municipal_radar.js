@@ -4,7 +4,7 @@
         Plotly.restyle(graph, 'theta', [headers]);
         Plotly.restyle(graph, 'r', [values]);
     }
-    
+
     // <!-- Plotly radar1 -->
     data = [{
         type: 'scatterpolar',

@@ -2,119 +2,94 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block referencia %}departamental.html{% endblock %}
-{% block title_1 %}Departamental{% endblock %}
-{% block title_2 %}Departamental{% endblock %}
+{% block title_1 %}Vista departamental{% endblock %}
+{% block title_2 %}Vista departamental{% endblock %}
 
 {% block content %}
-    <p>{{ mensaje }}</p>
+<p>{{ mensaje }}</p>
+
     <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="selection_tipo_grafico">Tipo de gráfico</label>
+                <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_tipo_grafico">
+                    <option value="map" selected>Mapa</option>
+                    <option value="radar">Radar</option>
+                </select>
+            </div>
+        </div>
         <div class="col-md-2" style="margin-top: 25px">
             <div class="form-group">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="compareCheck" onclick="Show_Hide_Sections()">
+                    <input type="checkbox" class="form-check-input" id="compareCheck">
                     <label class="form-check-label" for="compareCheck">Comparar</label>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 hidden" id="selection_tipo_grafico_group">
-            <div class="form-group">
-                <label class="d-inline-block" for="selection_tipo_grafico">Tipo de gráfico</label>
-                <select class="form-select form-select-sm d-inline-block" aria-label="Default select example" id="selection_tipo_grafico" onclick="Show_Hide_Sections()">
-                    <option value="map">Mapa</option>
-                    <option value="radar">Radar</option>
-                </select>
             </div>
         </div>
     </div>
 
     <hr>
 
-    <!-- Presentar - Mapa -->
-    <div id="section1">
+    <div id="section1" class="visible">
         <div class="row">
-            <p style="color:red;">section1</p>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="selection_departamento_1">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1">
-                        <option value="todos">Todos</option>
-                        {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                        {% endfor %}
+                    <label for="selection_dimension_1">Dimensión</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1">
+                        <option value="accesibilidad" selected>Accesibilidad</option>
+                        <option value="calidad">Calidad</option>
+                        <option value="disponibilidad">Disponibilidad</option>
+                        <option value="poblacion">Población</option>
+                        <option value="utilizacion">Utilización</option>
                     </select>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="selection_dimension_1">Dimensión</label>
-                    <!-- <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
+                    <label for="selection_indicador_1">Indicador</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1">
+                        <option value="0" selected>----------</option>
+                        {% comment %} 
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option> 
+                        {% endcomment %}
                     </select>
                 </div>
             </div>
         </div>
         <div class="row" style="margin-top:16px;">
-            <div class="col-md-6">
-                <div class="p-2" style="border: 1px solid #c2c3c4;">
-                    {% comment %} map1 {% endcomment %}
-                    <div class="form-group mb-3">
-                        <label for="selection_indicador_1">Indicador</label>
-                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
-                            <option value="default">default</option>
-                        </select>
-                    </div>
+            <div class="col-md-12">
+                <div>
+                    map1
                     <div id="map1" style="height: 480px;"></div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="p-2" style="border: 1px solid #c2c3c4;">
-                    {% comment %} radar - presentar {% endcomment %}
-                    <div class="form-group mb-3">
-                        <label for="selection_indicador_1">Tipo de indicadores</label>
-                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_1" name="selection_tipo_indicador_1" onChange="indicador_change(1)">
-                            <option value="porcentual">Porcentuales</option>
-                            <option value="numerico">Numéricos</option>
-                        </select>
-                    </div>
-                    <div id="radar1" style="height: 480px; border: 1px solid red;"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Comparar - Mapa -->    
-    <div id="section2">
+    <div id="section2" class="hidden">
         <div class="row">
-            <p style="color:red;">section2</p>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="selection_departamento_2">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2">
-                        <option value="todos">Todos</option>
-                        {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="col-md-6">                
                 <div class="form-group">
                     <label for="selection_dimension_2">Dimensión</label>
-                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
+                        <option value="accesibilidad" selected>Accesibilidad</option>
+                        <option value="calidad">Calidad</option>
+                        <option value="disponibilidad">Disponibilidad</option>
+                        <option value="poblacion">Población</option>
+                        <option value="utilizacion">Utilización</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_2">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onChange="indicador_change(2)">
-                        <!-- <option value="0">pruebas</option> -->
-                        {% for indicador in indicadores_first %}
-                            <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
-                        {% endfor %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2">
+                        <option selected>----------</option>
+                        {% comment %} 
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option> 
+                        {% endcomment %}
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -124,30 +99,24 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="selection_departamento_3">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3">
-                        <option value="todos">Todos</option>
-                        {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="selection_dimension_3">Dimensión</label>
-                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
                     <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
+                        <option value="accesibilidad" selected>Accesibilidad</option>
+                        <option value="calidad">Calidad</option>
+                        <option value="disponibilidad">Disponibilidad</option>
+                        <option value="poblacion">Población</option>
+                        <option value="utilizacion">Utilización</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="selection_indicador_3">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onChange="indicador_change(3)">
-                        <!-- <option value="0">pruebas</option> -->
-                        {% for indicador in indicadores_first %}
-                            <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
-                        {% endfor %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3">
+                        <option selected>----------</option>
+                        {% comment %} 
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option> 
+                        {% endcomment %}
                     </select>
                 </div>
                 <div style="margin-top:16px;">
@@ -158,183 +127,68 @@
         </div>
     </div>
 
-    <!-- Comparar - Radar -->
-    <div id="section3">
-        <div class="row">
-            <p style="color:red;">section3</p>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="selection_departamento_5">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_5">
-                        <option value="todos">Todos</option>
-                        {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="selection_dimension_5">Dimensión</label>
-                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()"> {% endcomment %}
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
-                        <option value="personalizado">Personalizado</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="selection_indicador_5">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_5">
-                        <option value="0">pruebas</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div id="section4">
-            <div class="row mt-1">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="selection_dimension_1">Indicadores</label>
-                        <div>
-                            <select id="multipleSelect" multiple name="native-select" placeholder="Indicadores" data-search="true" data-silent-initial-value-set="true">
-                                {% for item in indicadores %}
-                                    <option value="{{ item.pk }}">({{ item.dimension}}) {{ item.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:16px;">
-            <div class="col-md-12">
-                <div>
-                    radar - presentar
-                    <div id="radar2" style="height: 480px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/departamental_func_iniciales.js' %}"></script>
-    <script src="{% static 'js/departamental_radar.js' %}"></script>
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-
-    <!-- update_indicador_dropdownlist -->
     <script>
-        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {
-            // console.log('++ update_indicador_dropdownlist')
-            var dimensionId = $(dimension_dropdown_id).val();
+        $('#compareCheck').click(function(){
+            var section1 = document.getElementById("section1");
+            section1.classList.toggle("hidden");
+            section1.classList.toggle("visible");
 
-            if (dimensionId == 'personalizado') {
-                $(indicador_dropdown_id).html('<option value="">----------</option>');
-            } else {
-                $.ajax({
-                    url: "{% url 'baseApp:ajax_load_indicadores' %}",
-                    data: { 'dimensionId': dimensionId },
-                    success: function (data) {
-                        $(indicador_dropdown_id).empty();
-                        $(indicador_dropdown_id).html(data);
-                        $(indicador_dropdown_id).trigger("change");
-                    }
-                });
-            }
+            var section2 = document.getElementById("section2");
+            section2.classList.toggle("hidden");
+            section2.classList.toggle("visible");
+        });
+    </script>
+
+    <script>
+        function polystyle(feature) {
+            return {
+                fillColor: 'blue',
+                weight: 0.8,
+                opacity: 1,
+                color: 'white',  //Outline color
+                fillOpacity: 0.4
+            };
         }
+                
+        var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map1);
+        
+        var polyData1 = "{% static 'json/Colombia.json' %}"
+        $.getJSON(polyData1, function (data) {
+            L.geoJson(data, {style: polystyle}).addTo(map1);
+            // console.log(data);
+        });
     </script>
-
-    <!-- get_indicadores_data_municipal -->
-    <script>
-        function get_indicadores_data_municipal_map(filtered_data, departamento, dimension, indicador) {
-            // console.log("-- get_indicadores_data_municipal_map");
-            var results;
-
-            $.ajax({
-                url: '{% url "baseApp:ajax_get_indicadores_data_municipal_map" %}',
-                async: false,
-                data: {
-                    'departamento': departamento,
-                    'dimension': dimension,
-                    'indicador': indicador
-                },
-                dataType: 'json',
-
-                success: function (data) {
-                    const merged = filtered_data.map(location => {
-                        const divipola = location.properties.MPIO_CCNCT;
-                        const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
-                        return otherRecord ? {...location, ...otherRecord} : location;
-                    });
-                    results = merged;
-                },
-                error: function (res) {
-                    console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
-                }
-            });
-            return results;
-        }
-    </script>
-
-    <!-- get_dimensiones_data_departamental_radar -->
-    <script>
-        function get_dimensiones_data_departamental_radar(departamento, dimension) {
-            // console.log("-- get_dimensiones_data_departamental_radar");
-            $.ajax({
-                url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar" %}',
-                data: {
-                    'departamento': departamento,
-                    'dimension': dimension,
-                },
-                dataType: 'json',
-
-                success: function (data) {
-                    updateRadar('radar1', data.headers, data.values);
-                    // console.log('-------------------------');
-                    // console.log('radar_data:', data);
-                    // console.log('headers:', data.headers);
-                    // console.log('values:', data.values);
-                    // console.log('-------------------------');
-                },
-                error: function (res) {
-                    console.log(res.responseText);
-                }
-            });
-        }
-    </script>
-
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script>
-        var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
-    </script>
-    <script src="{% static 'js/departamental_mapas.js' %}"></script>
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-
-    {% comment %} <script>
-        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
-        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
-        $("#selection_dimension_5").change(function () { update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5"); });
-
-        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
-        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
-        update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
-    </script> {% endcomment %}
-
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/virtual-select.min.js' %}"></script>
 
     <script>
-        // lectura de indicadores en formato json para el multiselect
-        var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
+        var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map2);
+
+        var polyData2 = "{% static 'json/Colombia.json' %}"
+        $.getJSON(polyData2, function (data) {
+            L.geoJson(data, {style: polystyle}).addTo(map2);
+            // console.log(data);
+        });
     </script>
 
-    <script src="{% static 'js/departamental_generales.js' %}"></script>
-    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script>
+        var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map3);
 
-
+        var polyData3 = "{% static 'json/Colombia.json' %}"
+        $.getJSON(polyData3, function (data) {
+            L.geoJson(data, {style: polystyle}).addTo(map3);
+            // console.log(data);
+        });
+    </script>
+    
 {% endblock %}

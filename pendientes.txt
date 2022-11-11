@@ -1,13 +1,21 @@
 TODO:
-- agregar checkbox para mostrar indicadores en porcentaje o número (incluye tasas), para gráfico radar
-- comparar radares, sobreponer líneas
+
+- comparar radares - misma ubicación múltiples indicadores (sobreponer líneas)
+- comparar radares - múltiples ubicaciones mismo indicador (sobreponer líneas)
+- escala de colores mapas (indicadores numéricos) 
 
 FIXME:
 - corregir width de gráfico radar
+- parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
 
 
 DONE:
 
+- cambiar nombres de pestañas
+    Nacional > Departamental
+    Departamental > Municipal
+    Municipal > Por manzana
 
+- cambiar tile mapas
 
 NOTE:

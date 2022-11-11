@@ -2,121 +2,347 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block referencia %}municipal.html{% endblock %}
-{% block title_1 %}Municipal{% endblock %}
-{% block title_2 %}Municipal{% endblock %}
+{% block title_1 %}Vista municipal{% endblock %}
+{% block title_2 %}Vista municipal{% endblock %}
 
 {% block content %}
-    <p>{{ mensaje }}</p>    
-    
+    {% comment %} <p>{{ mensaje }}</p> {% endcomment %}
+    <div class="row">
+        {% comment %} <div class="col-md-2" style="margin-top: 25px"> {% endcomment %}
+        <div class="col-md-2">
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="compareCheck" onclick="Show_Hide_Sections()">
+                    <label class="form-check-label" for="compareCheck">Comparar</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 hidden" id="selection_tipo_grafico_group">
+            <div class="form-group">
+                <label class="d-inline-block" for="selection_tipo_grafico">Tipo de gráfico</label>
+                <select class="form-select form-select-sm d-inline-block" aria-label="Default select example" id="selection_tipo_grafico" onclick="Show_Hide_Sections()">
+                    <option value="map">Mapa</option>
+                    <option value="radar">Radar</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
     <!-- Presentar - Mapa -->
     <div id="section1">
         <div class="row">
-            <p style="color:red;">section1</p>            
-            <div class="col-md-3">
+            <p style="color:red;">section1</p>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1" onchange="updateGraph()">
-                        {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
-                        <option value="todos" selected>Todos</option>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_1">
+                        <option value="todos">Todos</option>
                         {% for dep in departamentos %}
                             <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="selection_municipio_1">Municipio</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_municipio_1" onchange="updateGraph()">
-                        {% comment %} <option value="0" selected>Todos</option> {% endcomment %}
-                        <option value="todos" selected>Todos</option>
-                        {% for municipio in municipios %}
-                            <option value="{{municipio.divipola}}">{{municipio.nombre}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" onchange="updateGraph()">
+                    <!-- <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_1">
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+        </div>
+        <div class="row" style="margin-top:16px;">
+            <div class="col-md-6">
+                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
+                    {% comment %} map1 {% endcomment %}
+                    <div class="form-group mb-3">
+                        <label for="selection_indicador_1">Indicador</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
+                            <option value="default">default</option>
+                        </select>
+                    </div>
+                    <div id="map1" style="height: 480px;"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
+                    {% comment %} radar - presentar {% endcomment %}
+                    <div class="form-group mb-3">
+                        <label for="selection_indicador_1">Tipo de indicadores</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_1" name="selection_tipo_indicador_1" onChange="indicador_change(1)">
+                            <option value="porcentual">Porcentuales</option>
+                            <option value="numerico">Numéricos</option>
+                        </select>
+                    </div>
+                    <div style="width:inherit; height: 480px;">
+                        <div id="radar1" style="width:100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparar - Mapa -->    
+    <div id="section2">
+        <div class="row">
+            <p style="color:red;">section2</p>
+            <div class="col-md-6">
+                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
+                    <div class="form-group">
+                        <label for="selection_departamento_2">Departamento</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_2">
+                            <option value="todos">Todos</option>
+                            {% for dep in departamentos %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_dimension_2">Dimensión</label>
+                        {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_2">
+                            {% for dimension in dimensiones %}
+                                <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_indicador_2">Indicador</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onChange="indicador_change(2)">
+                            <!-- <option value="0">pruebas</option> -->
+                            {% for indicador in indicadores_first %}
+                                <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div style="margin-top:16px;">
+                        {% comment %} map2 {% endcomment %}
+                        <div id="map2" style="height: 480px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
+                    <div class="form-group">
+                        <label for="selection_departamento_3">Departamento</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_3">
+                            <option value="todos">Todos</option>
+                            {% for dep in departamentos %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_dimension_3">Dimensión</label>
+                        {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_3">
+                            {% for dimension in dimensiones %}
+                                <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_indicador_3">Indicador</label>
+                        <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onChange="indicador_change(3)">
+                            <!-- <option value="0">pruebas</option> -->
+                            {% for indicador in indicadores_first %}
+                                <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div style="margin-top:16px;">
+                        map3
+                        <div id="map3" style="height: 480px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparar - Radar -->
+    <div id="section3">
+        <div class="row">
+            <p style="color:red;">section3</p>
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label for="selection_indicador_1">Indicador</label>
-                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_1" onchange="updateGraph()">
-                        <option value="0" selected>pruebas</option>
+                    <label for="selection_departamento_5">Departamento</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_departamento_5">
+                        <option value="todos">Todos</option>
+                        {% for dep in departamentos %}
+                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
-        </div>        
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="selection_dimension_5">Dimensión</label>
+                    {% comment %} <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()"> {% endcomment %}
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_dimension_5">
+                        {% for dimension in dimensiones %}
+                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
+                        {% endfor %}
+                        <option value="personalizado">Personalizado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="selection_indicador_5">Indicador</label>
+                    <select class="form-select  form-select-sm" aria-label="Default select example" id="selection_indicador_5">
+                        <option value="0">pruebas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="section4">
+            <div class="row mt-1">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="selection_dimension_1">Indicadores</label>
+                        <div>
+                            <select id="multipleSelect" multiple name="native-select" placeholder="Indicadores" data-search="true" data-silent-initial-value-set="true">
+                                {% for item in indicadores %}
+                                    <option value="{{ item.pk }}">({{ item.dimension}}) {{ item.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px;">
+            <div class="col-md-12">
+                <div>
+                    radar - presentar
+                    <div id="radar2" style="height: 480px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
-        
-    <script>
-        function updateGraph() {
-            console.log('updateGraph');
-        };
-    </script>
 
-    <script>
-        // Actualización de dropdownlist
-        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script src="{% static 'js/municipal_func_iniciales.js' %}"></script>
+    <script src="{% static 'js/municipal_radar.js' %}"></script>
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
-        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
-            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
-            var url = "{% url 'baseApp:ajax_load_indicadores' %}";
+    <!-- update_indicador_dropdownlist -->
+    <script>
+        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {
+            // console.log('++ update_indicador_dropdownlist')
             var dimensionId = $(dimension_dropdown_id).val();
 
             if (dimensionId == 'personalizado') {
                 $(indicador_dropdown_id).html('<option value="">----------</option>');
             } else {
                 $.ajax({
-                    url: url,
+                    url: "{% url 'baseApp:ajax_load_indicadores' %}",
                     data: { 'dimensionId': dimensionId },
                     success: function (data) {
+                        $(indicador_dropdown_id).empty();
                         $(indicador_dropdown_id).html(data);
+                        $(indicador_dropdown_id).trigger("change");
                     }
                 });
             }
         }
-
-        $("#selection_dimension_1").change(function () { update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1"); });        
-        
-        update_indicador_dropdownlist("#selection_dimension_1", "#selection_indicador_1");        
     </script>
+
+    <!-- get_indicadores_data_municipal -->
+    <script>
+        function get_indicadores_data_municipal_map(filtered_data, departamento, dimension, indicador) {
+            // console.log("-- get_indicadores_data_municipal_map");
+            var results;
+
+            $.ajax({
+                url: '{% url "baseApp:ajax_get_indicadores_data_municipal_map" %}',
+                async: false,
+                data: {
+                    'departamento': departamento,
+                    'dimension': dimension,
+                    'indicador': indicador
+                },
+                dataType: 'json',
+
+                success: function (data) {
+                    const merged = filtered_data.map(location => {
+                        const divipola = location.properties.MPIO_CCNCT;
+                        const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                        return otherRecord ? {...location, ...otherRecord} : location;
+                    });
+                    results = merged;
+                },
+                error: function (res) {
+                    console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
+                }
+            });
+            return results;
+        }
+    </script>
+
+    <!-- get_dimensiones_data_departamental_radar -->
+    <script>
+        function get_dimensiones_data_departamental_radar(departamento, dimension, es_porcentual) {
+            // console.log("-- get_dimensiones_data_departamental_radar");
+            $.ajax({
+                url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar" %}',
+                data: {
+                    'departamento': departamento,
+                    'dimension': dimension,
+                    'es_porcentual':es_porcentual,
+                },
+                dataType: 'json',
+
+                success: function (data) {
+                    updateRadar('radar1', data.headers, data.values);
+                    // console.log('-------------------------');
+                    // console.log('radar_data:', data);
+                    // console.log('headers:', data.headers);
+                    // console.log('values:', data.values);
+                    // console.log('-------------------------');
+                },
+                error: function (res) {
+                    console.log(res.responseText);
+                }
+            });
+        }
+    </script>
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script>
+        var polyData = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
+    </script>
+    <script src="{% static 'js/municipal_mapas.js' %}"></script>
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+    {% comment %} <script>
+        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
+        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
+        $("#selection_dimension_5").change(function () { update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5"); });
+
+        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
+        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
+        update_indicador_dropdownlist("#selection_dimension_5", "#selection_indicador_5");
+    </script> {% endcomment %}
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script src="{% static 'js/virtual-select.min.js' %}"></script>
 
     <script>
-        // Actualización de dropdownlist
-        // https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
-
-        function update_municipio_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {            
-            console.log('update_municipio_dropdownlist');
-
-            // var url = $(dimension_dropdown_id).attr("data-indicadores-url");
-            var url = "{% url 'baseApp:ajax_load_municipios' %}";
-            var departamentoId = $(dimension_dropdown_id).val();
-            
-            if (departamentoId == 'todos') {
-                $(indicador_dropdown_id).html('<option value="">----------</option>');
-            } else {
-                $.ajax({
-                    url: url,
-                    data: { 'departamentoId': departamentoId },
-                    success: function (data) {
-                        $(indicador_dropdown_id).html(data);
-                    }
-                });
-            }            
-        }
-
-        $("#selection_departamento_1").change(function () { update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1"); });        
-
-        update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1");
+        // lectura de indicadores en formato json para el multiselect
+        var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
     </script>
+
+    <script src="{% static 'js/municipal_generales.js' %}"></script>
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
 
 {% endblock %}

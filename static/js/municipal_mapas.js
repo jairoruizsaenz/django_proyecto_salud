@@ -1,4 +1,3 @@
-
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // ::: Variables y funciones generales mapas
 
@@ -13,7 +12,7 @@
                d > 30 ? '#a6d96a' :
                d > 20 ? '#66bd63' :
                d > 10 ? '#1a9850' :
-               d > 0 ? '#006837' :
+               d > 0.0 ? '#006837' :
                           '#575756';
     }
     function polystyle(feature) {
@@ -32,7 +31,8 @@
     // ::: Mapa 1
 
     var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map1);
+    // https://leaflet-extras.github.io/leaflet-providers/preview/
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map1);
 
     var layerGroup_1 = L.featureGroup()
     map1.addLayer(layerGroup_1);
@@ -139,7 +139,13 @@
     // ::: Mapa 2
 
     var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map2);
+
+    // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    //     subdomains: 'abcd',
+    //     maxZoom: 20
+    // });
 
     var layerGroup_2 = L.featureGroup()
     map2.addLayer(layerGroup_2);
@@ -246,7 +252,13 @@
     // ::: Mapa 3
 
     var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map3);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map3);
+
+    // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    //     subdomains: 'abcd',
+    //     maxZoom: 20
+    // });
 
     var layerGroup_3 = L.featureGroup()
     map3.addLayer(layerGroup_3);

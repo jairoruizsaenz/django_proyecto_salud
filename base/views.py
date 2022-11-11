@@ -74,6 +74,12 @@ def get_indicadores_data_municipal_map(request):
 def get_dimensiones_data_departamental_radar(request):
     departamento = request.GET.get('departamento', None)
     dimension = request.GET.get('dimension', None)
+    es_porcentual = request.GET.get('es_porcentual', 'true')
+
+    if es_porcentual == 'true':
+        es_porcentual = True
+    elif es_porcentual == 'false':
+        es_porcentual = False
 
     if departamento == 'todos':
         departamentos = Departamento.objects.all()
@@ -91,7 +97,8 @@ def get_dimensiones_data_departamental_radar(request):
     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
 
-    indicadores = Indicador.objects.filter(dimension=dimension, es_porcentual=True)
+    indicadores = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+
     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
     df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 
@@ -138,12 +145,12 @@ def load_municipios(request):
     return render(request, 'base/items_dropdown_list_options.html', {'items': municipios})
 
 
-def nacional(request):
-    context = { 'mensaje': 'Vista nacional' }
-    return render(request, 'base/nacional.html', context)
-
-
 def departamental(request):
+    context = { 'mensaje': 'Vista departamental' }
+    return render(request, 'base/departamental.html', context)
+
+
+def municipal(request):
     departamentos = Departamento.objects.all()
     dimensiones = Dimension.objects.all()
     
@@ -154,7 +161,7 @@ def departamental(request):
     indicadores_json = serializers.serialize("json", indicadores)
 
     context = { 
-        'mensaje':'Vista departamental',
+        'mensaje':'Vista municipal',
         'departamentos':departamentos,
         'dimensiones':dimensiones,
         
@@ -162,19 +169,19 @@ def departamental(request):
         'indicadores':indicadores,
         'indicadores_json':indicadores_json
     }
-    return render(request, 'base/departamental.html', context)
+    return render(request, 'base/municipal.html', context)
 
 
-def municipal(request):
+def manzanas(request):
     departamentos = Departamento.objects.all()
     dimensiones = Dimension.objects.all()
     
     context = { 
-        'mensaje':'Vista municipal',
+        'mensaje':'Vista por manzanas',
         'departamentos':departamentos,
         'dimensiones':dimensiones
     }
-    return render(request, 'base/municipal.html', context)
+    return render(request, 'base/manzanas.html', context)
 
 
 def red(request):
