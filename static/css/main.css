@@ -64,6 +64,17 @@ body {
     width: 100%;
 }
 
+/* .navbar-toggler {
+    color: purple;
+    border: 2px solid purple;
+}
+
+.navbar-toggler-icon {
+    color: lightcoral;
+    border: 2px solid lightcoral;
+} */
+
+
 .vscomp-toggle-button {
     padding: 10px 30px 10px 10px;
     border-radius: 5px;
