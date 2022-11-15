@@ -32,7 +32,8 @@
 
     var map1 = L.map('map1').setView([4.683709901063048, -74.05116825770746], 4);
     // https://leaflet-extras.github.io/leaflet-providers/preview/
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map1);
+    // https://leafletjs.com/reference.html#tilelayer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { minZoom:5, maxZoom: 10 }).addTo(map1);
 
     var layerGroup_1 = L.featureGroup()
     map1.addLayer(layerGroup_1);
@@ -139,7 +140,7 @@
     // ::: Mapa 2
 
     var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { minZoom:5, maxZoom: 10 }).addTo(map2);
 
     // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -252,7 +253,7 @@
     // ::: Mapa 3
 
     var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map3);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { minZoom:5, maxZoom: 10 }).addTo(map3);
 
     // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',

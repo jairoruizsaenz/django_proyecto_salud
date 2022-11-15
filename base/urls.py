@@ -4,9 +4,9 @@ from .views import *
 
 app_name = 'baseApp'
 urlpatterns = [
-    path('departamental/', departamental, name='departamental'),
-    path('municipal/', municipal, name='municipal'),
-    path('manzanas/', manzanas, name='manzanas'),
+    # path('departamental/', departamental, name='departamental'),
+    # path('manzanas/', manzanas, name='manzanas'),
+    path('indicadores/', indicadores, name='indicadores'),
     path('red/', red, name='red'),
     path('ayuda/', ayuda, name='ayuda'),
     path('simulacion/', simulacion, name='simulacion'),

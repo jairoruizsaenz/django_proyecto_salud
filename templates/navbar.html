@@ -6,14 +6,14 @@
             <!-- <img src="{% static 'images/logo_pequeno.png' %}" alt="" height="35" class="d-inline-block align-text-top"> -->
             <!-- <span style="margin-left: 15px;">Mapas de brecha de evidencia</span> -->
         </a>
-        
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-                
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <a class="navbar-brand abs" href=""></a>
-            <ul class="navbar-nav ms-auto">                
+            <ul class="navbar-nav ms-auto">
                 {% comment %} {% if request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Hola {{ request.user.first_name|title }} ({{ request.user.username }})</a>
@@ -22,9 +22,9 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a></li>
                 {% else %} {% endcomment %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:departamental' %}">Departamental</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:municipal' %}">Municipal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:manzanas' %}">Por manzanas</a></li>
+                    {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:departamental' %}">Departamental</a></li> {% endcomment %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:indicadores' %}">Indicadores</a></li>
+                    {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:manzanas' %}">Por manzanas</a></li> {% endcomment %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:simulacion' %}">Simulación</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:red' %}">Red</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'baseApp:ayuda' %}">Ayuda</a></li>

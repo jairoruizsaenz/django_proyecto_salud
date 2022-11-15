@@ -1,12 +1,16 @@
 TODO:
 
+- función Map para cargar datos
+- agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
+    (número de camas vs % Mujeres en edad reproductiva sin cobertura (Todas las sedes))
+- Ajustar las vistas por los niveles (municipal, departamental)
+- Borra vista municipal, agregar dropdown de municipio a la vista departamental
+
 - comparar radares - misma ubicación múltiples indicadores (sobreponer líneas)
 - comparar radares - múltiples ubicaciones mismo indicador (sobreponer líneas)
 - escala de colores mapas (indicadores numéricos) 
 
 FIXME:
-
-- corregir width de gráfico radar
 
 DONE:
 

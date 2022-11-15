@@ -266,12 +266,12 @@ def load_municipios(request):
     return render(request, 'base/items_dropdown_list_options.html', {'items': municipios})
 
 
-def departamental(request):
-    context = { 'mensaje': 'Vista departamental' }
-    return render(request, 'base/departamental.html', context)
+# def departamental(request):
+#     context = { 'mensaje': 'Vista departamental' }
+#     return render(request, 'base/departamental.html', context)
 
 
-def municipal(request):
+def indicadores(request):
     departamentos = Departamento.objects.all()
     dimensiones = Dimension.objects.all()
     
@@ -293,16 +293,16 @@ def municipal(request):
     return render(request, 'base/municipal.html', context)
 
 
-def manzanas(request):
-    departamentos = Departamento.objects.all()
-    dimensiones = Dimension.objects.all()
+# def manzanas(request):
+#     departamentos = Departamento.objects.all()
+#     dimensiones = Dimension.objects.all()
     
-    context = { 
-        'mensaje':'Vista por manzanas',
-        'departamentos':departamentos,
-        'dimensiones':dimensiones
-    }
-    return render(request, 'base/manzanas.html', context)
+#     context = { 
+#         'mensaje':'Vista por manzanas',
+#         'departamentos':departamentos,
+#         'dimensiones':dimensiones
+#     }
+#     return render(request, 'base/manzanas.html', context)
 
 
 def red(request):
