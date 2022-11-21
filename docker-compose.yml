@@ -1,0 +1,12 @@
+version: "3"
+services:
+  app:
+    build: . 
+    volumes:
+      - "./django_app:/usr/src/django_app/"
+    ports:
+      - "8082:8000"
+    image: app:image-django-P01-salud
+    container_name: container-django-P01-salud
+    restart: always
+    command: "python3 manage.py runserver 0:8000"
