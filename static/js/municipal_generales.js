@@ -48,7 +48,7 @@
 
     };
 
-    VirtualSelect.init({ 
+    VirtualSelect.init({
         ele: '#multipleSelect'
     });
 

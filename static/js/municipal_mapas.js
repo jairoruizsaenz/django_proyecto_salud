@@ -1,4 +1,6 @@
-    // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// https://www.youtube.com/watch?v=xerlQ3tE8Ew
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // ::: Variables y funciones generales mapas
 
     function getColor(d) {
@@ -79,7 +81,7 @@
         layerGroup_1.clearLayers();
         $.getJSON(polyData, function (data) {
             var filtered_data_1 = data
-            if (selection_departamento_1.value != 'todos') {
+            if (selection_departamento_1.value != '00') {
                 filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
             }
             else {
@@ -192,7 +194,7 @@
         layerGroup_2.clearLayers();
         $.getJSON(polyData, function (data) {
             var filtered_data_2 = data
-            if (selection_departamento_2.value != 'todos') {
+            if (selection_departamento_2.value != '00') {
                 filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 2}));
             }
             else {
@@ -305,7 +307,7 @@
         layerGroup_3.clearLayers();
         $.getJSON(polyData, function (data) {
             var filtered_data_3 = data
-            if (selection_departamento_3.value != 'todos') {
+            if (selection_departamento_3.value != '00') {
                 filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 3}));
             }
             else {

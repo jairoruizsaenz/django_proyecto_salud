@@ -23,7 +23,7 @@ def get_indicadores_data_municipal_map(request):
     dimension = request.GET.get('dimension', None)
     indicador = request.GET.get('indicador', None)
 
-    if departamento == 'todos':
+    if departamento == '00':
         departamentos = Departamento.objects.all()
     else:
         departamentos = Departamento.objects.filter(divipola=departamento)
@@ -81,10 +81,10 @@ def get_dimensiones_data_departamental_radar_1(request):
     elif es_porcentual == 'false':
         es_porcentual = False
 
-    if departamento == 'todos':
-        departamentos = Departamento.objects.all()
-    else:
-        departamentos = Departamento.objects.filter(divipola=departamento)
+    # if departamento == '00':
+    #     departamentos = Departamento.objects.all()
+    # else:
+    departamentos = Departamento.objects.filter(divipola=departamento)
 
     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
@@ -145,12 +145,12 @@ def get_dimensiones_data_departamental_radar_2(request):
     elif es_porcentual == 'false':
         es_porcentual = False
 
-    if departamento_1 == 'todos':
+    if departamento_1 == '00':
         departamentos_1 = Departamento.objects.all()
     else:
         departamentos_1 = Departamento.objects.filter(divipola=departamento_1)
 
-    if departamento_2 == 'todos':
+    if departamento_2 == '00':
         departamentos_2 = Departamento.objects.all()
     else:
         departamentos_2 = Departamento.objects.filter(divipola=departamento_2)

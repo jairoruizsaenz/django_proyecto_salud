@@ -38,9 +38,12 @@
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_1">
-                        <option value="todos">Todos</option>
                         {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% if dep.divipola == '00' %}
+                                <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                            {% else %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
@@ -97,10 +100,13 @@
                     <div class="form-group">
                         <label for="selection_departamento_2">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_2">
-                            <option value="todos">Todos</option>
                             {% for dep in departamentos %}
-                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                            {% endfor %}
+                                {% if dep.divipola == '00' %}
+                                    <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                                {% else %}
+                                    <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                                {% endif %}
+                            {% endfor %}                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -132,9 +138,12 @@
                     <div class="form-group">
                         <label for="selection_departamento_3">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_3">
-                            <option value="todos">Todos</option>
                             {% for dep in departamentos %}
-                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                                {% if dep.divipola == '00' %}
+                                    <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                                {% else %}
+                                    <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -173,9 +182,12 @@
                 <div class="form-group">
                     <label for="selection_departamento_4_1">Departamento 1</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_1">
-                        <option value="todos">Todos</option>
                         {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% if dep.divipola == '00' %}
+                                <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                            {% else %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
@@ -184,9 +196,12 @@
                 <div class="form-group">
                     <label for="selection_departamento_4_2">Departamento 2</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_2">
-                        {% comment %} <option value="todos">Todos</option> {% endcomment %}
                         {% for dep in departamentos %}
-                            <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% if dep.divipola == '00' %}
+                                <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                            {% else %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
