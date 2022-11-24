@@ -1,5 +1,18 @@
 TODO:
 
+DONE - justificar texto de la intro
+- mejorar imagen inicial (Accesibilidad y uso efectivo)
+
+- indicadores de calidad no están funcionando
+- agregar label de valor de gris y validar si está funcionando bien
+- revisar hover de gráfico radar
+- descargar info en excel
+
+- barranco minas, mapiripan (verificar municipios)
+- cambiar colores de mapa
+
+TODO:
+
 - función Map para cargar datos
 - agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
     (número de camas vs % Mujeres en edad reproductiva sin cobertura (Todas las sedes))

@@ -52,7 +52,10 @@ def get_indicadores_data_municipal_map(request):
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
     
-    # print(df_temp)
+    # if indicadores[0].es_porcentual:
+
+
+    print(df_temp.head())
 
     # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
     # df_temp.rename(columns={
@@ -66,7 +69,9 @@ def get_indicadores_data_municipal_map(request):
     # }, inplace=True)
 
     data = {}
-    data['filter_records']=df_temp.to_dict('records')
+    data['filter_records']=df_temp.to_dict('records')    
+    data['legend_colors'] = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
+    data['legend_values'] = ['90 - 100 %', '80 - 90 %', '70 - 80 %', '60 - 70 %', '50 - 60 %', '40 - 50 %', '30 - 40 %', '20 - 30 %', '10 - 20 %', '0 - 10 %', '0 %']
 
     return JsonResponse(data, safe=False)
     
@@ -282,21 +287,19 @@ def indicadores(request):
     indicadores_json = serializers.serialize("json", indicadores)
 
     context = { 
-        'mensaje':'Vista municipal',
         'departamentos':departamentos,
         'dimensiones':dimensiones,
-        
         'indicadores_first':indicadores_first,
         'indicadores':indicadores,
         'indicadores_json':indicadores_json
     }
-    return render(request, 'base/municipal.html', context)
+    return render(request, 'base/indicadores.html', context)
 
 
 # def manzanas(request):
 #     departamentos = Departamento.objects.all()
 #     dimensiones = Dimension.objects.all()
-    
+
 #     context = { 
 #         'mensaje':'Vista por manzanas',
 #         'departamentos':departamentos,
