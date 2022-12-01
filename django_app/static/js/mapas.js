@@ -83,8 +83,8 @@
     var legend_1 = L.control({position: 'bottomright'});
     legend_1.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend');
-        var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
-        var labels = [];
+        // var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+        // var labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
         // for (var i = 0; i < grades.length; i++) {
@@ -166,13 +166,9 @@
     // ::: Mapa 2
 
     var map2 = L.map('map2').setView([4.683709901063048, -74.05116825770746], 4);
+    // https://leaflet-extras.github.io/leaflet-providers/preview/
+    // https://leafletjs.com/reference.html#tilelayer
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { minZoom:5, maxZoom: 10 }).addTo(map2);
-
-    // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    //     subdomains: 'abcd',
-    //     maxZoom: 20
-    // });
 
     var layerGroup_2 = L.featureGroup()
     map2.addLayer(layerGroup_2);
@@ -213,22 +209,62 @@
         });
     }
 
+    // ::::::::::::::::::::::::::::::::
+    // Leyenda
+    var legend_2 = L.control({position: 'bottomright'});
+    legend_2.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+        // var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+        // var labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML += 
+        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        // }
+        div.innerHTML = '';
+        return div;
+    };
+    legend_2.addTo(map2);
+
+    legend_2.setContent = function(colors, values) {
+        this.getContainer().innerHTML = '';
+        for (var i = 0; i < colors.length; i++) {
+            this.getContainer().innerHTML +=
+                '<i style="background:' + colors[i] + '"></i>' + values[i] + '<br>';
+        }
+    };
+
+    // ::::::::::::::::::::::::::::::::
+    // Update Map
+
     function updateMap_2(dep_value, dim_value, ind_value) {
-        // console.log("-- updateMap_1");
+        // console.log("-- updateMap_2");
         layerGroup_2.clearLayers();
-        $.getJSON(shapes_municipales, function (data) {
-            var filtered_data_2 = data
-            if (dep_value != '00') {
-                filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 2}));
-            }
-            else {
+
+        if (dep_value == '00') {
+            $.getJSON(shapes_departamentales, function (data) {
+                var filtered_data_2 = data                
                 filtered_data_2 = filtered_data_2.features;
-            }
-            data_temp = get_indicadores_data_municipal_map(filtered_data_2, dep_value, dim_value, ind_value);
-            shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
-            shape_data_2.addTo(layerGroup_2)
-            map2.flyToBounds(shape_data_2.getBounds());
-        });
+                // TODO: deb implementar una función para extraer los datos departamentales
+                data_temp = get_indicadores_data_municipal_map(filtered_data_2, dep_value, dim_value, ind_value);
+                shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
+                shape_data_2.addTo(layerGroup_2)
+                map2.flyToBounds(shape_data_2.getBounds());
+                legend_2.setContent(data_temp[1], data_temp[2]);
+            });
+        }
+        else {
+            $.getJSON(shapes_municipales, function (data) {
+                var filtered_data_2 = data
+                filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 2}));
+                data_temp = get_indicadores_data_municipal_map(filtered_data_2, dep_value, dim_value, ind_value);
+                shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
+                shape_data_2.addTo(layerGroup_2)
+                map2.flyToBounds(shape_data_2.getBounds());
+                legend_2.setContent(data_temp[1], data_temp[2]);
+            });        
+        }
     }
 
     // ::::::::::::::::::::::::::::::::
@@ -242,36 +278,17 @@
     };
 
     info_2.update = function (props) {
-        var ind2 = document.getElementById("selection_indicador_2");
-        var ind2_value = ind2.value;
-        var ind2_text = ind2.options[ind2.selectedIndex].text;
+        var ind1 = document.getElementById("selection_indicador_2");
+        var ind1_value = ind1.value;
+        var ind1_text = ind1.options[ind1.selectedIndex].text;
 
         this._div.innerHTML = '' +  (props ? '<b>' 
             + props.properties.MPIO_CNMBR + '</b><br>' 
-            + ind2_text + '<br>'
-            + props.valor_indicador + '' + '<br>'
+            + ind1_text + '<br>'
+            + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
     info_2.addTo(map2);
-
-    // ::::::::::::::::::::::::::::::::
-    // Leyenda    
-    var legend_2 = L.control({position: 'bottomright'});
-    legend_2.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
-            labels = [];
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        // for (var i = 0; i < grades.length; i++) {
-        //     div.innerHTML +=
-        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-        //         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        // }
-        div.innerHTML = '';
-        return div;
-    };
-    legend_2.addTo(map2);
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -279,13 +296,9 @@
     // ::: Mapa 3
 
     var map3 = L.map('map3').setView([4.683709901063048, -74.05116825770746], 4);
+    // https://leaflet-extras.github.io/leaflet-providers/preview/
+    // https://leafletjs.com/reference.html#tilelayer
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { minZoom:5, maxZoom: 10 }).addTo(map3);
-
-    // var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    //     subdomains: 'abcd',
-    //     maxZoom: 20
-    // });
 
     var layerGroup_3 = L.featureGroup()
     map3.addLayer(layerGroup_3);
@@ -326,22 +339,62 @@
         });
     }
 
+    // ::::::::::::::::::::::::::::::::
+    // Leyenda
+    var legend_3 = L.control({position: 'bottomright'});
+    legend_3.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+        // var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+        // var labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML += 
+        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        // }
+        div.innerHTML = '';
+        return div;
+    };
+    legend_3.addTo(map3);
+
+    legend_3.setContent = function(colors, values) {
+        this.getContainer().innerHTML = '';
+        for (var i = 0; i < colors.length; i++) {
+            this.getContainer().innerHTML +=
+                '<i style="background:' + colors[i] + '"></i>' + values[i] + '<br>';
+        }
+    };
+
+    // ::::::::::::::::::::::::::::::::
+    // Update Map
+
     function updateMap_3(dep_value, dim_value, ind_value) {
-        // console.log("-- updateMap_1");
+        // console.log("-- updateMap_2");
         layerGroup_3.clearLayers();
-        $.getJSON(shapes_municipales, function (data) {
-            var filtered_data_3 = data
-            if (dep_value != '00') {
-                filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 3}));
-            }
-            else {
+
+        if (dep_value == '00') {
+            $.getJSON(shapes_departamentales, function (data) {
+                var filtered_data_3 = data                
                 filtered_data_3 = filtered_data_3.features;
-            }
-            data_temp = get_indicadores_data_municipal_map(filtered_data_3, dep_value, dim_value, ind_value);
-            shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
-            shape_data_3.addTo(layerGroup_3)
-            map3.flyToBounds(shape_data_3.getBounds());
-        });
+                // TODO: deb implementar una función para extraer los datos departamentales
+                data_temp = get_indicadores_data_municipal_map(filtered_data_3, dep_value, dim_value, ind_value);
+                shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
+                shape_data_3.addTo(layerGroup_3)
+                map3.flyToBounds(shape_data_3.getBounds());
+                legend_3.setContent(data_temp[1], data_temp[2]);
+            });
+        }
+        else {
+            $.getJSON(shapes_municipales, function (data) {
+                var filtered_data_3 = data
+                filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 3}));
+                data_temp = get_indicadores_data_municipal_map(filtered_data_3, dep_value, dim_value, ind_value);
+                shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
+                shape_data_3.addTo(layerGroup_3)
+                map3.flyToBounds(shape_data_3.getBounds());
+                legend_3.setContent(data_temp[1], data_temp[2]);
+            });        
+        }
     }
 
     // ::::::::::::::::::::::::::::::::
@@ -355,35 +408,16 @@
     };
 
     info_3.update = function (props) {
-        var ind3 = document.getElementById("selection_indicador_3");
-        var ind3_value = ind3.value;
-        var ind3_text = ind3.options[ind3.selectedIndex].text;
+        var ind1 = document.getElementById("selection_indicador_3");
+        var ind1_value = ind1.value;
+        var ind1_text = ind1.options[ind1.selectedIndex].text;
 
         this._div.innerHTML = '' +  (props ? '<b>' 
             + props.properties.MPIO_CNMBR + '</b><br>' 
-            + ind3_text + '<br>'
-            + props.valor_indicador + '' + '<br>'
+            + ind1_text + '<br>'
+            + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
     info_3.addTo(map3);
-
-    // ::::::::::::::::::::::::::::::::
-    // Leyenda
-    var legend_3 = L.control({position: 'bottomright'});
-    legend_3.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
-            labels = [];
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        // for (var i = 0; i < grades.length; i++) {
-        //     div.innerHTML +=
-        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-        //         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        // }
-        div.innerHTML = '';
-        return div;
-    };
-    legend_3.addTo(map3);
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
