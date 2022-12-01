@@ -6,6 +6,7 @@ import random
 from .models import *
 import pandas as pd
 import json
+import numpy as np
 
 # def get_indicadores_data_municipal(request):
 #     departamento = request.GET.get('departamento', None)
@@ -17,6 +18,31 @@ import json
 
 #     return JsonResponse(serializers.serialize('json', data), safe=False)
 
+
+def color_map(value, colores, rangos):
+    index = 0
+    for idx, val in enumerate(rangos[:-1]):
+        if (float(value) > float(rangos[idx+1])) and (float(value) <= float(rangos[idx])):
+            index = idx
+    
+    if float(value) == 0.0:
+        return colores[-1]
+
+    return colores[index]
+
+def update_rangos(rangos, es_porcentual):
+    temp = []
+    for idx, value in enumerate(rangos[:-1]):
+        if es_porcentual:
+            temp.append(f'{rangos[idx+1]} - {rangos[idx]} %')
+        else:
+            temp.append(f'{rangos[idx+1]:,} - {rangos[idx]:,}'.replace(',','.'))
+
+    if es_porcentual:
+        temp.append('0 %')
+    else:
+        temp.append('0')
+    return temp
 
 def get_indicadores_data_municipal_map(request):
     departamento = request.GET.get('departamento', None)
@@ -51,11 +77,6 @@ def get_indicadores_data_municipal_map(request):
     df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
-    
-    # if indicadores[0].es_porcentual:
-
-
-    print(df_temp.head())
 
     # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
     # df_temp.rename(columns={
@@ -68,13 +89,30 @@ def get_indicadores_data_municipal_map(request):
     #     'valor':'VALOR',
     # }, inplace=True)
 
+    colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
+
+    if indicadores[0].es_porcentual:
+        rangos = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+        df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+        rangos = update_rangos(rangos, True)
+    else:
+        rangos = np.quantile(list(df_temp['valor_indicador']), q = np.arange(0.1, 1, 0.1)).tolist()
+        rangos.append(df_temp['valor_indicador'].max())
+        rangos = [round(item) for item in rangos]
+        rangos.insert(0, 0)
+        rangos.reverse()
+        df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+        rangos = update_rangos(rangos, False)
+
+    # print(df_temp.head())
+
     data = {}
-    data['filter_records']=df_temp.to_dict('records')    
-    data['legend_colors'] = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
-    data['legend_values'] = ['90 - 100 %', '80 - 90 %', '70 - 80 %', '60 - 70 %', '50 - 60 %', '40 - 50 %', '30 - 40 %', '20 - 30 %', '10 - 20 %', '0 - 10 %', '0 %']
+    data['filter_records']=df_temp.to_dict('records')
+    data['legend_colors'] = colores
+    data['legend_values'] = rangos
 
     return JsonResponse(data, safe=False)
-    
+
 
 def get_dimensiones_data_departamental_radar_1(request):
     departamento = request.GET.get('departamento', None)

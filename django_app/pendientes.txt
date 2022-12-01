@@ -1,10 +1,10 @@
 TODO:
 
 DONE - justificar texto de la intro
-- mejorar imagen inicial (Accesibilidad y uso efectivo)
+DONE - agregar label de valor de gris y validar si está funcionando bien
+DONE - mejorar imagen inicial (Accesibilidad y uso efectivo)
 
 - indicadores de calidad no están funcionando
-- agregar label de valor de gris y validar si está funcionando bien
 - revisar hover de gráfico radar
 - descargar info en excel
 

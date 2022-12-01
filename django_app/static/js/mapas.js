@@ -3,25 +3,26 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // ::: Variables y funciones generales mapas
 
-    function getColor(d) {
-        var d = parseFloat(d);
-        return d > 90 ? '#a50026' :
-               d > 80 ? '#d73027' :
-               d > 70 ? '#f46d43' :
-               d > 60 ? '#fdae61' :
-               d > 50 ? '#fee090' :
-               d > 40 ? '#e0f3f8' :
-               d > 30 ? '#abd9e9' :
-               d > 20 ? '#74add1' :
-               d > 10 ? '#4575b4' :
-               d > 0.0 ? '#313695' :
-               d == 0.0 ? '#575756' :
-                          '#000000';
-    }
+    // function getColor(d) {
+    //     var d = parseFloat(d);
+    //     return d > 90 ? '#a50026' :
+    //            d > 80 ? '#d73027' :
+    //            d > 70 ? '#f46d43' :
+    //            d > 60 ? '#fdae61' :
+    //            d > 50 ? '#fee090' :
+    //            d > 40 ? '#e0f3f8' :
+    //            d > 30 ? '#abd9e9' :
+    //            d > 20 ? '#74add1' :
+    //            d > 10 ? '#4575b4' :
+    //            d > 0.0 ? '#313695' :
+    //            d == 0.0 ? '#575756' :
+    //                       '#000000';
+    // }
     function polystyle(feature) {
         return {
             // fillColor: getColor(feature.properties.MPIO_CCDGO),
-            fillColor: getColor(feature.valor_indicador),
+            // fillColor: getColor(feature.valor_indicador),
+            fillColor: feature.color,
             weight: 0.8,
             opacity: 1,
             color: 'white',
@@ -86,11 +87,10 @@
         var labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        }
-        // div.innerHTML = '<i style="background:#313695"></i> Testing<br>';
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML += 
+        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        // }
         div.innerHTML = '';
         return div;
     };
@@ -134,24 +134,6 @@
                 legend_1.setContent(data_temp[1], data_temp[2]);
             });        
         }
-
-        // var legend_colors = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756'];
-        // var legend_values = ['90 - 100 %', '80 - 90 %', '70 - 80 %', '60 - 70 %', '50 - 60 %', '40 - 50 %', '30 - 40 %', '20 - 30 %', '10 - 20 %', '0 - 10 %', '0 %'];
-        // legend_1.setContent(legend_colors, legend_values);
-
-        // $.getJSON(polyData, function (data) {
-        //     var filtered_data_1 = data
-        //     if (selection_departamento_1.value != '00') {
-        //         filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
-        //     }
-        //     else {
-        //         filtered_data_1 = filtered_data_1.features;
-        //     }
-        //     filtered_data_1 = get_indicadores_data_municipal_map(filtered_data_1, dep_value, dim_value, ind_value);
-        //     shape_data_1 = L.geoJson(filtered_data_1, { style: polystyle, onEachFeature: onEachFeature_1 });
-        //     shape_data_1.addTo(layerGroup_1)
-        //     map1.flyToBounds(shape_data_1.getBounds());
-        // });
     }
 
     // ::::::::::::::::::::::::::::::::
@@ -176,8 +158,6 @@
             : 'Pase el cursor por el mapa');
     };
     info_1.addTo(map1);
-
-
 
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -283,12 +263,12 @@
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        }
-
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML +=
+        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        //         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        // }
+        div.innerHTML = '';
         return div;
     };
     legend_2.addTo(map2);
@@ -396,12 +376,12 @@
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        }
-
+        // for (var i = 0; i < grades.length; i++) {
+        //     div.innerHTML +=
+        //         '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        //         grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        // }
+        div.innerHTML = '';
         return div;
     };
     legend_3.addTo(map3);
