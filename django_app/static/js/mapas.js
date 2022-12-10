@@ -43,7 +43,6 @@
     map1.addLayer(layerGroup_1);
 
     var shape_data_1;
-
     function highlightFeature_1(e) {
         var layer = e.target;
 
@@ -112,11 +111,15 @@
         layerGroup_1.clearLayers();
 
         if (dep_value == '00') {
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_1 = data                
                 filtered_data_1 = filtered_data_1.features;
-                // TODO: deb implementar una función para extraer los datos departamentales
-                data_temp = get_indicadores_data_municipal_map(filtered_data_1, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_data_departamental_map(filtered_data_1, dep_value, dim_value, ind_value);
                 shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                 shape_data_1.addTo(layerGroup_1)
                 map1.flyToBounds(shape_data_1.getBounds());
@@ -124,6 +127,11 @@
             });
         }
         else {
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_municipales, function (data) {
                 var filtered_data_1 = data
                 filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
@@ -138,7 +146,6 @@
 
     // ::::::::::::::::::::::::::::::::
     // Etiqueta de datos
-
     var info_1 = L.control();
     info_1.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -152,13 +159,27 @@
         var ind1_text = ind1.options[ind1.selectedIndex].text;
 
         this._div.innerHTML = '' +  (props ? '<b>' 
-            + props.properties.MPIO_CNMBR + '</b><br>' 
+            + props.nombre_ubicacion + '</b><br>' 
             + ind1_text + '<br>'
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
     info_1.addTo(map1);
 
+    // https://github.com/rowanwins/leaflet-easyPrint
+    var printPlugin_1 = L.easyPrint({
+        title: 'Descargar Imagen',
+        position: 'bottomleft',
+        sizeModes: ['A4Landscape'],
+        exportOnly: true,
+        filename: 'Imagen_Mapa',
+        hideControlContainer: false
+        // hidden: true
+    }).addTo(map1);
+
+    // function functionToExecute() {
+    //     printPlugin_1.printMap('A4Landscape', 'Imagen_Mapa');
+    // }
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -242,12 +263,17 @@
         // console.log("-- updateMap_2");
         layerGroup_2.clearLayers();
 
+        $.ajaxSetup({
+            scriptCharset: "utf-8",
+            contentType: "application/json; charset=utf-8"
+        });
+
         if (dep_value == '00') {
             $.getJSON(shapes_departamentales, function (data) {
-                var filtered_data_2 = data                
+                var filtered_data_2 = data
                 filtered_data_2 = filtered_data_2.features;
                 // TODO: deb implementar una función para extraer los datos departamentales
-                data_temp = get_indicadores_data_municipal_map(filtered_data_2, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_data_departamental_map(filtered_data_2, dep_value, dim_value, ind_value);
                 shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                 shape_data_2.addTo(layerGroup_2)
                 map2.flyToBounds(shape_data_2.getBounds());
@@ -289,6 +315,17 @@
             : 'Pase el cursor por el mapa');
     };
     info_2.addTo(map2);
+
+    // https://github.com/rowanwins/leaflet-easyPrint
+    var printPlugin_2 = L.easyPrint({
+        title: 'Descargar Imagen',
+        position: 'bottomleft',
+        sizeModes: ['A4Landscape'],
+        exportOnly: true,
+        filename: 'Imagen_Mapa',
+        hideControlContainer: false
+        // hidden: true
+    }).addTo(map2);
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -372,12 +409,17 @@
         // console.log("-- updateMap_2");
         layerGroup_3.clearLayers();
 
+        $.ajaxSetup({
+            scriptCharset: "utf-8",
+            contentType: "application/json; charset=utf-8"
+        });
+
         if (dep_value == '00') {
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_3 = data                
                 filtered_data_3 = filtered_data_3.features;
                 // TODO: deb implementar una función para extraer los datos departamentales
-                data_temp = get_indicadores_data_municipal_map(filtered_data_3, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_data_departamental_map(filtered_data_3, dep_value, dim_value, ind_value);
                 shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                 shape_data_3.addTo(layerGroup_3)
                 map3.flyToBounds(shape_data_3.getBounds());
@@ -419,5 +461,16 @@
             : 'Pase el cursor por el mapa');
     };
     info_3.addTo(map3);
+
+    // https://github.com/rowanwins/leaflet-easyPrint
+    var printPlugin_3 = L.easyPrint({
+        title: 'Descargar Imagen',
+        position: 'bottomleft',
+        sizeModes: ['A4Landscape'],
+        exportOnly: true,
+        filename: 'Imagen_Mapa',
+        hideControlContainer: false
+        // hidden: true
+    }).addTo(map3);
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

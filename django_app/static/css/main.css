@@ -15,6 +15,16 @@
     --t_naranja: #fce4c2;
 }
 
+.gris_oscuro { 
+    color: var(--dark_gray);
+    background-color: var(--light_gray);
+}
+
+.gris_oscuro:hover { 
+    color: white;
+    background-color: var(--dark-gray);
+}
+
 .amarillo { border-bottom: 8px solid var(--dnp-yellow); }
 .azul { border-bottom: 8px solid var(--dnp-blue); }
 .rojo { border-bottom: 8px solid var(--dnp-red); }

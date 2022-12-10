@@ -1,39 +1,57 @@
 TODO:
 
-DONE - justificar texto de la intro
-DONE - agregar label de valor de gris y validar si está funcionando bien
-DONE - mejorar imagen inicial (Accesibilidad y uso efectivo)
+- Implementar función para tener los datos a nivel departamental y ver si es posible incluir el dato departamental de los indicadores en el tooltip municipal
+- Descargar datos
+    - Agregar botón para descargar datos
+    - la idea es que descargue los datos de los filtros usados. 
+        - Dataframe en Excel
+        - Mapa en Imagen
+        - Shape
 
-- indicadores de calidad no están funcionando
-- revisar hover de gráfico radar
-- descargar info en excel
+ESTO NO - Verificación datos de Accesibilidad - Recalcular areas de influencia determinar indicadores de accesibilidad. Validar que sumatoria de población rural + urbana corresponda con total (David)
 
-- barranco minas, mapiripan (verificar municipios)
-- cambiar colores de mapa
-
-TODO:
-
-- función Map para cargar datos
-- agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
+- Presentación de indicadores por Manzanas
+- Indicadores de calidad no están funcionando (los indicadores de calidad solo aplican a nivel departamental, se deben quitar del dropdown con municipios)
+- Revisar hover de gráfico radar
+Prioridad baja - Agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
     (número de camas vs % Mujeres en edad reproductiva sin cobertura (Todas las sedes))
-- Ajustar las vistas por los niveles (municipal, departamental)
-- Borra vista municipal, agregar dropdown de municipio a la vista departamental
 
-- comparar radares - misma ubicación múltiples indicadores (sobreponer líneas)
-- comparar radares - múltiples ubicaciones mismo indicador (sobreponer líneas)
-- escala de colores mapas (indicadores numéricos) 
-
-FIXME:
+- Comparar radares - misma ubicación múltiples indicadores (sobreponer líneas)
+- Comparar radares - múltiples ubicaciones mismo indicador (sobreponer líneas)
+- Barranco minas, mapiripan (verificar municipios)
 
 DONE:
 
-- cambiar nombres de pestañas
-    Nacional > Departamental
-    Departamental > Municipal
-    Municipal > Por manzana
+- Ocultar pestañas de secciones que no se está utilizando
+- Revisar si están bien los indicadores (multiplicar por 100), ejemplo:
+    TOTAL NACIONAL
+    Prop_SinCobertura_Prim_Rural
+    0,750908939
+    Accesibilidad
+    (%) Población Rural sin Cobertura (Servicios Primarios)
+
+- función Map para cargar datos > se implementaron scripts para procesar los datos, todavía se deben cargar los datos de manera manual a la base de datos
+
+- Se implementaron funciones para controlar las leyendas, se envían colores y cortes desde el view
+    - cambiar colores de mapa
+    - escala de colores mapas (indicadores numéricos) 
+
+- justificar texto de la intro
+- agregar label de valor de gris y validar si está funcionando bien
+- mejorar imagen inicial (Accesibilidad y uso efectivo)
+
+- Se unificaron las vistas
+    - Ajustar las vistas por los niveles (municipal, departamental)
+    - Borra vista municipal, agregar dropdown de municipio a la vista departamental
+    - cambiar nombres de pestañas
+        Nacional > Departamental
+        Departamental > Municipal
+        Municipal > Por manzana
 
 - cambiar tile mapas
 - parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
-. corregir escalas en radar
+- corregir escalas en radar
 
-NOTE:
+FIXME:
+
+ESTO NO - Ajustar escalas de paleta de colores de los mapas para que tengan cortes y colores unificados en la vista de comparar.

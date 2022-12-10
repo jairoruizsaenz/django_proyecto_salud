@@ -71,6 +71,12 @@
                         </select>
                     </div>
                     <div id="map1" style="height: 480px;"></div>
+                    <div class="d-flex justify-content-end">
+                    {% comment %} <div class="mt-2"> {% endcomment %}
+                        <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar datos</button>
+                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
+                        <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button>
+                    </div>
                 </div>
             </div>
             <div class="col-md-12">
@@ -330,6 +336,41 @@
         }
     </script>
 
+        <!-- get_indicadores_data_departamental -->
+        <script>
+            function get_indicadores_data_departamental_map(filtered_data, departamento, dimension, indicador) {
+                // console.log("-- get_indicadores_data_departamental_map");
+                var results;
+                var legend_colors, legend_values;
+    
+                $.ajax({
+                    url: '{% url "baseApp:ajax_get_indicadores_data_departamental_map" %}',
+                    async: false,
+                    data: {
+                        'departamento': departamento,
+                        'dimension': dimension,
+                        'indicador': indicador
+                    },
+                    dataType: 'json',
+    
+                    success: function (data) {                    
+                        const merged = filtered_data.map(location => {
+                            const divipola = location.properties.DPTO;
+                            const otherRecord = data.filter_records.find(({divipola_departamento: candidateDivipola}) => candidateDivipola == divipola);
+                            return otherRecord ? {...location, ...otherRecord} : location;
+                        });
+                        results = merged;
+                        legend_colors = data.legend_colors;
+                        legend_values = data.legend_values;
+                    },
+                    error: function (res) {
+                        console.log('Error - get_indicadores_data_departamental_map: ', res.responseText);
+                    }
+                });
+                return [results, legend_colors, legend_values];
+            }
+        </script>
+
     <!-- get_dimensiones_data_departamental_radar -->
     <script>
         function get_dimensiones_data_departamental_radar_1(departamento, dimension, es_porcentual) {
@@ -393,6 +434,7 @@
     <script>
         var shapes_municipales = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         var shapes_departamentales = "{% static 'json/Colombia.json' %}"
+        {% comment %} var shapes_departamentales = "{% static 'json/23.geojson' %}" {% endcomment %}
     </script>
     <script src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
