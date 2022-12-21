@@ -8,16 +8,6 @@ import pandas as pd
 import json
 import numpy as np
 
-# def get_indicadores_data_municipal(request):
-#     departamento = request.GET.get('departamento', None)
-#     dimension = request.GET.get('dimension', None)
-#     indicador = request.GET.get('indicador', None)
-
-#     # values = RegistroIndiceMunicipal.objects.filter(Q(usuario_remitente = usuario, usuario_destinatario = usuario_chat) | Q(usuario_remitente = usuario_chat, usuario_destinatario = usuario))
-#     data = RegistroIndiceMunicipal.objects.all()
-
-#     return JsonResponse(serializers.serialize('json', data), safe=False)
-
 
 def color_map(value, colores, rangos):
     index = 0
@@ -44,8 +34,131 @@ def update_rangos(rangos, es_porcentual):
         temp.append('0')
     return temp
 
-def get_indicadores_data_municipal_map(request):
+# def get_indicadores_data_municipal_map(request):
+#     departamento = request.GET.get('departamento', None)
+#     dimension = request.GET.get('dimension', None)
+#     indicador = request.GET.get('indicador', None)
+
+#     if departamento == '00':
+#         departamentos = Departamento.objects.all()
+#     else:
+#         departamentos = Departamento.objects.filter(divipola=departamento)
+
+#     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+#     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+    
+#     municipios = Municipio.objects.filter(departamento__in=departamentos)
+#     municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+#     df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+    
+#     registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador=indicador)
+#     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+#     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor_indicador'])
+
+#     indicadores = Indicador.objects.filter(pk=indicador)
+#     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+#     df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+#     dimensiones = Dimension.objects.filter(pk=dimension)
+#     dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+#     df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+
+#     df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
+#     df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+#     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
+#     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
+
+#     df_temp.rename(columns={"nombre_municipio": "nombre_ubicacion"}, inplace=True)
+
+#     colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
+
+#     if indicadores[0].es_porcentual:
+#         rangos = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+#         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+#         rangos = update_rangos(rangos, True)
+#     else:
+#         rangos = np.quantile(list(df_temp['valor_indicador']), q = np.arange(0.1, 1, 0.1)).tolist()
+#         rangos.append(df_temp['valor_indicador'].max())
+#         rangos = [round(item) for item in rangos]
+#         rangos.insert(0, 0)
+#         rangos.reverse()
+#         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+#         rangos = update_rangos(rangos, False)
+
+#     # print(df_temp.head(50))
+
+#     data = {}
+#     data['filter_records']=df_temp.to_dict('records')
+#     data['legend_colors'] = colores
+#     data['legend_values'] = rangos
+
+#     return JsonResponse(data, safe=False)
+
+
+# def get_indicadores_data_departamental_map(request):
+#     departamento = request.GET.get('departamento', None)
+#     dimension = request.GET.get('dimension', None)
+#     indicador = request.GET.get('indicador', None)
+
+#     if departamento == '00':
+#         departamentos = Departamento.objects.all()
+#     else:
+#         departamentos = Departamento.objects.filter(divipola=departamento)
+
+#     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+#     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+
+#     # municipios = Municipio.objects.filter(departamento__in=departamentos)
+#     # municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+#     # df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+
+#     registros = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos, indicador=indicador)
+#     registros_list = registros.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
+#     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
+
+#     indicadores = Indicador.objects.filter(pk=indicador)
+#     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+#     df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+#     dimensiones = Dimension.objects.filter(pk=dimension)
+#     dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+#     df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+
+#     # df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
+#     df_temp = df_registros.merge(df_departamentos, on='departamento_pk', how="left")
+#     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
+#     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
+
+#     df_temp.rename(columns={"nombre_departamento": "nombre_ubicacion"}, inplace=True)
+
+#     colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
+
+#     if indicadores[0].es_porcentual:
+#         rangos = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
+#         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+#         rangos = update_rangos(rangos, True)
+#     else:
+#         rangos = np.quantile(list(df_temp['valor_indicador']), q = np.arange(0.1, 1, 0.1)).tolist()
+#         rangos.append(df_temp['valor_indicador'].max())
+#         rangos = [round(item) for item in rangos]
+#         rangos.insert(0, 0)
+#         rangos.reverse()
+#         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
+#         rangos = update_rangos(rangos, False)
+
+#     # print(list(df_temp))
+#     # print(df_temp.head(50))
+
+#     data = {}
+#     data['filter_records']=df_temp.to_dict('records')
+#     data['legend_colors'] = colores
+#     data['legend_values'] = rangos
+
+#     return JsonResponse(data, safe=False)
+
+def get_indicadores_map(request):
     departamento = request.GET.get('departamento', None)
+    # municipio = request.GET.get('municipio', None)
     dimension = request.GET.get('dimension', None)
     indicador = request.GET.get('indicador', None)
 
@@ -57,13 +170,18 @@ def get_indicadores_data_municipal_map(request):
     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
     
-    municipios = Municipio.objects.filter(departamento__in=departamentos)
-    municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
-    df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
-    
-    registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador=indicador)
-    registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
-    df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor_indicador'])
+    if departamento == '00':
+        registros = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos, indicador=indicador)
+        registros_list = registros.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
+        df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
+    else:
+        municipios = Municipio.objects.filter(departamento__in=departamentos)
+        municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+        df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+
+        registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador=indicador)
+        registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+        df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor_indicador'])
 
     indicadores = Indicador.objects.filter(pk=indicador)
     indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
@@ -73,95 +191,17 @@ def get_indicadores_data_municipal_map(request):
     dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
     df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
 
-    df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
-    df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+    if departamento == '00':
+        df_temp = df_registros.merge(df_departamentos, on='departamento_pk', how="left")
+    else:
+        df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
+        df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+    
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
 
     df_temp.rename(columns={"nombre_municipio": "nombre_ubicacion"}, inplace=True)
-
-    # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
-    # df_temp.rename(columns={
-    #     'divipola_departamento':'DPTO_CCDGO', 
-    #     'divipola_municipio':'MPIO_CCNCT',
-    #     'nombre_departamento':'DPTO_CNMBR',
-    #     'nombre_dimension':'DIMENSION',
-    #     'nombre_indicador':'INDICADOR',
-    #     'nombre_municipio':'MPIO_CNMBR',
-    #     'valor':'VALOR',
-    # }, inplace=True)
-
-    colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
-
-    if indicadores[0].es_porcentual:
-        rangos = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
-        df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
-        rangos = update_rangos(rangos, True)
-    else:
-        rangos = np.quantile(list(df_temp['valor_indicador']), q = np.arange(0.1, 1, 0.1)).tolist()
-        rangos.append(df_temp['valor_indicador'].max())
-        rangos = [round(item) for item in rangos]
-        rangos.insert(0, 0)
-        rangos.reverse()
-        df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
-        rangos = update_rangos(rangos, False)
-
-    # print(df_temp.head(50))
-
-    data = {}
-    data['filter_records']=df_temp.to_dict('records')
-    data['legend_colors'] = colores
-    data['legend_values'] = rangos
-
-    return JsonResponse(data, safe=False)
-
-
-def get_indicadores_data_departamental_map(request):
-    departamento = request.GET.get('departamento', None)
-    dimension = request.GET.get('dimension', None)
-    indicador = request.GET.get('indicador', None)
-
-    if departamento == '00':
-        departamentos = Departamento.objects.all()
-    else:
-        departamentos = Departamento.objects.filter(divipola=departamento)
-
-    departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
-    df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
-    
-    # municipios = Municipio.objects.filter(departamento__in=departamentos)
-    # municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
-    # df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
-    
-    registros = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos, indicador=indicador)
-    registros_list = registros.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
-    df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
-
-    indicadores = Indicador.objects.filter(pk=indicador)
-    indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
-    df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
-
-    dimensiones = Dimension.objects.filter(pk=dimension)
-    dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
-    df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
-
-    # df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
-    df_temp = df_registros.merge(df_departamentos, on='departamento_pk', how="left")
-    df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
-    df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
-
     df_temp.rename(columns={"nombre_departamento": "nombre_ubicacion"}, inplace=True)
-    
-    # df_temp = df_temp[['indicador_pk', 'divipola_departamento', 'divipola_municipio', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'nombre_municipio', 'valor']]
-    # df_temp.rename(columns={
-    #     'divipola_departamento':'DPTO_CCDGO', 
-    #     'divipola_municipio':'MPIO_CCNCT',
-    #     'nombre_departamento':'DPTO_CNMBR',
-    #     'nombre_dimension':'DIMENSION',
-    #     'nombre_indicador':'INDICADOR',
-    #     'nombre_municipio':'MPIO_CNMBR',
-    #     'valor':'VALOR',
-    # }, inplace=True)
 
     colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
 
@@ -177,10 +217,7 @@ def get_indicadores_data_departamental_map(request):
         rangos.reverse()
         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
         rangos = update_rangos(rangos, False)
-
-    print(list(df_temp))
-    print(df_temp.head(50))
-
+    
     data = {}
     data['filter_records']=df_temp.to_dict('records')
     data['legend_colors'] = colores
@@ -206,11 +243,11 @@ def get_dimensiones_data_departamental_radar_1(request):
 
     departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
     df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
-    
+
     municipios = Municipio.objects.filter(departamento__in=departamentos)
     municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
     df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
-    
+
     registros = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos, indicador__dimension__in=dimension)
     registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
     df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
@@ -226,7 +263,7 @@ def get_dimensiones_data_departamental_radar_1(request):
 
     df_temp = df_temp[['nombre_indicador', 'valor']]
     df_temp = df_temp.groupby(['nombre_indicador']).mean()
-   
+
     # print('----------------------------')
     # print(df_temp)
     # print('----------------------------')
@@ -237,7 +274,7 @@ def get_dimensiones_data_departamental_radar_1(request):
 
         headers.append(headers[0])
         values.append(values[0])
-    
+
     except Exception as e: 
         print(e)
         headers = ['']

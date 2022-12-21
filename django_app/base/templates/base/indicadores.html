@@ -282,7 +282,6 @@
     <!-- update_indicador_dropdownlist -->
     <script>
         function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {
-            // console.log('++ update_indicador_dropdownlist')
             var dimensionId = $(dimension_dropdown_id).val();
 
             if (dimensionId == 'personalizado') {
@@ -301,50 +300,16 @@
         }
     </script>
 
-    <!-- get_indicadores_data_municipal -->
+    <!-- get_indicadores_map -->
     <script>
-        function get_indicadores_data_municipal_map(filtered_data, departamento, dimension, indicador) {
-            // console.log("-- get_indicadores_data_municipal_map");
+        function get_indicadores_map(filtered_data, departamento, dimension, indicador) {
             var results;
             var legend_colors, legend_values;
 
-            $.ajax({
-                url: '{% url "baseApp:ajax_get_indicadores_data_municipal_map" %}',
-                async: false,
-                data: {
-                    'departamento': departamento,
-                    'dimension': dimension,
-                    'indicador': indicador
-                },
-                dataType: 'json',
-
-                success: function (data) {                    
-                    const merged = filtered_data.map(location => {
-                        const divipola = location.properties.MPIO_CCNCT;
-                        const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
-                        return otherRecord ? {...location, ...otherRecord} : location;
-                    });
-                    results = merged;
-                    legend_colors = data.legend_colors;
-                    legend_values = data.legend_values;
-                },
-                error: function (res) {
-                    console.log('Error - get_indicadores_data_municipal_map: ', res.responseText);
-                }
-            });
-            return [results, legend_colors, legend_values];
-        }
-    </script>
-
-        <!-- get_indicadores_data_departamental -->
-        <script>
-            function get_indicadores_data_departamental_map(filtered_data, departamento, dimension, indicador) {
-                // console.log("-- get_indicadores_data_departamental_map");
-                var results;
-                var legend_colors, legend_values;
-    
+            if (departamento == '00') {
+                // DEPARTAMENTAL
                 $.ajax({
-                    url: '{% url "baseApp:ajax_get_indicadores_data_departamental_map" %}',
+                    url: '{% url "baseApp:ajax_get_indicadores_map" %}',
                     async: false,
                     data: {
                         'departamento': departamento,
@@ -352,8 +317,8 @@
                         'indicador': indicador
                     },
                     dataType: 'json',
-    
-                    success: function (data) {                    
+
+                    success: function (data) {
                         const merged = filtered_data.map(location => {
                             const divipola = location.properties.DPTO;
                             const otherRecord = data.filter_records.find(({divipola_departamento: candidateDivipola}) => candidateDivipola == divipola);
@@ -364,17 +329,43 @@
                         legend_values = data.legend_values;
                     },
                     error: function (res) {
-                        console.log('Error - get_indicadores_data_departamental_map: ', res.responseText);
+                        console.log('Error - get_indicadores_map - departamental: ', res.responseText);
                     }
                 });
-                return [results, legend_colors, legend_values];
+            } else {
+                // MUNICIPAL
+                $.ajax({
+                    url: '{% url "baseApp:ajax_get_indicadores_map" %}',
+                    async: false,
+                    data: {
+                        'departamento': departamento,
+                        'dimension': dimension,
+                        'indicador': indicador
+                    },
+                    dataType: 'json',
+
+                    success: function (data) {
+                        const merged = filtered_data.map(location => {
+                            const divipola = location.properties.MPIO_CCNCT;
+                            const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                            return otherRecord ? {...location, ...otherRecord} : location;
+                        });
+                        results = merged;
+                        legend_colors = data.legend_colors;
+                        legend_values = data.legend_values;
+                    },
+                    error: function (res) {
+                        console.log('Error - get_indicadores_map - municipal: ', res.responseText);
+                    }
+                });
             }
-        </script>
+            return [results, legend_colors, legend_values];
+        }
+    </script>
 
     <!-- get_dimensiones_data_departamental_radar -->
     <script>
         function get_dimensiones_data_departamental_radar_1(departamento, dimension, es_porcentual) {
-            // console.log("-- get_dimensiones_data_departamental_radar");
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar_1" %}',
                 data: {

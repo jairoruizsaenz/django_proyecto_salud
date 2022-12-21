@@ -107,19 +107,19 @@
     // Update Map
 
     function updateMap_1(dep_value, dim_value, ind_value) {
-        // console.log("-- updateMap_1");
         layerGroup_1.clearLayers();
 
         if (dep_value == '00') {
+            // DEPARTAMENTAL
             $.ajaxSetup({
                 scriptCharset: "utf-8",
                 contentType: "application/json; charset=utf-8"
             });
 
             $.getJSON(shapes_departamentales, function (data) {
-                var filtered_data_1 = data                
+                var filtered_data_1 = data
                 filtered_data_1 = filtered_data_1.features;
-                data_temp = get_indicadores_data_departamental_map(filtered_data_1, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_1, dep_value, dim_value, ind_value);
                 shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                 shape_data_1.addTo(layerGroup_1)
                 map1.flyToBounds(shape_data_1.getBounds());
@@ -127,6 +127,7 @@
             });
         }
         else {
+            // MUNICIPAL
             $.ajaxSetup({
                 scriptCharset: "utf-8",
                 contentType: "application/json; charset=utf-8"
@@ -135,17 +136,18 @@
             $.getJSON(shapes_municipales, function (data) {
                 var filtered_data_1 = data
                 filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
-                data_temp = get_indicadores_data_municipal_map(filtered_data_1, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_1, dep_value, dim_value, ind_value);
                 shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                 shape_data_1.addTo(layerGroup_1)
                 map1.flyToBounds(shape_data_1.getBounds());
                 legend_1.setContent(data_temp[1], data_temp[2]);
-            });        
+            });
         }
     }
 
     // ::::::::::::::::::::::::::::::::
     // Etiqueta de datos
+
     var info_1 = L.control();
     info_1.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -158,9 +160,8 @@
         var ind1_value = ind1.value;
         var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? '<b>' 
-            + props.nombre_ubicacion + '</b><br>' 
-            + ind1_text + '<br>'
+        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
+            + '<b>' + props.nombre_ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
@@ -260,20 +261,19 @@
     // Update Map
 
     function updateMap_2(dep_value, dim_value, ind_value) {
-        // console.log("-- updateMap_2");
         layerGroup_2.clearLayers();
 
-        $.ajaxSetup({
-            scriptCharset: "utf-8",
-            contentType: "application/json; charset=utf-8"
-        });
-
         if (dep_value == '00') {
+            // DEPARTAMENTAL
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_2 = data
                 filtered_data_2 = filtered_data_2.features;
-                // TODO: deb implementar una función para extraer los datos departamentales
-                data_temp = get_indicadores_data_departamental_map(filtered_data_2, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_2, dep_value, dim_value, ind_value);
                 shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                 shape_data_2.addTo(layerGroup_2)
                 map2.flyToBounds(shape_data_2.getBounds());
@@ -281,15 +281,21 @@
             });
         }
         else {
+            // MUNICIPAL
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_municipales, function (data) {
                 var filtered_data_2 = data
                 filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 2}));
-                data_temp = get_indicadores_data_municipal_map(filtered_data_2, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_2, dep_value, dim_value, ind_value);
                 shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                 shape_data_2.addTo(layerGroup_2)
                 map2.flyToBounds(shape_data_2.getBounds());
                 legend_2.setContent(data_temp[1], data_temp[2]);
-            });        
+            });
         }
     }
 
@@ -308,9 +314,8 @@
         var ind1_value = ind1.value;
         var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? '<b>' 
-            + props.properties.MPIO_CNMBR + '</b><br>' 
-            + ind1_text + '<br>'
+        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
+            + '<b>' + props.nombre_ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
@@ -406,20 +411,19 @@
     // Update Map
 
     function updateMap_3(dep_value, dim_value, ind_value) {
-        // console.log("-- updateMap_2");
         layerGroup_3.clearLayers();
 
-        $.ajaxSetup({
-            scriptCharset: "utf-8",
-            contentType: "application/json; charset=utf-8"
-        });
-
         if (dep_value == '00') {
+            // DEPARTAMENTAL
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_departamentales, function (data) {
-                var filtered_data_3 = data                
+                var filtered_data_3 = data
                 filtered_data_3 = filtered_data_3.features;
-                // TODO: deb implementar una función para extraer los datos departamentales
-                data_temp = get_indicadores_data_departamental_map(filtered_data_3, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_3, dep_value, dim_value, ind_value);
                 shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                 shape_data_3.addTo(layerGroup_3)
                 map3.flyToBounds(shape_data_3.getBounds());
@@ -427,15 +431,21 @@
             });
         }
         else {
+            // MUNICIPAL
+            $.ajaxSetup({
+                scriptCharset: "utf-8",
+                contentType: "application/json; charset=utf-8"
+            });
+
             $.getJSON(shapes_municipales, function (data) {
                 var filtered_data_3 = data
                 filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 3}));
-                data_temp = get_indicadores_data_municipal_map(filtered_data_3, dep_value, dim_value, ind_value);
+                data_temp = get_indicadores_map(filtered_data_3, dep_value, dim_value, ind_value);
                 shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                 shape_data_3.addTo(layerGroup_3)
                 map3.flyToBounds(shape_data_3.getBounds());
                 legend_3.setContent(data_temp[1], data_temp[2]);
-            });        
+            });
         }
     }
 
@@ -454,9 +464,8 @@
         var ind1_value = ind1.value;
         var ind1_text = ind1.options[ind1.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? '<b>' 
-            + props.properties.MPIO_CNMBR + '</b><br>' 
-            + ind1_text + '<br>'
+        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
+            + '<b>' + props.nombre_ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
