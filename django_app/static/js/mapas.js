@@ -156,12 +156,24 @@
     };
 
     info_1.update = function (props) {
-        var ind1 = document.getElementById("selection_indicador_1");
-        var ind1_value = ind1.value;
-        var ind1_text = ind1.options[ind1.selectedIndex].text;
+        var ind = document.getElementById("selection_indicador_1");
+        var ind_text = ind.options[ind.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
-            + '<b>' + props.nombre_ubicacion + '</b>: ' 
+        try {
+            var departamento = props.nombre_departamento;
+            var municipio = props.nombre_municipio;
+
+            var ubicacion = municipio;
+            if (typeof municipio == 'undefined') {
+                var ubicacion = departamento;
+            }
+
+        } catch (error) {
+            // console.error(error);
+        }
+
+        this._div.innerHTML = '' +  (props ? ind_text + '<br>'
+            + '<b>' + ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
@@ -310,12 +322,24 @@
     };
 
     info_2.update = function (props) {
-        var ind1 = document.getElementById("selection_indicador_2");
-        var ind1_value = ind1.value;
-        var ind1_text = ind1.options[ind1.selectedIndex].text;
+        var ind = document.getElementById("selection_indicador_2");
+        var ind_text = ind.options[ind.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
-            + '<b>' + props.nombre_ubicacion + '</b>: ' 
+        try {
+            var departamento = props.nombre_departamento;
+            var municipio = props.nombre_municipio;
+
+            var ubicacion = municipio;
+            if (typeof municipio == 'undefined') {
+                var ubicacion = departamento;
+            }
+
+        } catch (error) {
+            // console.error(error);
+        }
+
+        this._div.innerHTML = '' +  (props ? ind_text + '<br>'
+            + '<b>' + ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
@@ -460,12 +484,24 @@
     };
 
     info_3.update = function (props) {
-        var ind1 = document.getElementById("selection_indicador_3");
-        var ind1_value = ind1.value;
-        var ind1_text = ind1.options[ind1.selectedIndex].text;
+        var ind = document.getElementById("selection_indicador_3");
+        var ind_text = ind.options[ind.selectedIndex].text;
 
-        this._div.innerHTML = '' +  (props ? ind1_text + '<br>'
-            + '<b>' + props.nombre_ubicacion + '</b>: ' 
+        try {
+            var departamento = props.nombre_departamento;
+            var municipio = props.nombre_municipio;
+
+            var ubicacion = municipio;
+            if (typeof municipio == 'undefined') {
+                var ubicacion = departamento;
+            }
+
+        } catch (error) {
+            // console.error(error);
+        }
+
+        this._div.innerHTML = '' +  (props ? ind_text + '<br>'
+            + '<b>' + ubicacion + '</b>: ' 
             + parseFloat(props.valor_indicador).toFixed(2) + '' + '<br>'
             : 'Pase el cursor por el mapa');
     };
