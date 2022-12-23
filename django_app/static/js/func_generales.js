@@ -58,7 +58,7 @@
     
     indicadorPersonalizado();
     hide_show_indicadorPersonalizado();
-    console.log('---------------');
+    // console.log('---------------');
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // <!-- Show_Hide_Sections -->

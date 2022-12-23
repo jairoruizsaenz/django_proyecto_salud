@@ -156,7 +156,7 @@ def update_rangos(rangos, es_porcentual):
 
 #     return JsonResponse(data, safe=False)
 
-def get_indicadores_map(request):
+def get_indicadores_map(request, return_df=False):
     departamento = request.GET.get('departamento', None)
     # municipio = request.GET.get('municipio', None)
     dimension = request.GET.get('dimension', None)
@@ -200,6 +200,16 @@ def get_indicadores_map(request):
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
 
+    if return_df:
+        df_temp.drop(['registro_pk', 'departamento_pk', 'indicador_pk', 'dimension_pk', 'divipola_departamento'], axis=1, inplace=True)
+        if departamento == '00':
+            df_temp = df_temp[['nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+        else:
+            df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+
+        df_temp.rename(columns={"nombre_departamento":"departamento", "nombre_municipio":"municipio", "nombre_dimension":"dimension", "nombre_indicador":"indicador", "valor_indicador":"valor"}, inplace=True)
+        return df_temp
+    
     df_temp.rename(columns={"nombre_municipio": "nombre_ubicacion"}, inplace=True)
     df_temp.rename(columns={"nombre_departamento": "nombre_ubicacion"}, inplace=True)
 
@@ -530,3 +540,24 @@ def agregar_punto(request):
 
     data = {'latitud':latitud, 'longitud':longitud, 'radio':radio, 'color':color}    
     return JsonResponse(data)
+
+
+from io import BytesIO
+from django.http import HttpResponse
+import pandas as pd
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt #no pide token csrf al hacer la petición
+def downloadExcel(request):
+    with BytesIO() as b:
+        writer = pd.ExcelWriter(b, engine='xlsxwriter')
+        df = get_indicadores_map(request, return_df=True)
+
+        df.to_excel(writer, sheet_name='Datos', index=False)
+        writer.save()
+
+        filename = 'datos_indicadores.xlsx'
+        response = HttpResponse( b.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' )
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+        return response

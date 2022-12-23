@@ -72,10 +72,10 @@
                     </div>
                     <div id="map1" style="height: 480px;"></div>
                     <div class="d-flex justify-content-end">
-                    {% comment %} <div class="mt-2"> {% endcomment %}
-                        <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar datos</button>
+                        <button id='download_button_1' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
+                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onClick="downloadExcel(1)"></i>Descargar datos</button> {% endcomment %}
                         {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                        <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button>
+                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -136,6 +136,11 @@
                     <div style="margin-top:16px;">
                         {% comment %} map2 {% endcomment %}
                         <div id="map2" style="height: 480px;"></div>
+                        <div class="d-flex justify-content-end">
+                            <button id='download_button_2' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
+                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
+                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -174,6 +179,11 @@
                     <div style="margin-top:16px;">
                         {% comment %} map3 {% endcomment %}
                         <div id="map3" style="height: 480px;"></div>
+                        <div class="d-flex justify-content-end">
+                            <button id='download_button_3' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
+                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
+                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -418,6 +428,150 @@
                     console.log(res.responseText);
                 }
             });
+        }
+    </script>
+
+    <script>
+        // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
+        $('.download_button').on('click', e => {
+            // random data
+            let data = 'mydata=foo&excel=bar';
+            let request = new XMLHttpRequest();
+
+            // console.log(e.target.id);
+            if (e.target.id == 'download_button_1') {
+                var dep = document.getElementById("selection_departamento_1");
+                var dep_value = dep.value;
+
+                var dim = document.getElementById("selection_dimension_1");
+                var dim_value = dim.value;
+
+                var ind = document.getElementById("selection_indicador_1");
+                var ind_value = ind.value;
+
+            } else if (e.target.id == 'download_button_2') {
+                var dep = document.getElementById("selection_departamento_2");
+                var dep_value = dep.value;
+
+                var dim = document.getElementById("selection_dimension_2");
+                var dim_value = dim.value;
+
+                var ind = document.getElementById("selection_indicador_2");
+                var ind_value = ind.value;
+
+            } else if (e.target.id == 'download_button_3') {
+                var dep = document.getElementById("selection_departamento_3");
+                var dep_value = dep.value;
+
+                var dim = document.getElementById("selection_dimension_3");
+                var dim_value = dim.value;
+
+                var ind = document.getElementById("selection_indicador_3");
+                var ind_value = ind.value;
+            }
+            //console.log(dep_value, dim_value, ind_value)
+
+            // request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}', true);
+            request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}?departamento='+dep_value+'&dimension='+dim_value+'&indicador='+ind_value, true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            request.responseType = 'blob';
+
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let filename = "";
+                    let disposition = request.getResponseHeader('Content-Disposition');
+                    // check if filename is given
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    let blob = this.response;
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    }
+                    else {
+                        let downloadLink = window.document.createElement('a');
+                        let contentTypeHeader = request.getResponseHeader("Content-Type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                        downloadLink.download = filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
+                } else {
+                    alert('Download failed.')
+                }
+            };
+            request.send(data);
+        });
+
+        {% comment %} function ajax_downloadExcel(departamento, dimension, indicador) {
+            $.ajax({
+                url: '{% url "baseApp:ajax_downloadExcel" %}',
+                async: false,
+                data: {
+                    'departamento': departamento,
+                    'dimension': dimension,
+                    'indicador': indicador
+                },
+                dataType: 'json',
+
+                success: function (data) {
+                    console.log('Exito - downloadExcel');
+                },
+                error: function (res) {
+                    console.log('Error - downloadExcel: ', res.responseText);
+                }
+            });
+        } {% endcomment %}
+
+        function downloadExcel(index) {
+            // console.log('-- downloadExcel --------')
+
+            if (index == 1) {
+                var dep = document.getElementById("selection_departamento_1");
+                var dep_value = dep.value;
+                var dep_text = dep.options[dep.selectedIndex].text;
+
+                var dim = document.getElementById("selection_dimension_1");
+                var dim_value = dim.value;
+                var dim_text = dim.options[dim.selectedIndex].text;
+
+                var ind = document.getElementById("selection_indicador_1");
+                var ind_value = ind.value;
+                var ind_text = ind.options[ind.selectedIndex].text;
+
+            } else if (index == 2) {
+                var dep = document.getElementById("selection_departamento_2");
+                var dep_value = dep.value;
+                var dep_text = dep.options[dep.selectedIndex].text;
+
+                var dim = document.getElementById("selection_dimension_2");
+                var dim_value = dim.value;
+                var dim_text = dim.options[dim.selectedIndex].text;
+
+                var ind = document.getElementById("selection_indicador_2");
+                var ind_value = ind.value;
+                var ind_text = ind.options[ind.selectedIndex].text;
+
+            } else if (index == 3) {
+                var dep = document.getElementById("selection_departamento_3");
+                var dep_value = dep.value;
+                var dep_text = dep.options[dep.selectedIndex].text;
+
+                var dim = document.getElementById("selection_dimension_3");
+                var dim_value = dim.value;
+                var dim_text = dim.options[dim.selectedIndex].text;
+
+                var ind = document.getElementById("selection_indicador_3");
+                var ind_value = ind.value;
+                var ind_text = ind.options[ind.selectedIndex].text;
+
+            }
+            ajax_downloadExcel(dep_value, dim_value, ind_value)
+            // console.log('-------------------------------------------');
+            // console.log(dep_text, ' - ', dim_text, ' - ', ind_text);
         }
     </script>
 
