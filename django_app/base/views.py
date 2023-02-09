@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
-from .forms import Punto_Salud_Create_Form
-import random
-from .models import *
-import pandas as pd
-import json
-import numpy as np
 
+from .forms import Punto_Salud_Create_Form
+from .models import *
+
+from io import BytesIO
+import random
+import pandas as pd
+import numpy as np
+# import json
 
 def color_map(value, colores, rangos):
     index = 0
@@ -208,6 +211,7 @@ def get_indicadores_map(request, return_df=False):
             df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
 
         df_temp.rename(columns={"nombre_departamento":"departamento", "nombre_municipio":"municipio", "nombre_dimension":"dimension", "nombre_indicador":"indicador", "valor_indicador":"valor"}, inplace=True)
+        df_temp.drop_duplicates(inplace=True)
         return df_temp
 
     colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
@@ -538,11 +542,8 @@ def agregar_punto(request):
     data = {'latitud':latitud, 'longitud':longitud, 'radio':radio, 'color':color}    
     return JsonResponse(data)
 
-
-from io import BytesIO
-from django.http import HttpResponse
-import pandas as pd
-from django.views.decorators.csrf import csrf_exempt
+# CSRF Token
+# https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
 
 @csrf_exempt #no pide token csrf al hacer la petición
 def downloadExcel(request):

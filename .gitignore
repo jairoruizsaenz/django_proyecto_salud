@@ -11,3 +11,5 @@ temp_borrar/
 *.csv
 
 .ipynb_checkpoints/
+
+shapes/
