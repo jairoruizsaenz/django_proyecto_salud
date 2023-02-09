@@ -211,6 +211,7 @@ def get_indicadores_map(request, return_df=False):
             df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
 
         df_temp.rename(columns={"nombre_departamento":"departamento", "nombre_municipio":"municipio", "nombre_dimension":"dimension", "nombre_indicador":"indicador", "valor_indicador":"valor"}, inplace=True)
+        df_temp.drop_duplicates(inplace=True)
         return df_temp
 
     colores = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#fee090', '#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695', '#575756']
