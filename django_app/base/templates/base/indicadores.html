@@ -14,7 +14,7 @@
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="compareCheck" onclick="Show_Hide_Sections()">
                     <label class="form-check-label" for="compareCheck">Comparar</label>
-                    {% comment %} <br><br><span style="color:red;">GEOPANDAS</span> {% endcomment %}
+                    <br><br><span style="color:red;">GEOPANDAS</span>
                 </div>
             </div>
         </div>
@@ -231,14 +231,15 @@
                         {% for dimension in dimensiones %}
                             <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
                         {% endfor %}
-                        {% comment %} NOTE: agregar esta opción{% endcomment %}
+                        {% comment %} FIXME: agregar esta opción{% endcomment %}
+                        {% comment %} NOTE: con la opción personalizado, debe aparecer el campo multiselect para comparar distintos indicadores que no pertenezcan a una misma dimensión {% endcomment %}
                         {% comment %} <option value="personalizado">Personalizado</option> {% endcomment %}
                     </select>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-3">
-                    <label for="selection_indicador_4">Tipo de indicadores</label>
+                    <label for="selection_tipo_indicador_4">Tipo de indicadores</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_4" name="selection_tipo_indicador_4" onChange="indicador_change(4)">
                         <option value="porcentual">Porcentuales</option>
                         <option value="numerico">Numéricos</option>
@@ -246,6 +247,7 @@
                 </div>
             </div>
             {% comment %} FIXME: tiene clase hidden{% endcomment %}
+            {% comment %} NOTE: Validar para que iba a usar este campo {% endcomment %}
             <div class="col-md-4">
                 <div class="form-group hidden"> 
                     <label for="selection_indicador_4">Indicador</label>
@@ -588,7 +590,7 @@
     <script src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
-    {% comment %} <script>
+    <script>
         $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
         $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
         $("#selection_dimension_4").change(function () { update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4"); });
@@ -596,7 +598,7 @@
         update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
         update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
         update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
-    </script> {% endcomment %}
+    </script>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script src="{% static 'js/virtual-select.min.js' %}"></script>
@@ -609,4 +611,65 @@
     <script src="{% static 'js/func_generales.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
+
+    <script>
+        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // <!-- multiselect -->
+
+        var selection = [];
+
+        function filtroMultiselect(elemento) { 
+            return selection.includes(elemento.pk.toString());
+        }
+
+        function hide_show_indicadorPersonalizado() {
+            // console.log('function hide_show_indicadorPersonalizado()');
+
+            var dimension = document.getElementById('selection_dimension_4');
+            var dimension_value = dimension.options[dimension.selectedIndex].value;
+            
+            var section4 = document.getElementById("section4");
+            section4.classList.remove("visible");
+            section4.classList.add("hidden");
+
+            if (dimension_value == 'personalizado') {
+                document.getElementById("selection_indicador_4").disabled = true;
+                section4.classList.remove("hidden");
+                section4.classList.add("visible");
+            } else {
+                document.getElementById("selection_indicador_4").disabled = false;
+            }
+        };
+
+        function indicadorPersonalizado() {
+            // console.log('function indicadorPersonalizado()');
+
+            selection = $('#multipleSelect').val();
+            var data_multiselect = indicadores_json.filter(filtroMultiselect)
+
+            var selection__ind_pk = [];
+            var selection__ind_name = [];
+            for(var i=0; i < data_multiselect.length; i++){
+                selection__ind_pk.push(data_multiselect[i].pk);
+                selection__ind_name.push(data_multiselect[i]['fields'].nombre);
+            }
+
+            // console.log('-----')
+            // console.log('selection:', selection)
+            // console.log('data_multiselect:', data_multiselect)
+            // console.log('selection__ind_pk:', selection__ind_pk)
+            // console.log('selection__ind_name:', selection__ind_name)
+        };
+
+        VirtualSelect.init({
+            ele: '#multipleSelect'
+        });
+
+        document.getElementById('selection_dimension_4').addEventListener('change', function() { hide_show_indicadorPersonalizado(); });
+        document.getElementById('multipleSelect').addEventListener('change', function() { indicadorPersonalizado(); });
+        
+        indicadorPersonalizado();
+        hide_show_indicadorPersonalizado();
+
+    </script>
 {% endblock %}
