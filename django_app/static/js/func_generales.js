@@ -149,6 +149,18 @@
 
     function departamento_change(index) {
         // console.log('-- dpto change --------');
+
+        update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1");
+        // if (index == 1) {
+        //     update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1");
+        // } else if (index == 2) {
+        //     update_municipio_dropdownlist("#selection_departamento_2", "#selection_municipio_2");
+        // } else if (index == 3) {
+        //     update_municipio_dropdownlist("#selection_departamento_3", "#selection_municipio_3");
+        // } else if (index == 4) {
+        //     update_municipio_dropdownlist("#selection_departamento_4", "#selection_municipio_4");
+        // }
+
         updateGraphs(index);
     }
     
@@ -188,3 +200,4 @@
     update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
     update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
     
+    update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1");

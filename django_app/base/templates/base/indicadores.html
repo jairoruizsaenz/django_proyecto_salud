@@ -53,13 +53,7 @@
                 <div class="form-group">
                     <label for="selection_municipio_1">Municipio</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_1">
-                        {% comment %} {% for dep in departamentos %}
-                            {% if dep.divipola == '00' %}
-                                <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
-                            {% else %}
-                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
-                            {% endif %}
-                        {% endfor %} {% endcomment %}
+                        <option value="">----------</option>
                     </select>
                 </div>
             </div>
@@ -332,6 +326,29 @@
                         $(indicador_dropdown_id).empty();
                         $(indicador_dropdown_id).html(data);
                         $(indicador_dropdown_id).trigger("change");
+                    }
+                });
+            }
+        }
+    </script>
+
+    <!-- update_municipio_dropdownlist -->
+    <script>
+        function update_municipio_dropdownlist(departamento_dropdown_id, municipio_dropdown_id) {
+            var departamentoId = $(departamento_dropdown_id).val();
+            console.log('departamentoId:', departamentoId)
+            console.log('municipio_dropdown_id:', municipio_dropdown_id)
+
+            if (departamentoId == '00') {
+                $(municipio_dropdown_id).html('<option value="">----------</option>');
+            } else {
+                $.ajax({
+                    url: "{% url 'baseApp:ajax_load_municipios' %}",
+                    data: { 'departamentoId': departamentoId },
+                    success: function (data) {
+                        $(municipio_dropdown_id).empty();
+                        $(municipio_dropdown_id).html(data);
+                        $(municipio_dropdown_id).trigger("change");
                     }
                 });
             }
@@ -617,17 +634,16 @@
         var shapes_departamentales = "{% static 'json/Colombia.json' %}"
 
         function get_shapes_municipales(dep_code) {
-            var shapes = "{% static 'shapes/SHAPES_DEPTO_MPIO/dep_code.geojson' %}".replace('dep_code', dep_code)
-            return shapes
+            return "{% static 'shapes/SHAPES_DEPTO_MPIO/dep_code.geojson' %}".replace('dep_code', dep_code)
         }
         function get_shapes_manzanas(mun_code) {
-            var shapes = "{% static 'shapes/MPIOS_MNZ/mun_code.geojson' %}".replace('mun_code', mun_code)
-            return shapes
+            return "{% static 'shapes/MPIOS_MNZ/mun_code.geojson' %}".replace('mun_code', mun_code)
         } 
     </script>
     <script type="text/javascript" src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
+    {% comment %} 
     <script>
         $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
         $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
@@ -635,8 +651,9 @@
 
         update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
         update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
-        update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
+        update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4"); 
     </script>
+    {% endcomment %}
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script type="text/javascript" src="{% static 'js/virtual-select.min.js' %}"></script>
