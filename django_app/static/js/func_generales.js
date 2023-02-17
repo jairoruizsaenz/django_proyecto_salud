@@ -76,6 +76,9 @@
                 tipo_ind_value = false;
             }
 
+            // FIXME: Borrar
+            updateMap_0(dep_value, dim_value, ind_value);
+
             updateMap_1(dep_value, dim_value, ind_value);
             get_dimensiones_data_departamental_radar_1(dep_value, dim_value, tipo_ind_value)
 

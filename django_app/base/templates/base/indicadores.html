@@ -35,7 +35,7 @@
     <div id="section1">
         <div class="row">
             {% comment %} <p style="color:red;">section1</p> {% endcomment %}
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_1">
@@ -49,7 +49,21 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="selection_municipio_1">Municipio</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_1">
+                        {% comment %} {% for dep in departamentos %}
+                            {% if dep.divipola == '00' %}
+                                <option value="{{dep.divipola}}" selected>{{dep.nombre}}</option>
+                            {% else %}
+                                <option value="{{dep.divipola}}">{{dep.nombre}}</option>
+                            {% endif %}
+                        {% endfor %} {% endcomment %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="selection_dimension_1">Dimensión</label>
                     <!-- <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
@@ -62,7 +76,18 @@
             </div>
         </div>
         <div class="row" style="margin-top:16px;">
-            <div class="col-md-12">
+            
+            {% comment %} FIXME: Borrar {% endcomment %}
+            <div class="col-md-6">
+                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
+                    <div id="map0" style="height: 480px;"></div>
+                </div>
+            </div>
+            {% comment %} FIXME: Borrar {% endcomment %}
+
+            {% comment %} FIXME: cambiar columna a 12 {% endcomment %}
+            <div class="col-md-6">
+            {% comment %} <div class="col-md-12"> {% endcomment %}
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
                     {% comment %} map1 {% endcomment %}
                     <div class="form-group mb-3">
@@ -359,7 +384,12 @@
 
                     success: function (data) {
                         const merged = filtered_data.map(location => {
-                            const divipola = location.properties.MPIO_CCNCT;
+                            // Usando como shapes archivo MunicipiosVeredas_2MB.json
+                            // const divipola = location.properties.MPIO_CCNCT;
+
+                            // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
+                            const divipola = location.properties.MPIO_CDPMP;
+
                             const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
                             return otherRecord ? {...location, ...otherRecord} : location;
                         });
@@ -585,7 +615,15 @@
     <script>
         var shapes_municipales = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         var shapes_departamentales = "{% static 'json/Colombia.json' %}"
-        {% comment %} var shapes_departamentales = "{% static 'json/23.geojson' %}" {% endcomment %}
+
+        function get_shapes_municipales(dep_code) {
+            var shapes = "{% static 'shapes/SHAPES_DEPTO_MPIO/dep_code.geojson' %}".replace('dep_code', dep_code)
+            return shapes
+        }
+        function get_shapes_manzanas(mun_code) {
+            var shapes = "{% static 'shapes/MPIOS_MNZ/mun_code.geojson' %}".replace('mun_code', mun_code)
+            return shapes
+        } 
     </script>
     <script type="text/javascript" src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
