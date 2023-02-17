@@ -57,7 +57,7 @@
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
         }
-        console.log('map0 - layer.feature:', layer.feature)
+        // console.log('map0 - layer.feature:', layer.feature)
         info_0.update(layer.feature);
     }
 
@@ -226,7 +226,7 @@
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
         }
-        console.log('map1 - layer.feature:', layer.feature)
+        // console.log('map1 - layer.feature:', layer.feature)
         info_1.update(layer.feature);
     }
 
