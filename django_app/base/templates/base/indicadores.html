@@ -288,8 +288,8 @@
     </div>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/func_iniciales.js' %}"></script>
-    <script src="{% static 'js/radar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/func_iniciales.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/radar.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
     <!-- update_indicador_dropdownlist -->
@@ -587,7 +587,7 @@
         var shapes_departamentales = "{% static 'json/Colombia.json' %}"
         {% comment %} var shapes_departamentales = "{% static 'json/23.geojson' %}" {% endcomment %}
     </script>
-    <script src="{% static 'js/mapas.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
     <script>
@@ -601,14 +601,14 @@
     </script>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/virtual-select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/virtual-select.min.js' %}"></script>
 
     <script>
         // lectura de indicadores en formato json para el multiselect
         var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
     </script>
 
-    <script src="{% static 'js/func_generales.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/func_generales.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
 
