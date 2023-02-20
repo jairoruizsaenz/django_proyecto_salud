@@ -423,13 +423,23 @@ def get_dimensiones_data_departamental_radar_2(request):
 def load_indicadores(request):
     dimension_id = request.GET.get('dimensionId')
     indicadores = Indicador.objects.filter(dimension_id=dimension_id).order_by('nombre')
-    return render(request, 'base/items_dropdown_list_options.html', {'items': indicadores})
+    context = {
+        'with_default':False,
+        'items': indicadores
+    }
+    return render(request, 'base/items_dropdown_list_options.html', context=context)
 
 
 def load_municipios(request):
     departamento_id = request.GET.get('departamentoId')
     municipios = Municipio.objects.filter(departamento__divipola=departamento_id).order_by('nombre')
-    return render(request, 'base/items_dropdown_list_options.html', {'items': municipios})
+    context = {
+        'with_default':True,
+        'items': municipios
+    }
+    print('cargando_municipios')
+    print(context)
+    return render(request, 'base/items_dropdown_list_options.html', context=context)
 
 
 # def departamental(request):

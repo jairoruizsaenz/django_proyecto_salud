@@ -1,6 +1,6 @@
 TODO:
-- Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios
-- Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
+DONE - Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios
+DONE - Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
 - Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
 
 TODO:
