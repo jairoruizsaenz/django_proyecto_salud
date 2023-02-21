@@ -1,0 +1,14 @@
+{% if with_default %}
+    <option value="000" selected>----------</option>
+{% endif %}
+{% for item in items %}    
+    {% if with_default == 'True' %}
+        {% if forloop.first %}
+            <option value="{{ item.divipola }}" selected>{{ item.nombre }}</option>
+        {% else %}
+            <option value="{{ item.divipola }}">{{ item.nombre }}</option>
+        {% endif %}
+    {% else %}
+        <option value="{{ item.divipola }}">{{ item.nombre }}</option>
+    {% endif %}
+{% endfor %}

@@ -437,9 +437,7 @@ def load_municipios(request):
         'with_default':True,
         'items': municipios
     }
-    print('cargando_municipios')
-    print(context)
-    return render(request, 'base/items_dropdown_list_options.html', context=context)
+    return render(request, 'base/items_dropdown_list_options_municipios.html', context=context)
 
 
 # def departamental(request):

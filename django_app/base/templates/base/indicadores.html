@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label for="selection_municipio_1">Municipio</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_1">
-                        <option value="">----------</option>
+                        <option value="000">----------</option>
                     </select>
                 </div>
             </div>
@@ -132,7 +132,13 @@
                                 {% else %}
                                     <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                                 {% endif %}
-                            {% endfor %}                            
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_municipio_2">Municipio</label>
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_2">
+                            <option value="000">----------</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -176,6 +182,12 @@
                                     <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                                 {% endif %}
                             {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selection_municipio_3">Municipio</label>
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_3">
+                            <option value="000">----------</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -336,8 +348,8 @@
     <script>
         function update_municipio_dropdownlist(departamento_dropdown_id, municipio_dropdown_id) {
             var departamentoId = $(departamento_dropdown_id).val();
-            console.log('departamentoId:', departamentoId)
-            console.log('municipio_dropdown_id:', municipio_dropdown_id)
+            // console.log('departamentoId:', departamentoId)
+            // console.log('municipio_dropdown_id:', municipio_dropdown_id)
 
             if (departamentoId == '00') {
                 $(municipio_dropdown_id).html('<option value="">----------</option>');
@@ -357,17 +369,19 @@
 
     <!-- get_indicadores_map -->
     <script>
-        function get_indicadores_map(filtered_data, departamento, dimension, indicador) {
+        function get_indicadores_map(filtered_data, departamento, municipio, dimension, indicador) {
             var results;
             var legend_colors, legend_values;
 
             if (departamento == '00') {
+                console.log('-- Departamental')
                 // DEPARTAMENTAL
                 $.ajax({
                     url: '{% url "baseApp:ajax_get_indicadores_map" %}',
                     async: false,
                     data: {
                         'departamento': departamento,
+                        'municipio':municipio,
                         'dimension': dimension,
                         'indicador': indicador
                     },
@@ -388,18 +402,24 @@
                     }
                 });
             } else {
+                console.clear()
+                console.log('console.clear()')
+                console.log('-- Municipal')
                 // MUNICIPAL
                 $.ajax({
                     url: '{% url "baseApp:ajax_get_indicadores_map" %}',
                     async: false,
                     data: {
                         'departamento': departamento,
+                        'municipio':municipio,
                         'dimension': dimension,
                         'indicador': indicador
                     },
                     dataType: 'json',
 
                     success: function (data) {
+                        console.log('Jairo - aquí estoy')
+                        console.log(filtered_data)
                         const merged = filtered_data.map(location => {
                             // Usando como shapes archivo MunicipiosVeredas_2MB.json
                             // const divipola = location.properties.MPIO_CCNCT;
@@ -418,6 +438,7 @@
                         console.log('Error - get_indicadores_map - municipal: ', res.responseText);
                     }
                 });
+                console.log('-- DEBO INCLUIR LÓGICA DE MANZANA')
             }
             return [results, legend_colors, legend_values];
         }
