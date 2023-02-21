@@ -402,42 +402,84 @@
                     }
                 });
             } else {
-                console.clear()
-                console.log('console.clear()')
-                console.log('-- Municipal')
-                // MUNICIPAL
-                $.ajax({
-                    url: '{% url "baseApp:ajax_get_indicadores_map" %}',
-                    async: false,
-                    data: {
-                        'departamento': departamento,
-                        'municipio':municipio,
-                        'dimension': dimension,
-                        'indicador': indicador
-                    },
-                    dataType: 'json',
+                if (municipio == '000' || municipio == '') {
+                    console.clear()
+                    console.log('console.clear()')
+                    console.log('-- Municipal')
+                    // MUNICIPAL
+                    $.ajax({
+                        url: '{% url "baseApp:ajax_get_indicadores_map" %}',
+                        async: false,
+                        data: {
+                            'departamento': departamento,
+                            'municipio':municipio,
+                            'dimension': dimension,
+                            'indicador': indicador
+                        },
+                        dataType: 'json',
 
-                    success: function (data) {
-                        console.log('Jairo - aquí estoy')
-                        console.log(filtered_data)
-                        const merged = filtered_data.map(location => {
-                            // Usando como shapes archivo MunicipiosVeredas_2MB.json
-                            // const divipola = location.properties.MPIO_CCNCT;
+                        success: function (data) {
+                            console.log('Jairo - aquí estoy')
+                            console.log('filtered_data:', filtered_data)
+                            const merged = filtered_data.map(location => {
+                                // Usando como shapes archivo MunicipiosVeredas_2MB.json
+                                // const divipola = location.properties.MPIO_CCNCT;
 
-                            // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
-                            const divipola = location.properties.MPIO_CDPMP;
+                                // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
+                                const divipola = location.properties.MPIO_CDPMP;
 
-                            const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
-                            return otherRecord ? {...location, ...otherRecord} : location;
-                        });
-                        results = merged;
-                        legend_colors = data.legend_colors;
-                        legend_values = data.legend_values;
-                    },
-                    error: function (res) {
-                        console.log('Error - get_indicadores_map - municipal: ', res.responseText);
-                    }
-                });
+                                const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                                return otherRecord ? {...location, ...otherRecord} : location;
+                            });
+                            results = merged;
+                            legend_colors = data.legend_colors;
+                            legend_values = data.legend_values;
+                            console.log('results:', results)
+                        },
+                        error: function (res) {
+                            console.log('Error - get_indicadores_map - municipal: ', res.responseText);
+                        }
+                    });
+                } else {
+                    console.clear()
+                    console.log('console.clear()')
+                    console.log('-- Manzana')
+                    // MANZANA
+                    $.ajax({
+                        url: '{% url "baseApp:ajax_get_indicadores_map" %}',
+                        async: false,
+                        data: {
+                            'departamento': departamento,
+                            'municipio':municipio,
+                            'dimension': dimension,
+                            'indicador': indicador
+                        },
+                        dataType: 'json',
+
+                        success: function (data) {
+                            console.log('Jairo - aquí estoy 2')
+                            console.log('filtered_data:', filtered_data)
+                            const merged = filtered_data.map(location => {
+                                // Usando como shapes archivo MunicipiosVeredas_2MB.json
+                                // const divipola = location.properties.MPIO_CCNCT;
+
+                                // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
+                                const divipola = location.properties.MPIO_CDPMP;
+
+                                const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                                return otherRecord ? {...location, ...otherRecord} : location;
+                            });
+                            results = merged;
+                            legend_colors = data.legend_colors;
+                            legend_values = data.legend_values;
+                            console.log('results:', results)
+                        },
+                        error: function (res) {
+                            console.log('Error - get_indicadores_map - municipal: ', res.responseText);
+                        }
+                    });
+                }
+                
                 console.log('-- DEBO INCLUIR LÓGICA DE MANZANA')
             }
             return [results, legend_colors, legend_values];
