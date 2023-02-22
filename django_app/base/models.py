@@ -38,7 +38,7 @@ class Punto_Salud(models.Model):
     #     return str(self.pk)
 
 
-class Departamento(models.Model):    
+class Departamento(models.Model):
     divipola = models.CharField(max_length=2, unique=True)
     nombre = models.CharField(null=False, default='', max_length=255)
 
@@ -61,7 +61,19 @@ class Municipio(models.Model):
         return f"{self.departamento.nombre} - {self.nombre}"
 
 
-class Dimension(models.Model):    
+class Manzana(models.Model):
+    municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
+    divipola = models.CharField(max_length=5, unique=True)
+    # nombre = models.CharField(null=False, default='', max_length=255)
+
+    class Meta:
+        ordering = ['divipola']
+
+    def __str__(self):
+        return f"{self.municipio.nombre} - {self.divipola}"
+
+
+class Dimension(models.Model):
     nombre = models.CharField(null=False, default='', max_length=255)
     
     class Meta:
@@ -87,11 +99,25 @@ class Indicador(models.Model):
         return f"{self.dimension.nombre} - {self.nombre}"
 
 
+class RegistroIndiceDepartamental(models.Model):
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+    indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
+    valor = models.FloatField()
+
+    class Meta:
+        verbose_name = "Registro índice - Departamental"
+        verbose_name_plural = "Registros índices - Departamental"
+        ordering = ['indicador', 'departamento']
+
+    def __str__(self):
+        return f"{self.indicador} - {self.departamento}"
+
+
 class RegistroIndiceMunicipal(models.Model):
     municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
     indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
     valor = models.FloatField()
-    
+
     class Meta:
         verbose_name = "Registro índice - Municipal"
         verbose_name_plural = "Registros índices - Municipal"
@@ -101,15 +127,15 @@ class RegistroIndiceMunicipal(models.Model):
         return f"{self.indicador} - {self.municipio}"
 
 
-class RegistroIndiceDepartamental(models.Model):
-    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+class RegistroIndiceManzana(models.Model):
+    manzana = models.ForeignKey(Manzana, on_delete=models.CASCADE)
     indicador = models.ForeignKey(Indicador, on_delete=models.CASCADE)
     valor = models.FloatField()
-    
+
     class Meta:
-        verbose_name = "Registro índice - Departamental"
-        verbose_name_plural = "Registros índices - Departamental"
-        ordering = ['indicador', 'departamento']
+        verbose_name = "Registro índice - Manzana"
+        verbose_name_plural = "Registros índices - Manzana"
+        ordering = ['indicador', 'manzana']
 
     def __str__(self):
-        return f"{self.indicador} - {self.departamento}"
+        return f"{self.indicador} - {self.manzana}"
