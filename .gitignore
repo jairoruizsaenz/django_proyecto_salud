@@ -13,3 +13,5 @@ temp_borrar/
 .ipynb_checkpoints/
 
 shapes/
+
+*.sqlite3
