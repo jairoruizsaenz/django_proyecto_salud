@@ -19,13 +19,17 @@
     //                       '#000000';
     // }
     function polystyle(feature) {
+        var temp_color = feature.color
+        if (typeof temp_color == 'undefined'){
+            temp_color = '#0f0f0f'
+        }
         return {
             // fillColor: getColor(feature.properties.MPIO_CCDGO),
             // fillColor: getColor(feature.valor_indicador),
-            fillColor: feature.color,
+            fillColor: temp_color,
             weight: 0.5,
             opacity: 1,
-            color: 'white',
+            color: '#c2c2c2',
             fillOpacity: 0.7
         };
     }
@@ -47,7 +51,7 @@
         var layer = e.target;
 
         layer.setStyle({
-            weight: 5,
+            weight: 3,
             color: '#666',
             dashArray: '',
             fillOpacity: 0.7
@@ -234,7 +238,7 @@
         var layer = e.target;
 
         layer.setStyle({
-            weight: 5,
+            weight: 3,
             color: '#666',
             dashArray: '',
             fillOpacity: 0.7
@@ -417,7 +421,7 @@
         var layer = e.target;
 
         layer.setStyle({
-            weight: 5,
+            weight: 3,
             color: '#666',
             dashArray: '',
             fillOpacity: 0.7

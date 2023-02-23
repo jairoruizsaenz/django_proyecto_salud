@@ -273,7 +273,10 @@ def get_indicadores_map(request, return_df=False):
         rangos.reverse()
         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
         rangos = update_rangos(rangos, False)
-    
+
+    colores.append('#0f0f0f')
+    rangos.append('NaN')
+
     print(':::::::::::::::::::::::::::::::::')
     print('departamento:', departamento)
     print('municipio:', municipio)
