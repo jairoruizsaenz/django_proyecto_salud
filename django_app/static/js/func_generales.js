@@ -176,7 +176,6 @@
         // } else if (index == 4) {
         //     update_municipio_dropdownlist("#selection_departamento_4", "#selection_municipio_4");
         // }
-
         updateGraphs(index);
     }
 

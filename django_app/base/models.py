@@ -63,7 +63,7 @@ class Municipio(models.Model):
 
 class Manzana(models.Model):
     municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE)
-    divipola = models.CharField(max_length=5, unique=True)
+    divipola = models.CharField(max_length=22, unique=True)
     # nombre = models.CharField(null=False, default='', max_length=255)
 
     class Meta:

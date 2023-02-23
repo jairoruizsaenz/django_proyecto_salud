@@ -318,21 +318,42 @@
             });
         }
         else {
-            // MUNICIPAL
-            $.ajaxSetup({
-                scriptCharset: "utf-8",
-                contentType: "application/json; charset=utf-8"
-            });
-            
-            $.getJSON(get_shapes_municipales(dep_value), function (data) {
-                var filtered_data_1 = data
-                filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
-                data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
-                shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
-                shape_data_1.addTo(layerGroup_1)
-                map1.flyToBounds(shape_data_1.getBounds());
-                legend_1.setContent(data_temp[1], data_temp[2]);
-            });
+            if (mun_value == '000' || mun_value == '') {
+                // MUNICIPAL
+                $.ajaxSetup({
+                    scriptCharset: "utf-8",
+                    contentType: "application/json; charset=utf-8"
+                });
+                
+                $.getJSON(get_shapes_municipales(dep_value), function (data) {
+                    var filtered_data_1 = data
+                    // filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
+                    filtered_data_1 = data['features']
+                    data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
+                    shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
+                    shape_data_1.addTo(layerGroup_1)
+                    map1.flyToBounds(shape_data_1.getBounds());
+                    legend_1.setContent(data_temp[1], data_temp[2]);
+                });
+            }
+            else {
+                // MANZANA
+                $.ajaxSetup({
+                    scriptCharset: "utf-8",
+                    contentType: "application/json; charset=utf-8"
+                });
+                
+                $.getJSON(get_shapes_manzanas(mun_value), function (data) {
+                    var filtered_data_1 = data
+                    // filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
+                    filtered_data_1 = data['features']
+                    data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
+                    shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
+                    shape_data_1.addTo(layerGroup_1)
+                    map1.flyToBounds(shape_data_1.getBounds());
+                    legend_1.setContent(data_temp[1], data_temp[2]);
+                });
+            }
         }
     }
 

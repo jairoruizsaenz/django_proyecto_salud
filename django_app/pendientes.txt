@@ -2,6 +2,10 @@ TODO:
 DONE - Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios
 DONE - Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
 - Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
+- funciones para actualizar los radares
+
+FIXME:
+Si grafico manzanas y luego cambio de departamento, sale un error porque no se "borrar" el municipio, entonces trata de graficar un municipio de otro departamento
 
 TODO:
 

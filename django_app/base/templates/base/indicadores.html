@@ -374,7 +374,7 @@
             var legend_colors, legend_values;
 
             if (departamento == '00') {
-                console.log('-- Departamental')
+                console.log('-- Departamental -- get_indicadores_map')
                 // DEPARTAMENTAL
                 $.ajax({
                     url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -396,6 +396,7 @@
                         results = merged;
                         legend_colors = data.legend_colors;
                         legend_values = data.legend_values;
+                        console.log('results - departamental:', results)
                     },
                     error: function (res) {
                         console.log('Error - get_indicadores_map - departamental: ', res.responseText);
@@ -405,7 +406,7 @@
                 if (municipio == '000' || municipio == '') {
                     console.clear()
                     console.log('console.clear()')
-                    console.log('-- Municipal')
+                    console.log('-- Municipal -- get_indicadores_map')
                     // MUNICIPAL
                     $.ajax({
                         url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -419,8 +420,6 @@
                         dataType: 'json',
 
                         success: function (data) {
-                            console.log('Jairo - aquí estoy')
-                            console.log('filtered_data:', filtered_data)
                             const merged = filtered_data.map(location => {
                                 // Usando como shapes archivo MunicipiosVeredas_2MB.json
                                 // const divipola = location.properties.MPIO_CCNCT;
@@ -434,7 +433,7 @@
                             results = merged;
                             legend_colors = data.legend_colors;
                             legend_values = data.legend_values;
-                            console.log('results:', results)
+                            console.log('results - municipal:', results)
                         },
                         error: function (res) {
                             console.log('Error - get_indicadores_map - municipal: ', res.responseText);
@@ -443,7 +442,7 @@
                 } else {
                     console.clear()
                     console.log('console.clear()')
-                    console.log('-- Manzana')
+                    console.log('-- Manzana -- get_indicadores_map')
                     // MANZANA
                     $.ajax({
                         url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -457,22 +456,20 @@
                         dataType: 'json',
 
                         success: function (data) {
-                            console.log('Jairo - aquí estoy 2')
-                            console.log('filtered_data:', filtered_data)
                             const merged = filtered_data.map(location => {
                                 // Usando como shapes archivo MunicipiosVeredas_2MB.json
                                 // const divipola = location.properties.MPIO_CCNCT;
 
                                 // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
-                                const divipola = location.properties.MPIO_CDPMP;
+                                const divipola = location.properties.COD_DANE_A;
 
-                                const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                                const otherRecord = data.filter_records.find(({divipola_manzana: candidateDivipola}) => candidateDivipola == divipola);
                                 return otherRecord ? {...location, ...otherRecord} : location;
                             });
                             results = merged;
                             legend_colors = data.legend_colors;
                             legend_values = data.legend_values;
-                            console.log('results:', results)
+                            console.log('results - manzana:', results)
                         },
                         error: function (res) {
                             console.log('Error - get_indicadores_map - municipal: ', res.responseText);

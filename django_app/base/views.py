@@ -161,23 +161,69 @@ def update_rangos(rangos, es_porcentual):
 
 def get_indicadores_map(request, return_df=False):
     departamento = request.GET.get('departamento', None)
-    # municipio = request.GET.get('municipio', None)
+    municipio = request.GET.get('municipio', None)
     dimension = request.GET.get('dimension', None)
     indicador = request.GET.get('indicador', None)
 
     if departamento == '00':
-        departamentos = Departamento.objects.all()
-    else:
-        departamentos = Departamento.objects.filter(divipola=departamento)
+        # Vista Nacional - se visualiza la info por departamentos
 
-    departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
-    df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
-    
-    if departamento == '00':
+        departamentos = Departamento.objects.all()
+        departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+
         registros = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos, indicador=indicador)
         registros_list = registros.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
         df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
+
+        indicadores = Indicador.objects.filter(pk=indicador)
+        indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+        dimensiones = Dimension.objects.filter(pk=dimension)
+        dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+        df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+
+        df_temp = df_registros.merge(df_departamentos, on='departamento_pk', how="left")
+    
+    elif municipio != '':
+        # Vista Municipal - se visualiza la info por manzanas
+
+        departamentos = Departamento.objects.filter(divipola=departamento)
+        departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+
+        municipios = Municipio.objects.filter(divipola=municipio)
+        municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+        df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+
+        manzanas = Manzana.objects.filter(municipio__in=municipios)
+        manzanas_list = manzanas.values_list('pk', 'municipio', 'divipola', flat=False)
+        df_manzanas = pd.DataFrame.from_records(manzanas_list, columns=['manzana_pk', 'municipio_pk', 'divipola_manzana'])
+
+        registros = RegistroIndiceManzana.objects.filter(manzana__municipio__in=municipios, indicador=indicador)
+        registros_list = registros.values_list('pk', 'manzana', 'indicador', 'valor', flat=False)
+        df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'manzana_pk', 'indicador_pk', 'valor_indicador'])
+
+        indicadores = Indicador.objects.filter(pk=indicador)
+        indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+        dimensiones = Dimension.objects.filter(pk=dimension)
+        dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+        df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+
+        df_temp = df_registros.merge(df_manzanas, on='manzana_pk', how="left")
+        df_temp = df_temp.merge(df_municipios, on='municipio_pk', how="left")
+        df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
+
     else:
+        # Vista Departamental - se visualiza la info por municipios
+
+        departamentos = Departamento.objects.filter(divipola=departamento)
+        departamentos_list = departamentos.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos = pd.DataFrame.from_records(departamentos_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+
         municipios = Municipio.objects.filter(departamento__in=departamentos)
         municipios_list = municipios.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
         df_municipios = pd.DataFrame.from_records(municipios_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
@@ -186,20 +232,19 @@ def get_indicadores_map(request, return_df=False):
         registros_list = registros.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
         df_registros = pd.DataFrame.from_records(registros_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor_indicador'])
 
-    indicadores = Indicador.objects.filter(pk=indicador)
-    indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
-    df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+        indicadores = Indicador.objects.filter(pk=indicador)
+        indicadores_list = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores = pd.DataFrame.from_records(indicadores_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 
-    dimensiones = Dimension.objects.filter(pk=dimension)
-    dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
-    df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
+        dimensiones = Dimension.objects.filter(pk=dimension)
+        dimensiones_list = dimensiones.values_list('pk', 'nombre', flat=False)
+        df_dimensiones = pd.DataFrame.from_records(dimensiones_list, columns=['dimension_pk', 'nombre_dimension'])
 
-    if departamento == '00':
-        df_temp = df_registros.merge(df_departamentos, on='departamento_pk', how="left")
-    else:
         df_temp = df_registros.merge(df_municipios, on='municipio_pk', how="left")
         df_temp = df_temp.merge(df_departamentos, on='departamento_pk', how="left")
-    
+
+    print('----------------------------------------')
+
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
 
@@ -229,6 +274,15 @@ def get_indicadores_map(request, return_df=False):
         df_temp['color'] = df_temp['valor_indicador'].map(lambda valor: color_map(valor, colores, rangos))
         rangos = update_rangos(rangos, False)
     
+    print(':::::::::::::::::::::::::::::::::')
+    print('departamento:', departamento)
+    print('municipio:', municipio)
+    print('dimension:', dimension)
+    print('indicador:', indicador)
+    print(':::::::::::::::::::::::::::::::::')
+    print(df_temp.head(15))
+    print(':::::::::::::::::::::::::::::::::')
+
     data = {}
     data['filter_records']=df_temp.to_dict('records')
     data['legend_colors'] = colores
