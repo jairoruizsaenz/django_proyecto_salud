@@ -280,8 +280,8 @@ def get_indicadores_map(request, return_df=False):
     print('dimension:', dimension)
     print('indicador:', indicador)
     print(':::::::::::::::::::::::::::::::::')
-    print(df_temp.head(15))
-    print(':::::::::::::::::::::::::::::::::')
+    # print(df_temp.head(15))
+    # print(':::::::::::::::::::::::::::::::::')
 
     data = {}
     data['filter_records']=df_temp.to_dict('records')

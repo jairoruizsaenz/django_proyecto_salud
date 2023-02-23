@@ -80,9 +80,6 @@
                 tipo_ind_value = false;
             }
 
-            // FIXME: Borrar
-            updateMap_0(dep_value, mun_value, dim_value, ind_value);
-
             updateMap_1(dep_value, mun_value, dim_value, ind_value);
             get_dimensiones_data_departamental_radar_1(dep_value, dim_value, tipo_ind_value)
 
@@ -180,7 +177,7 @@
     }
 
     function municipio_change(index) {
-        console.log('-- municipio change --------');      
+        // console.log('-- municipio change --------');      
         updateGraphs(index);
     }
     
@@ -224,7 +221,7 @@
     update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
     update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
     update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
-    
+
     update_municipio_dropdownlist("#selection_departamento_1", "#selection_municipio_1");
     update_municipio_dropdownlist("#selection_departamento_2", "#selection_municipio_2");
     update_municipio_dropdownlist("#selection_departamento_3", "#selection_municipio_3");

@@ -70,17 +70,7 @@
             </div>
         </div>
         <div class="row" style="margin-top:16px;">
-            
-            {% comment %} FIXME: Borrar {% endcomment %}
-            <div class="col-md-6">
-                <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
-                    <div id="map0" style="height: 480px;"></div>
-                </div>
-            </div>
-            {% comment %} FIXME: Borrar {% endcomment %}
-
-            {% comment %} FIXME: cambiar columna a 12 {% endcomment %}
-            <div class="col-md-6">
+            <div class="col-md-12">
             {% comment %} <div class="col-md-12"> {% endcomment %}
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
                     {% comment %} map1 {% endcomment %}
@@ -404,8 +394,8 @@
                 });
             } else {
                 if (municipio == '000' || municipio == '') {
-                    console.clear()
-                    console.log('console.clear()')
+                    // console.clear()
+                    // console.log('console.clear()')
                     console.log('-- Municipal -- get_indicadores_map')
                     // MUNICIPAL
                     $.ajax({
@@ -440,8 +430,8 @@
                         }
                     });
                 } else {
-                    console.clear()
-                    console.log('console.clear()')
+                    // console.clear()
+                    // console.log('console.clear()')
                     console.log('-- Manzana -- get_indicadores_map')
                     // MANZANA
                     $.ajax({
@@ -476,8 +466,6 @@
                         }
                     });
                 }
-                
-                console.log('-- DEBO INCLUIR LÓGICA DE MANZANA')
             }
             return [results, legend_colors, legend_values];
         }
