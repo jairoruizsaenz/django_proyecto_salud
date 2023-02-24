@@ -51,7 +51,7 @@
 
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // <!-- EventListener -->
-    function updateGraphs(index) {
+    function updateGraphs(index, departamento_change = false) {
         // console.log('-- updateGraphs --------')
 
         if (index == 1) {
@@ -80,6 +80,9 @@
                 tipo_ind_value = false;
             }
 
+            // -- cambio de departamento
+            if (departamento_change){ mun_value = ''; }
+
             updateMap_1(dep_value, mun_value, dim_value, ind_value);
             get_dimensiones_data_departamental_radar_1(dep_value, dim_value, tipo_ind_value)
 
@@ -100,6 +103,9 @@
             var ind_value = ind.value;
             var ind_text = ind.options[ind.selectedIndex].text;
 
+            // -- cambio de departamento
+            if (departamento_change){ mun_value = ''; }
+
             updateMap_2(dep_value, mun_value, dim_value, ind_value);
             // get_dimensiones_data_departamental_radar_1(dep_value, dim_value)
 
@@ -119,6 +125,9 @@
             var ind = document.getElementById("selection_indicador_3");
             var ind_value = ind.value;
             var ind_text = ind.options[ind.selectedIndex].text;
+
+            // -- cambio de departamento
+            if (departamento_change){ mun_value = ''; }
 
             updateMap_3(dep_value, mun_value, dim_value, ind_value);
             // get_dimensiones_data_departamental_radar_1(dep_value, dim_value)
@@ -173,7 +182,7 @@
         // } else if (index == 4) {
         //     update_municipio_dropdownlist("#selection_departamento_4", "#selection_municipio_4");
         // }
-        updateGraphs(index);
+        updateGraphs(index, true);
     }
 
     function municipio_change(index) {

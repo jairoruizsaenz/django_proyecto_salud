@@ -364,7 +364,7 @@
             var legend_colors, legend_values;
 
             if (departamento == '00') {
-                console.log('-- Departamental -- get_indicadores_map')
+                // console.log('-- Departamental -- get_indicadores_map')
                 // DEPARTAMENTAL
                 $.ajax({
                     url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -386,17 +386,15 @@
                         results = merged;
                         legend_colors = data.legend_colors;
                         legend_values = data.legend_values;
-                        console.log('results - departamental:', results)
+                        // console.log('results - departamental:', results)
                     },
                     error: function (res) {
                         console.log('Error - get_indicadores_map - departamental: ', res.responseText);
                     }
                 });
             } else {
-                if (municipio == '000' || municipio == '') {
-                    // console.clear()
-                    // console.log('console.clear()')
-                    console.log('-- Municipal -- get_indicadores_map')
+                if (municipio == '000' || municipio == '') {                    
+                    // console.log('-- Municipal -- get_indicadores_map')
                     // MUNICIPAL
                     $.ajax({
                         url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -423,16 +421,14 @@
                             results = merged;
                             legend_colors = data.legend_colors;
                             legend_values = data.legend_values;
-                            console.log('results - municipal:', results)
+                            // console.log('results - municipal:', results)
                         },
                         error: function (res) {
                             console.log('Error - get_indicadores_map - municipal: ', res.responseText);
                         }
                     });
                 } else {
-                    // console.clear()
-                    // console.log('console.clear()')
-                    console.log('-- Manzana -- get_indicadores_map')
+                    // console.log('-- Manzana -- get_indicadores_map')
                     // MANZANA
                     $.ajax({
                         url: '{% url "baseApp:ajax_get_indicadores_map" %}',
@@ -459,7 +455,7 @@
                             results = merged;
                             legend_colors = data.legend_colors;
                             legend_values = data.legend_values;
-                            console.log('results - manzana:', results)
+                            // console.log('results - manzana:', results)
                         },
                         error: function (res) {
                             console.log('Error - get_indicadores_map - municipal: ', res.responseText);

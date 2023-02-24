@@ -3,9 +3,8 @@ DONE - Agregar elemento '---------' en el modelo municipio para cada departament
 DONE - Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
 - Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
 - funciones para actualizar los radares
-
-FIXME:
-Si grafico manzanas y luego cambio de departamento, sale un error porque no se "borrar" el municipio, entonces trata de graficar un municipio de otro departamento
+- actualizar función para descargar datos, debe incluir info de MUNICIPIOS y MANZANAS
+- actualizar funciones de actualización de dropdowns para DIMENSIÓN e INDICADOR, la idea es que solo aparezcan opciones que tengan datos para el DEPARTAMENTO/MUNICIPIO seleccionado
 
 TODO:
 
@@ -15,7 +14,7 @@ TODO:
     - la idea es que descargue los datos de los filtros usados. 
         - Dataframe en Excel
         - Mapa en Imagen
-        - Shape
+        - Shape con los datos (usar geopandas)
 
 ESTO NO - Verificación datos de Accesibilidad - Recalcular areas de influencia determinar indicadores de accesibilidad. Validar que sumatoria de población rural + urbana corresponda con total (David)
 
