@@ -2,13 +2,13 @@
     <option value="000" selected>----------</option>
 {% endif %}
 {% for item in items %}    
-    {% if with_default == 'True' %}
+    {% if with_default %}
+        <option value="{{ item.pk }}">{{ item.nombre }}</option>            
+    {% else %}
         {% if forloop.first %}
             <option value="{{ item.pk }}" selected>{{ item.nombre }}</option>
         {% else %}
             <option value="{{ item.pk }}">{{ item.nombre }}</option>
-        {% endif %}
-    {% else %}
-        <option value="{{ item.pk }}">{{ item.nombre }}</option>
+        {% endif %}        
     {% endif %}
 {% endfor %}

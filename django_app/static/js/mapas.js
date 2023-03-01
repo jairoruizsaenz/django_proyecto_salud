@@ -123,7 +123,7 @@
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_1 = data
                 filtered_data_1 = filtered_data_1.features;
-                data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
+                data_temp = get_data_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
                 shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                 shape_data_1.addTo(layerGroup_1)
                 map1.flyToBounds(shape_data_1.getBounds());
@@ -142,7 +142,7 @@
                     var filtered_data_1 = data
                     // filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_1 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
                     shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                     shape_data_1.addTo(layerGroup_1)
                     map1.flyToBounds(shape_data_1.getBounds());
@@ -160,7 +160,7 @@
                     var filtered_data_1 = data
                     // filtered_data_1 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_1 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_1, dep_value, mun_value, dim_value, ind_value);
                     shape_data_1 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_1 });
                     shape_data_1.addTo(layerGroup_1)
                     map1.flyToBounds(shape_data_1.getBounds());
@@ -310,7 +310,7 @@
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_2 = data
                 filtered_data_2 = filtered_data_2.features;
-                data_temp = get_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
+                data_temp = get_data_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
                 shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                 shape_data_2.addTo(layerGroup_2)
                 map2.flyToBounds(shape_data_2.getBounds());
@@ -329,7 +329,7 @@
                     var filtered_data_2 = data
                     // filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_2 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
                     shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                     shape_data_2.addTo(layerGroup_2)
                     map2.flyToBounds(shape_data_2.getBounds());
@@ -347,7 +347,7 @@
                     var filtered_data_2 = data
                     // filtered_data_2 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_2 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_2, dep_value, mun_value, dim_value, ind_value);
                     shape_data_2 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_2 });
                     shape_data_2.addTo(layerGroup_2)
                     map2.flyToBounds(shape_data_2.getBounds());
@@ -493,7 +493,7 @@
             $.getJSON(shapes_departamentales, function (data) {
                 var filtered_data_3 = data
                 filtered_data_3 = filtered_data_3.features;
-                data_temp = get_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
+                data_temp = get_data_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
                 shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                 shape_data_3.addTo(layerGroup_3)
                 map3.flyToBounds(shape_data_3.getBounds());
@@ -512,7 +512,7 @@
                     var filtered_data_3 = data
                     // filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_3 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
                     shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                     shape_data_3.addTo(layerGroup_3)
                     map3.flyToBounds(shape_data_3.getBounds());
@@ -530,7 +530,7 @@
                     var filtered_data_3 = data
                     // filtered_data_3 = data['features'].filter(filtroDepartamental({selection: 1}));
                     filtered_data_3 = data['features']
-                    data_temp = get_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
+                    data_temp = get_data_indicadores_map(filtered_data_3, dep_value, mun_value, dim_value, ind_value);
                     shape_data_3 = L.geoJson(data_temp[0], { style: polystyle, onEachFeature: onEachFeature_3 });
                     shape_data_3.addTo(layerGroup_3)
                     map3.flyToBounds(shape_data_3.getBounds());

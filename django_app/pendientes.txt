@@ -1,10 +1,30 @@
 TODO:
 DONE - Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios
 DONE - Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
-- Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
+DONE - actualizar función para descargar datos, debe incluir info de MUNICIPIOS y MANZANAS
+DONE - Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
+DONE - actualizar funciones de actualización de dropdowns para DIMENSIÓN e INDICADOR, la idea es que solo aparezcan opciones que tengan datos para el DEPARTAMENTO/MUNICIPIO seleccionado
+DONE - hay un error al cambiar de Dimensión, parece que al actualizar los indicadores, no se selecciona el primer valor del indicador del dropdown
+
 - funciones para actualizar los radares
-- actualizar función para descargar datos, debe incluir info de MUNICIPIOS y MANZANAS
-- actualizar funciones de actualización de dropdowns para DIMENSIÓN e INDICADOR, la idea es que solo aparezcan opciones que tengan datos para el DEPARTAMENTO/MUNICIPIO seleccionado
+
+FIXME:
+- Parece haber una inconsistencia en los DATOS / MAPA / Excel descargado. Revisar: Santander > Jordán > Utilización > Personas que se enfermaron
+    En la escala de colores sale que hay al menos un valor de 9, en el mapa no se visualiza, pero si se descarga la información si aparecen
+    
+    departamento=68, municipio=68370, dimension=6, indicador=75
+
+    SELECT id, manzana_id, indicador_id, valor 
+    FROM base_registroindicemanzana
+    WHERE indicador_id = '75' AND manzana_id IN (
+        SELECT id as 'id_manzana'
+        FROM base_manzana
+        WHERE  municipio_id = '916'
+    );
+
+    NOTE:
+    *** Parece que hay 2 manzanas que no están en el geojson, por esta razón no se ven los valores en el mapa.
+    *** Se debe indagar más para poder identificar donde está el error
 
 TODO:
 
