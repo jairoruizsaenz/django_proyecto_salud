@@ -10,7 +10,10 @@ from io import BytesIO
 import random
 import pandas as pd
 import numpy as np
-# import json
+import geopandas as gpd
+
+from django.templatetags.static import static
+
 
 def color_map(value, colores, rangos):
     index = 0
@@ -159,7 +162,7 @@ def update_rangos(rangos, es_porcentual):
 
 #     return JsonResponse(data, safe=False)
 
-def get_data_indicadores_map(request, return_df=False):
+def get_data_indicadores_map(request, return_df=False, include_divipola_id=False):
     # print('::: def get_data_indicadores_map')
     departamento = request.GET.get('departamento', None)
     municipio = request.GET.get('municipio', None)
@@ -247,17 +250,27 @@ def get_data_indicadores_map(request, return_df=False):
 
     df_temp = df_temp.merge(df_indicadores, on='indicador_pk', how="left")
     df_temp = df_temp.merge(df_dimensiones, on='dimension_pk', how="left")
-
+   
     if return_df:
         if departamento == '00':
             # Vista Nacional - se visualiza la info por departamentos
-            df_temp = df_temp[['nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]      
+            if include_divipola_id:
+                df_temp = df_temp[['divipola_departamento', 'nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+            else:
+                df_temp = df_temp[['nombre_departamento', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+
         elif (municipio != '') and (municipio != '000') and (municipio is not None):
             # Vista Municipal - se visualiza la info por manzanas
-            df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'divipola_manzana', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+            if include_divipola_id:
+                df_temp = df_temp[['divipola_departamento', 'nombre_departamento', 'divipola_municipio', 'nombre_municipio', 'divipola_manzana', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+            else:
+                df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'divipola_manzana', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
         else:
             # Vista Departamental - se visualiza la info por municipios
-            df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+            if include_divipola_id:
+                df_temp = df_temp[['divipola_departamento', 'nombre_departamento', 'divipola_municipio', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
+            else:
+                df_temp = df_temp[['nombre_departamento', 'nombre_municipio', 'nombre_dimension', 'nombre_indicador', 'valor_indicador']]
 
         df_temp.rename(columns={"nombre_departamento":"departamento", "nombre_municipio":"municipio", "nombre_dimension":"dimension", "nombre_indicador":"indicador", "valor_indicador":"valor"}, inplace=True)
         df_temp.drop_duplicates(inplace=True)
@@ -693,14 +706,61 @@ def agregar_punto(request):
 @csrf_exempt #no pide token csrf al hacer la petición
 def downloadExcel(request):
     with BytesIO() as b:
-        writer = pd.ExcelWriter(b, engine='xlsxwriter')
         df = get_data_indicadores_map(request, return_df=True)
 
+        writer = pd.ExcelWriter(b, engine='xlsxwriter')
         df.to_excel(writer, sheet_name='Datos', index=False)
-        writer.save()
+        writer.close()
 
         filename = 'datos_indicadores.xlsx'
         response = HttpResponse( b.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' )
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+        return response
+
+
+@csrf_exempt #no pide token csrf al hacer la petición
+def downloadGeoJson(request):
+    with BytesIO() as b:
+        
+        departamento = request.GET.get('departamento', None)
+        municipio = request.GET.get('municipio', None)
+        # dimension = request.GET.get('dimension', None)
+        # indicador = request.GET.get('indicador', None)
+
+        data_df = get_data_indicadores_map(request, return_df=True, include_divipola_id=True)
+        columns_list = list(data_df)
+
+        if ('departamento' in columns_list) and ('municipio' not in columns_list):
+            # Nivel departamento
+            file_path = f"{request.scheme}://{request.get_host()}{static('/json/Colombia.json')}"
+            geo_df = gpd.read_file(file_path)
+            geo_df = geo_df.merge(data_df, how='left', left_on='DPTO', right_on='divipola_departamento')
+            geo_df = geo_df[['geometry', 'DPTO', 'departamento', 'dimension', 'indicador', 'valor']]
+            geo_df.rename(columns={"DPTO":"DPTO_CCDGO", "departamento":"DPTO_CNMBR", "dimension": "DIMENSION", "indicador": "INDICADOR", "valor": "VALOR"}, inplace=True)
+
+        elif ('divipola_manzana' in columns_list):
+            # Nivel manzana
+            geojson_file = f"{static('/shapes/MPIOS_MNZ/'+municipio+'.geojson')}"
+            file_path = f"{request.scheme}://{request.get_host()}{geojson_file}"
+            geo_df = gpd.read_file(file_path)
+            geo_df = geo_df.merge(data_df, how='left', left_on='COD_DANE_A', right_on='divipola_manzana')
+            geo_df = geo_df[['geometry', 'COD_DANE_A', 'DPTO_CCDGO', 'departamento','MPIO_CCDGO', 'MPIO_CDPMP','municipio',  'CLAS_CCDGO', 'SETR_CCDGO', 'SETR_CCNCT', 'SECR_CCDGO', 'SECR_CCNCT', 'ZU_CCDGO', 'ZU_CDIVI', 'SETU_CCDGO', 'SETU_CCNCT', 'SECU_CCDGO', 'SECU_CCNCT', 'MANZ_CCDGO', 'AG_CCDGO', 'DATO_ANM', 'VERSION', 'AREA', 'LATITUD', 'LONGITUD', 'DENSIDAD', 'CTNENCUEST', 'dimension', 'indicador', 'valor']]
+            geo_df.rename(columns={"departamento":"DPTO_CNMBR", "municipio":"MPIO_CNMBR", "dimension": "DIMENSION", "indicador": "INDICADOR", "valor": "VALOR"}, inplace=True)
+
+        else:
+            # Nivel municipios
+            geojson_file = f"{static('/shapes/SHAPES_DEPTO_MPIO/'+departamento+'.geojson')}"
+            file_path = f"{request.scheme}://{request.get_host()}{geojson_file}"
+            geo_df = gpd.read_file(file_path)
+            geo_df = geo_df.merge(data_df, how='left', left_on='MPIO_CDPMP', right_on='divipola_municipio')
+            geo_df = geo_df[['geometry', 'DPTO_CCDGO', 'departamento', 'MPIO_CCDGO', 'MPIO_CDPMP', 'municipio', 'dimension', 'indicador', 'valor']]
+            geo_df.rename(columns={"departamento":"DPTO_CNMBR", "municipio":"MPIO_CNMBR", "dimension": "DIMENSION", "indicador": "INDICADOR", "valor": "VALOR"}, inplace=True)
+
+        b.write(geo_df.to_json().encode())
+
+        filename = 'datos_indicadores.geojson'
+        response = HttpResponse(b.getvalue(), content_type='application/geo+json' )
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
         return response

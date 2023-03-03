@@ -20,13 +20,6 @@ TODO:
 - Funciones para actualizar los radares
 - Revisar hover de gráfico radar
 - Incluir el dato departamental de los indicadores en el tooltip municipal
-
-- Descargar datos
-    - Agregar botón para descargar datos
-        DONE - Dataframe en Excel
-        DONE - Mapa en Imagen
-        - Shape con los datos (usar geopandas)
-
 - Prioridad baja - Agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
     (número de camas vs % Mujeres en edad reproductiva sin cobertura (Todas las sedes))
 
@@ -41,6 +34,7 @@ NOTE: Posibles mejoras
 
 DONE:
 
+DONE - Descargar datos (Dataframe en Excel, Mapa en Imagen y Shape con los datos)
 DONE - justificar texto de la intro
 DONE - Se implementaron funciones para controlar las leyendas, se envían colores y cortes desde el view
 DONE - Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios

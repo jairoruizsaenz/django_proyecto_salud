@@ -14,7 +14,6 @@
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="compareCheck" onclick="Show_Hide_Sections()">
                     <label class="form-check-label" for="compareCheck">Comparar</label>
-                    <br><br><span style="color:red;">GEOPANDAS</span>
                 </div>
             </div>
         </div>
@@ -79,10 +78,8 @@
                     </div>
                     <div id="map1" style="height: 480px;"></div>
                     <div class="d-flex justify-content-end">
-                        <button id='download_button_1' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onClick="downloadExcel(1)"></i>Descargar datos</button> {% endcomment %}
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                        <button id='download_button_1_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                        <button id='download_button_1_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                     </div>
                 </div>
             </div>
@@ -144,9 +141,8 @@
                         {% comment %} map2 {% endcomment %}
                         <div id="map2" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
-                            <button id='download_button_2' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                            <button id='download_button_2_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                            <button id='download_button_2_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                         </div>
                     </div>
                 </div>
@@ -187,9 +183,8 @@
                         {% comment %} map3 {% endcomment %}
                         <div id="map3" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
-                            <button id='download_button_3' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                            <button id='download_button_3_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                            <button id='download_button_3_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                         </div>
                     </div>
                 </div>
@@ -558,60 +553,38 @@
         }
     </script>
 
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script>
-        // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
+        // Download Excel File
+        $('.download_excel_file').on('click', e => {
+            // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
 
-        // CSRF Token
-        // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
-        $('.download_button').on('click', e => {
+            // CSRF Token
+            // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
+
             // random data
             let data = 'mydata=foo&excel=bar';
             let request = new XMLHttpRequest();
 
             // console.log(e.target.id);
-            if (e.target.id == 'download_button_1') {
+            if (e.target.id == 'download_button_1_excel') {
                 var dep = document.getElementById("selection_departamento_1");
-                var dep_value = dep.value;
-
                 var mun = document.getElementById("selection_municipio_1");
-                var mun_value = mun.value;
-
                 var dim = document.getElementById("selection_dimension_1");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_1");
-                var ind_value = ind.value;
-
-            } else if (e.target.id == 'download_button_2') {
+            } else if (e.target.id == 'download_button_2_excel') {
                 var dep = document.getElementById("selection_departamento_2");
-                var dep_value = dep.value;
-
                 var mun = document.getElementById("selection_municipio_2");
-                var mun_value = mun.value;
-
                 var dim = document.getElementById("selection_dimension_2");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_2");
-                var ind_value = ind.value;
-
-            } else if (e.target.id == 'download_button_3') {
+            } else if (e.target.id == 'download_button_3_excel') {
                 var dep = document.getElementById("selection_departamento_3");
-                var dep_value = dep.value;
-
                 var mun = document.getElementById("selection_municipio_3");
-                var mun_value = mun.value;
-
                 var dim = document.getElementById("selection_dimension_3");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_3");
-                var ind_value = ind.value;
             }
-            //console.log(dep_value, dim_value, ind_value)
 
-            // request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}', true);
-            request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}?departamento='+dep_value+'&municipio='+mun_value+'&dimension='+dim_value+'&indicador='+ind_value, true);
+            request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}?departamento='+dep.value+'&municipio='+mun.value+'&dimension='+dim.value+'&indicador='+ind.value, true);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
             request.responseType = 'blob';
 
@@ -639,79 +612,77 @@
                         document.body.removeChild(downloadLink);
                     }
                 } else {
-                    alert('Download failed.')
+                    alert('Se presentó un error en la descarga del archivo')
                 }
             };
             request.send(data);
         });
+    </script>
 
-        {% comment %} function ajax_downloadExcel(departamento, dimension, indicador) {
-            $.ajax({
-                url: '{% url "baseApp:ajax_downloadExcel" %}',
-                async: false,
-                data: {
-                    'departamento': departamento,
-                    'dimension': dimension,
-                    'indicador': indicador
-                },
-                dataType: 'json',
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script>
+        // Download GeoJson File
+        $('.download_geojson_file').on('click', e => {
+            // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
 
-                success: function (data) {
-                    console.log('Exito - downloadExcel');
-                },
-                error: function (res) {
-                    console.log('Error - downloadExcel: ', res.responseText);
-                }
-            });
-        } {% endcomment %}
+            // CSRF Token
+            // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
 
-        function downloadExcel(index) {
-            // console.log('-- downloadExcel --------')
+            // random data
+            let data = 'mydata=foo&excel=bar';
+            let request = new XMLHttpRequest();
 
-            if (index == 1) {
+            // console.log(e.target.id);
+            if (e.target.id == 'download_button_1_geojson') {
                 var dep = document.getElementById("selection_departamento_1");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_1");
                 var dim = document.getElementById("selection_dimension_1");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_1");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
-            } else if (index == 2) {
+            } else if (e.target.id == 'download_button_2_geojson') {
                 var dep = document.getElementById("selection_departamento_2");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_2");
                 var dim = document.getElementById("selection_dimension_2");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_2");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
-            } else if (index == 3) {
+            } else if (e.target.id == 'download_button_3_geojson') {
                 var dep = document.getElementById("selection_departamento_3");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_3");
                 var dim = document.getElementById("selection_dimension_3");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_3");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
             }
-            ajax_downloadExcel(dep_value, dim_value, ind_value)
-            // console.log('-------------------------------------------');
-            // console.log(dep_text, ' - ', dim_text, ' - ', ind_text);
-        }
+
+            request.open('POST', '{% url "baseApp:ajax_downloadGeoJson" %}?departamento='+dep.value+'&municipio='+mun.value+'&dimension='+dim.value+'&indicador='+ind.value, true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            request.responseType = 'blob';
+
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let filename = "";
+                    let disposition = request.getResponseHeader('Content-Disposition');
+                    // check if filename is given
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    let blob = this.response;
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    }
+                    else {
+                        let downloadLink = window.document.createElement('a');
+                        let contentTypeHeader = request.getResponseHeader("Content-Type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                        downloadLink.download = filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
+                } else {
+                    alert('Se presentó un error en la descarga del archivo')
+                }
+            };
+            request.send(data);
+        });
     </script>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->

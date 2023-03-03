@@ -20,6 +20,7 @@ urlpatterns = [
     # path('ajax/get-indicadores-data-departamental-map/', get_indicadores_data_departamental_map, name='ajax_get_indicadores_data_departamental_map'),
     path('ajax/get-data-indicadores-map/', get_data_indicadores_map, name='ajax_get_data_indicadores_map'),
     path('ajax/downloadExcel/', downloadExcel, name='ajax_downloadExcel'),
+    path('ajax/downloadGeoJson/', downloadGeoJson, name='ajax_downloadGeoJson'),
 
     path('ajax/get-dimensiones-data-departamental-radar-1/', get_dimensiones_data_departamental_radar_1, name='ajax_get_dimensiones_data_departamental_radar_1'),
     path('ajax/get-dimensiones-data-departamental-radar-2/', get_dimensiones_data_departamental_radar_2, name='ajax_get_dimensiones_data_departamental_radar_2'),
