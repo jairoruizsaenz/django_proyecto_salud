@@ -497,11 +497,12 @@
 
     <!-- get_dimensiones_data_departamental_radar -->
     <script>
-        function get_dimensiones_data_departamental_radar_1(departamento, dimension, es_porcentual) {
+        function get_dimensiones_data_departamental_radar_1(departamento, municipio, dimension, es_porcentual) {
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar_1" %}',
                 data: {
                     'departamento': departamento,
+                    'municipio': municipio,
                     'dimension': dimension,
                     'es_porcentual':es_porcentual,
                 },

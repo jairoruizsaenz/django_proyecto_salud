@@ -70,7 +70,7 @@
             var ind_value = ind.value;
             // var ind_text = ind.options[ind.selectedIndex].text;
 
-            var tipo_ind = document.getElementById( "selection_tipo_indicador_1");
+            var tipo_ind = document.getElementById("selection_tipo_indicador_1");
             var tipo_ind_value = tipo_ind.value;
 
             if (tipo_ind_value == 'porcentual') {
@@ -80,7 +80,7 @@
             }
 
             updateMap_1(dep_value, mun_value, dim_value, ind_value);
-            // get_dimensiones_data_departamental_radar_1(dep_value, dim_value, tipo_ind_value)
+            get_dimensiones_data_departamental_radar_1(dep_value, mun_value, dim_value, tipo_ind_value)
 
         } else if (index == 2) {
             var dep = document.getElementById("selection_departamento_2");
