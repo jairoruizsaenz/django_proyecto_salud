@@ -380,7 +380,10 @@ def get_dimensiones_data_departamental_radar_1(request):
 def get_dimensiones_data_departamental_radar_2(request):
     # print('::: def get_dimensiones_data_departamental_radar_2')
     departamento_1 = request.GET.get('departamento_1', None)
+    municipio_1 = request.GET.get('municipio_1', None)
     departamento_2 = request.GET.get('departamento_2', None)
+    municipio_2 = request.GET.get('municipio_2', None)
+
     dimension = request.GET.get('dimension', None)
     es_porcentual = request.GET.get('es_porcentual', 'true')
 
@@ -505,12 +508,14 @@ def load_dimensiones(request):
     departamento_id = request.GET.get('departamentoId', None)
     municipio_id = request.GET.get('municipioId', None)
 
+    departamento_2_id = request.GET.get('departamento2Id', None)
+    municipio_2_id = request.GET.get('municipio2Id', None)
+
     if departamento_id == '00':
         # Vista Nacional - se visualiza la info por departamentos
         departamento = Departamento.objects.filter(divipola=departamento_id)
         registros = RegistroIndiceDepartamental.objects.filter(departamento__in=departamento)
 
-    # elif (municipio_id != '') and (municipio_id is not None) :
     elif (municipio_id == 'default') or (municipio_id == '000') or (municipio_id == '') or (municipio_id is None):
         # Vista Departamental - se visualiza la info por municipios
         departamento = Departamento.objects.filter(divipola=departamento_id)
@@ -523,19 +528,41 @@ def load_dimensiones(request):
         manzanas = Manzana.objects.filter(municipio__in=municipio)
         registros = RegistroIndiceManzana.objects.filter(manzana__in=manzanas)
 
-    registros_list = registros.values_list('indicador', flat=True)
+    if departamento_2_id is '':
+        # Si no hay valor para departamento_2_id
+        registros_list = registros.values_list('indicador', flat=True)
+        lista_registros = list(set(registros_list))
 
-    indicadores = Indicador.objects.filter(pk__in = list(registros_list))
+    else:
+        if departamento_2_id == '00':
+            # Vista Nacional - se visualiza la info por departamentos
+            departamento_2 = Departamento.objects.filter(divipola=departamento_2_id)
+            registros_2 = RegistroIndiceDepartamental.objects.filter(departamento__in=departamento_2)
+
+        elif (municipio_2_id == 'default') or (municipio_2_id == '000') or (municipio_2_id == '') or (municipio_2_id is None):
+            # Vista Departamental - se visualiza la info por municipios
+            departamento_2 = Departamento.objects.filter(divipola=departamento_2_id)
+            municipios_2 = Municipio.objects.filter(departamento__in=departamento_2)
+            registros_2 = RegistroIndiceMunicipal.objects.filter(municipio__in=municipios_2)
+
+        else:
+            # Vista Municipal - se visualiza la info por manzanas
+            municipio_2 = Municipio.objects.filter(divipola=municipio_2_id)
+            manzanas_2 = Manzana.objects.filter(municipio__in=municipio_2)
+            registros_2 = RegistroIndiceManzana.objects.filter(manzana__in=manzanas_2)
+
+        registros_list_1 = registros.values_list('indicador', flat=True)
+        registros_list_2 = registros_2.values_list('indicador', flat=True)
+        lista_registros = list(set(registros_list_1).intersection(registros_list_2))
+
+    indicadores = Indicador.objects.filter(pk__in = lista_registros)
     indicadores_list = indicadores.values_list('dimension', flat=True)
 
     dimensiones = Dimension.objects.filter(pk__in = list(indicadores_list)).order_by('nombre')
-    # print('dimensiones:', dimensiones, '\n')
-    context = {
-        'with_default':False,
-        'items': dimensiones
-    }
-    return render(request, 'base/items_dropdown_list_options.html', context=context)
 
+    context = { 'with_default':False, 'items': dimensiones }
+    return render(request, 'base/items_dropdown_list_options.html', context=context)
+   
 
 def load_indicadores(request):
     # print('::: def load_indicadores')

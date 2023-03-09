@@ -127,13 +127,17 @@
             var dep_1_value = dep_1.value;
             // var dep_1_text = dep_1.options[dep_1.selectedIndex].text;
 
+            var mun_1 = document.getElementById("selection_municipio_4_1");
+            var mun_1_value = mun.value;
+            // var mun_1_text = mun.options[mun.selectedIndex].text;
+
             var dep_2 = document.getElementById("selection_departamento_4_2");
             var dep_2_value = dep_2.value;
             // var dep_2_text = dep_2.options[dep_2.selectedIndex].text;
 
-            // var mun = document.getElementById("selection_municipio_1");
-            // var mun_value = mun.value;
-            // var mun_text = mun.options[mun.selectedIndex].text;
+            var mun_2 = document.getElementById("selection_municipio_4_2");
+            var mun_2_value = mun.value;
+            // var mun_2_text = mun.options[mun.selectedIndex].text;
 
             var dim = document.getElementById("selection_dimension_4");
             var dim_value = dim.value;
@@ -153,19 +157,19 @@
             }
 
             // updateMap_3(dep_value, dim_value, ind_value);
-            get_dimensiones_data_departamental_radar_2(dep_1_value, dep_2_value, dim_value, tipo_ind_value)
+            get_dimensiones_data_departamental_radar_2(dep_1_value, mun_1_value, dep_2_value, mun_2_value, dim_value, tipo_ind_value)
         }
         // console.log('-------------------------------------------');
         // console.log(dep_text, ' - ', dim_text, ' - ', ind_text);
     }
 
     function indicador_change(index) {
-        // console.log('-- indi change --------', index);
+        console.log('-- indi change --------', index);
         updateGraphs(index);
     }
 
     function dimension_change(index) {
-        // console.log('-- dim change ---------', index);
+        console.log('-- dim change ---------', index);
 
         if (index == 1) {
             update_indicador_dropdownlist(index, "#selection_departamento_1", "#selection_municipio_1", "#selection_dimension_1", "#selection_indicador_1");
@@ -174,12 +178,12 @@
         } else if (index == 3) {
             update_indicador_dropdownlist(index, "#selection_departamento_3", "#selection_municipio_3", "#selection_dimension_3", "#selection_indicador_3");
         } else if (index == 4) {
-            update_indicador_dropdownlist(index, "#selection_departamento_4", "#selection_municipio_4", "#selection_dimension_4", "#selection_indicador_4");
+            indicador_change(index)
         }
     }
 
     function municipio_change(index) {
-        // console.log('-- mun change --------', index);
+        console.log('-- mun change --------', index);
 
         if (index == 1) {
             update_dimension_dropdownlist(index, "#selection_departamento_1", "#selection_municipio_1", "#selection_dimension_1");
@@ -187,8 +191,8 @@
             update_dimension_dropdownlist(index, "#selection_departamento_2", "#selection_municipio_2", "#selection_dimension_2");
         } else if (index == 3) {
             update_dimension_dropdownlist(index, "#selection_departamento_3", "#selection_municipio_3", "#selection_dimension_3");
-        } else if (index == 4) {
-            update_dimension_dropdownlist(index, "#selection_departamento_4", "#selection_municipio_4", "#selection_dimension_4");
+        } else if (index == 41 || index == 42) {
+            update_dimension_dropdownlist(index, "#selection_departamento_4_1", "#selection_municipio_4_1", "#selection_dimension_4", "#selection_departamento_4_2", "#selection_municipio_4_2");
         }
 
         // dimension_change(index);
@@ -196,49 +200,48 @@
     }
 
     function departamento_change(index) {
-        // console.log('-- dpto change --------', index);
+        console.log('-- dpto change --------', index);
 
         if (index == 1) {
             update_municipio_dropdownlist(index, "#selection_departamento_1", "#selection_municipio_1");
-
         } else if (index == 2) {
             update_municipio_dropdownlist(index, "#selection_departamento_2", "#selection_municipio_2");
-
         } else if (index == 3) {
             update_municipio_dropdownlist(index, "#selection_departamento_3", "#selection_municipio_3");
-
+        } else if (index == 41) {
+            update_municipio_dropdownlist(index, "#selection_departamento_4_1", "#selection_municipio_4_1");    
+        } else if (index == 42) {
+            update_municipio_dropdownlist(index, "#selection_departamento_4_2", "#selection_municipio_4_2");
         }
-        // } else if (index == 4) {
-        //     update_municipio_dropdownlist("#selection_departamento_4", "#selection_municipio_4");
-        // }
 
         // dimension_change(index);
         // indicador_change(index);
         // updateGraphs(index);
     }
 
-    document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(1); });
-    document.getElementById('selection_municipio_1').addEventListener('change', function() { municipio_change(1); });
-    document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(1); });
-    document.getElementById('selection_indicador_1').addEventListener('change', function() { indicador_change(1); });
+    // document.getElementById('selection_departamento_1').addEventListener('change', function() { departamento_change(1); });
+    // document.getElementById('selection_municipio_1').addEventListener('change', function() { municipio_change(1); });
+    // document.getElementById('selection_dimension_1').addEventListener('change', function() { dimension_change(1); });
+    // document.getElementById('selection_indicador_1').addEventListener('change', function() { indicador_change(1); });
 
-    document.getElementById('selection_departamento_2').addEventListener('change', function() { departamento_change(2); });
-    document.getElementById('selection_municipio_2').addEventListener('change', function() { municipio_change(2); });
-    document.getElementById('selection_dimension_2').addEventListener('change', function() { dimension_change(2); });
-    document.getElementById('selection_indicador_2').addEventListener('change', function() { indicador_change(2); });
+    // document.getElementById('selection_departamento_2').addEventListener('change', function() { departamento_change(2); });
+    // document.getElementById('selection_municipio_2').addEventListener('change', function() { municipio_change(2); });
+    // document.getElementById('selection_dimension_2').addEventListener('change', function() { dimension_change(2); });
+    // document.getElementById('selection_indicador_2').addEventListener('change', function() { indicador_change(2); });
 
-    document.getElementById('selection_departamento_3').addEventListener('change', function() { departamento_change(3); });
-    document.getElementById('selection_municipio_3').addEventListener('change', function() { municipio_change(3); });
-    document.getElementById('selection_dimension_3').addEventListener('change', function() { dimension_change(3); });
-    document.getElementById('selection_indicador_3').addEventListener('change', function() { indicador_change(3); });
+    // document.getElementById('selection_departamento_3').addEventListener('change', function() { departamento_change(3); });
+    // document.getElementById('selection_municipio_3').addEventListener('change', function() { municipio_change(3); });
+    // document.getElementById('selection_dimension_3').addEventListener('change', function() { dimension_change(3); });
+    // document.getElementById('selection_indicador_3').addEventListener('change', function() { indicador_change(3); });
 
-    // document.getElementById('selection_departamento_4_1').addEventListener('change', function() { departamento_change(4); });
-    // document.getElementById('selection_departamento_4_2').addEventListener('change', function() { departamento_change(4); });
-    // document.getElementById('selection_municipio_4_1').addEventListener('change', function() { municipio_change(4); });
-    // document.getElementById('selection_municipio_4_1').addEventListener('change', function() { municipio_change(4); });
+    document.getElementById('selection_departamento_4_1').addEventListener('change', function() { departamento_change(41); });
+    document.getElementById('selection_departamento_4_2').addEventListener('change', function() { departamento_change(42); });
+    document.getElementById('selection_municipio_4_1').addEventListener('change', function() { municipio_change(41); });
+    document.getElementById('selection_municipio_4_2').addEventListener('change', function() { municipio_change(42); });
     // document.getElementById('selection_dimension_4').addEventListener('change', function() { dimension_change(4); });
 
-    departamento_change(1);
-    departamento_change(2);
-    departamento_change(3);
-    // departamento_change(4);
+    // departamento_change(1);
+    // departamento_change(2);
+    // departamento_change(3);
+    departamento_change(41);
+    departamento_change(42);

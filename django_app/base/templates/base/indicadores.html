@@ -6,9 +6,7 @@
 {% block title_2 %}Indicadores{% endblock %}
 
 {% block content %}
-    {% comment %} <p>{{ mensaje }}</p> {% endcomment %}
     <div class="row">
-        {% comment %} <div class="col-md-2" style="margin-top: 25px"> {% endcomment %}
         <div class="col-md-2">
             <div class="form-group">
                 <div class="form-check">
@@ -33,9 +31,8 @@
     <!-- Presentar - Mapa -->
     <div id="section1">
         <div class="row">
-            {% comment %} <p style="color:red;">section1</p> {% endcomment %}
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_1">
                         {% for dep in departamentos %}
@@ -49,7 +46,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group pb-2">
                     <label for="selection_municipio_1">Municipio</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_1">
                         <option value="000">----------</option>
@@ -57,7 +54,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group pb-2">
                     <label for="selection_dimension_1">Dimensión</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_1" onchange="dimension_dropdown_changed(1, '#selection_dimension_1');">
                         <option value="default">default</option>
@@ -65,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="margin-top:16px;">
+        <div class="row mt-3">
             <div class="col-md-12">
             {% comment %} <div class="col-md-12"> {% endcomment %}
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
@@ -101,13 +98,12 @@
         </div>
     </div>
 
-    <!-- Comparar - Mapa -->    
+    <!-- Comparar - Mapa -->
     <div id="section2">
         <div class="row">
-            {% comment %} <p style="color:red;">section2</p> {% endcomment %}
             <div class="col-md-6">
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_departamento_2">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_2">
                             {% for dep in departamentos %}
@@ -119,26 +115,25 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_municipio_2">Municipio</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_2">
                             <option value="000">----------</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_dimension_2">Dimensión</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_2" onchange="dimension_dropdown_changed(2, '#selection_dimension_2');">
                             <option value="default">default</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_indicador_2">Indicador</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onchange="indicador_dropdown_changed(2, '#selection_indicador_2');">
                             <option value="default">default</option>
                         </select>
                     </div>
-                    <div style="margin-top:16px;">
-                        {% comment %} map2 {% endcomment %}
+                    <div class="mt-3">
                         <div id="map2" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
                             <button id='download_button_2_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
@@ -149,7 +144,7 @@
             </div>
             <div class="col-md-6">
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_departamento_3">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_3">
                             {% for dep in departamentos %}
@@ -161,26 +156,25 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_municipio_3">Municipio</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_3">
                             <option value="000">----------</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_dimension_3">Dimensión</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_3" onchange="dimension_dropdown_changed(3, '#selection_dimension_3');">
                             <option value="default">default</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_indicador_3">Indicador</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onchange="indicador_dropdown_changed(3, '#selection_indicador_3');">
                             <option value="default">default</option>
                         </select>
                     </div>
-                    <div style="margin-top:16px;">
-                        {% comment %} map3 {% endcomment %}
+                    <div class="mt-3">
                         <div id="map3" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
                             <button id='download_button_3_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
@@ -195,9 +189,8 @@
     <!-- Comparar - Radar -->
     <div id="section3">
         <div class="row">
-            {% comment %} <p style="color:red;">section3</p> {% endcomment %}
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_4_1">Departamento 1</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_1">
                         {% for dep in departamentos %}
@@ -211,7 +204,15 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
+                    <label for="selection_municipio_4_1">Municipio 1</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_4_1">
+                        <option value="000">----------</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_4_2">Departamento 2</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_2">
                         {% for dep in departamentos %}
@@ -225,23 +226,30 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
+                    <label for="selection_municipio_4_2">Municipio 2</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_4_2">
+                        <option value="000">----------</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group pb-2">
                     <label for="selection_dimension_4">Dimensión</label>
-                    {% comment %} <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()"> {% endcomment %}
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4" onchange="dimension_dropdown_changed(4, '#selection_dimension_4');">
+                        <option value="default">default</option>
                         {% comment %} FIXME: agregar esta opción{% endcomment %}
                         {% comment %} NOTE: con la opción personalizado, debe aparecer el campo multiselect para comparar distintos indicadores que no pertenezcan a una misma dimensión {% endcomment %}
                         {% comment %} <option value="personalizado">Personalizado</option> {% endcomment %}
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group mb-3">
+            <div class="col-md-6">
+                <div class="form-group pb-2">
                     <label for="selection_tipo_indicador_4">Tipo de indicadores</label>
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_4" name="selection_tipo_indicador_4">
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_4" name="selection_tipo_indicador_4" onchange="dimension_dropdown_changed(4, '#selection_dimension_4');">
                         <option value="porcentual">Porcentuales</option>
                         <option value="numerico">Numéricos</option>
                     </select>
@@ -250,7 +258,7 @@
             {% comment %} FIXME: tiene clase hidden{% endcomment %}
             {% comment %} NOTE: Validar para que iba a usar este campo {% endcomment %}
             <div class="col-md-4">
-                <div class="form-group hidden"> 
+                <div class="form-group pb-2 hidden"> 
                     <label for="selection_indicador_4">Indicador</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_4" name="selection_indicador_4">
                         <option value="0">pruebas</option>
@@ -278,7 +286,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top:16px;">
+        <div class="row mt-3">
             <div class="col-md-12">
                 <div style="width:inherit; height: 480px; border: 1px solid #c2c3c4;">
                     {% comment %} radar - presentar {% endcomment %}
@@ -295,7 +303,7 @@
     
     <script>
         function dimension_dropdown_changed(index, dropdown_id){
-            var dropdown = $(dropdown_id);
+            // var dropdown = $(dropdown_id);
             // console.log('dimension_dropdown_changed', dropdown_id, dropdown.val())
             dimension_change(index);
         }
@@ -303,7 +311,7 @@
 
     <script>
         function indicador_dropdown_changed(index, dropdown_id){
-            var dropdown = $(dropdown_id);
+            // var dropdown = $(dropdown_id);
             // console.log('indicador_dropdown_changed', dropdown_id, dropdown.val())
             indicador_change(index);
         }
@@ -335,15 +343,27 @@
 
     <!-- update_dimension_dropdownlist -->
     <script>
-        function update_dimension_dropdownlist(index, departamento_dropdown_id, municipio_dropdown_id, dimension_dropdown_id) {
+        function update_dimension_dropdownlist(index, departamento_dropdown_id, municipio_dropdown_id, dimension_dropdown_id, departamento_2_dropdown_id=null, municipio_2_dropdown_id=null) {
             // console.log('-- function update_dimension_dropdownlist')
             var departamentoId = $(departamento_dropdown_id).val();
-            var municipioId = $(municipio_dropdown_id).val();
+            var municipioId = $(municipio_dropdown_id).val();            
+            var departamento2Id = null;
+            var municipio2Id = null;
+
+            if (departamento_2_dropdown_id !== null) {
+                var departamento2Id = $(departamento_2_dropdown_id).val();
+            }
+            if (municipio_2_dropdown_id !== null) {
+                var municipio2Id = $(municipio_2_dropdown_id).val();
+            }
+
             $.ajax({
                 url: "{% url 'baseApp:ajax_load_dimensiones' %}",
                 data: { 
                     'departamentoId': departamentoId,
                     'municipioId': municipioId,
+                    'departamento2Id':departamento2Id,
+                    'municipio2Id':municipio2Id
                 },
                 success: function (data) {
                     $(dimension_dropdown_id).empty();
@@ -525,14 +545,16 @@
     </script>
 
     <script>
-        function get_dimensiones_data_departamental_radar_2(departamento_1, departamento_2, dimension, es_porcentual) {
+        function get_dimensiones_data_departamental_radar_2(departamento_1, municipio_1, departamento_2, municipio_2, dimension, es_porcentual) {
             // console.log("-- get_dimensiones_data_departamental_radar");
             // console.log(departamento_1, ' - ', departamento_2, ' - ', dimension, ' - ', es_porcentual)
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar_2" %}',
                 data: {
                     'departamento_1': departamento_1,
+                    'municipio_1':municipio_1,
                     'departamento_2': departamento_2,
+                    'municipio_2':municipio_2,
                     'dimension': dimension,
                     'es_porcentual':es_porcentual,
                 },
