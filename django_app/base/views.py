@@ -358,7 +358,6 @@ def get_dimensiones_data_departamental_radar_1(request):
         df_temp = df_temp[['nombre_indicador', 'valor']]
         df_temp = df_temp[df_temp['nombre_indicador'].notna()]
 
-
     # df_temp = df_temp.groupby(['nombre_indicador']).mean()
 
     try:
@@ -383,7 +382,6 @@ def get_dimensiones_data_departamental_radar_2(request):
     municipio_1 = request.GET.get('municipio_1', None)
     departamento_2 = request.GET.get('departamento_2', None)
     municipio_2 = request.GET.get('municipio_2', None)
-
     dimension = request.GET.get('dimension', None)
     es_porcentual = request.GET.get('es_porcentual', 'true')
 
@@ -394,48 +392,55 @@ def get_dimensiones_data_departamental_radar_2(request):
     elif es_porcentual == 'false':
         es_porcentual = False
 
-    if departamento_1 == '00':
-        departamentos_1 = Departamento.objects.all()
-    else:
-        departamentos_1 = Departamento.objects.filter(divipola=departamento_1)
-
-    if departamento_2 == '00':
-        departamentos_2 = Departamento.objects.all()
-    else:
-        departamentos_2 = Departamento.objects.filter(divipola=departamento_2)
-
     # ---------------------------------------
 
-    departamentos_list_1 = departamentos_1.values_list('pk', 'divipola', 'nombre', flat=False)
-    df_departamentos_1 = pd.DataFrame.from_records(departamentos_list_1, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+    if municipio_1 == 'default' or municipio_1 == '000':
+        # print('::::::: departamental')
+        departamentos_1 = Departamento.objects.filter(divipola=departamento_1)
+        departamentos_1_list = departamentos_1.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos_1 = pd.DataFrame.from_records(departamentos_1_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
 
-    municipios_1 = Municipio.objects.filter(departamento__in=departamentos_1)
-    municipios_list_1 = municipios_1.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
-    df_municipios_1 = pd.DataFrame.from_records(municipios_list_1, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+        registros_1 = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos_1, indicador__dimension__in=dimension)
+        registros_1_list = registros_1.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
+        df_registros_1 = pd.DataFrame.from_records(registros_1_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
 
-    registros_1 = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos_1, indicador__dimension__in=dimension)
-    registros_list_1 = registros_1.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
-    df_registros_1 = pd.DataFrame.from_records(registros_list_1, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
+        indicadores_1 = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        indicadores_1_list = indicadores_1.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores_1 = pd.DataFrame.from_records(indicadores_1_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 
-    indicadores = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        df_temp_1 = df_registros_1.merge(df_departamentos_1, on='departamento_pk', how="left")
+        df_temp_1 = df_temp_1.merge(df_indicadores_1, on='indicador_pk', how="left")
+        df_temp_1.rename(columns={"valor_indicador":"valor"}, inplace=True)
+        df_temp_1 = df_temp_1[['nombre_indicador', 'valor']]
+        df_temp_1 = df_temp_1[df_temp_1['nombre_indicador'].notna()]
 
-    indicadores_list_1 = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
-    df_indicadores_1 = pd.DataFrame.from_records(indicadores_list_1, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+    else:
+        # print('::::::: municipal')
+        departamentos_1 = Departamento.objects.filter(divipola=departamento_1)
+        departamentos_1_list = departamentos_1.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos_1 = pd.DataFrame.from_records(departamentos_1_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
 
-    df_temp_1 = df_registros_1.merge(df_municipios_1, on='municipio_pk', how="left")
-    df_temp_1 = df_temp_1.merge(df_departamentos_1, on='departamento_pk', how="left")
-    df_temp_1 = df_temp_1.merge(df_indicadores_1, on='indicador_pk', how="left")
+        municipios_1 = Municipio.objects.filter(divipola=municipio_1)
+        municipios_1_list = municipios_1.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+        df_municipios_1 = pd.DataFrame.from_records(municipios_1_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
 
-    df_temp_1 = df_temp_1[['nombre_indicador', 'valor']]
-    df_temp_1 = df_temp_1.groupby(['nombre_indicador']).mean()
+        registros_1 = RegistroIndiceMunicipal.objects.filter(municipio__in=municipios_1, indicador__dimension__in=dimension)
+        registros_1_list = registros_1.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+        df_registros_1 = pd.DataFrame.from_records(registros_1_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
+
+        indicadores_1 = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        indicadores_1_list = indicadores_1.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores_1 = pd.DataFrame.from_records(indicadores_1_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+        df_temp_1 = df_registros_1.merge(df_municipios_1, on='municipio_pk', how="left")
+        df_temp_1 = df_temp_1.merge(df_indicadores_1, on='indicador_pk', how="left")
+        df_temp_1 = df_temp_1[['nombre_indicador', 'valor']]
+        df_temp_1 = df_temp_1[df_temp_1['nombre_indicador'].notna()]
 
     try:
-        headers_1 = list(df_temp_1.index)
-        values_1 = list(df_temp_1.iloc[:, 0])
+        headers_1 = list(df_temp_1.nombre_indicador)
+        values_1 = list(df_temp_1.valor)
 
-        headers_1.append(headers_1[0])
-        values_1.append(values_1[0])
-    
     except Exception as e: 
         print(e)
         headers_1 = ['']
@@ -449,36 +454,53 @@ def get_dimensiones_data_departamental_radar_2(request):
 
     # ---------------------------------------
 
-    departamentos_list_2 = departamentos_2.values_list('pk', 'divipola', 'nombre', flat=False)
-    df_departamentos_2 = pd.DataFrame.from_records(departamentos_list_2, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
+    if municipio_2 == 'default' or municipio_2 == '000':
+        # print('::::::: departamental')
+        departamentos_2 = Departamento.objects.filter(divipola=departamento_2)
+        departamentos_2_list = departamentos_2.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos_2 = pd.DataFrame.from_records(departamentos_2_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
 
-    municipios_2 = Municipio.objects.filter(departamento__in=departamentos_2)
-    municipios_list_2 = municipios_2.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
-    df_municipios_2 = pd.DataFrame.from_records(municipios_list_2, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
+        registros_2 = RegistroIndiceDepartamental.objects.filter(departamento__in=departamentos_2, indicador__dimension__in=dimension)
+        registros_2_list = registros_2.values_list('pk', 'departamento', 'indicador', 'valor', flat=False)
+        df_registros_2 = pd.DataFrame.from_records(registros_2_list, columns=['registro_pk', 'departamento_pk', 'indicador_pk', 'valor_indicador'])
 
-    registros_2 = RegistroIndiceMunicipal.objects.filter(municipio__departamento__in=departamentos_2, indicador__dimension__in=dimension)
-    registros_list_2 = registros_2.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
-    df_registros_2 = pd.DataFrame.from_records(registros_list_2, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
+        indicadores_2 = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        indicadores_2_list = indicadores_2.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores_2 = pd.DataFrame.from_records(indicadores_2_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
 
-    indicadores = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        df_temp_2 = df_registros_2.merge(df_departamentos_2, on='departamento_pk', how="left")
+        df_temp_2 = df_temp_2.merge(df_indicadores_2, on='indicador_pk', how="left")
+        df_temp_2.rename(columns={"valor_indicador":"valor"}, inplace=True)
+        df_temp_2 = df_temp_2[['nombre_indicador', 'valor']]
+        df_temp_2 = df_temp_2[df_temp_2['nombre_indicador'].notna()]
 
-    indicadores_list_2 = indicadores.values_list('pk', 'dimension', 'nombre', flat=False)
-    df_indicadores_2 = pd.DataFrame.from_records(indicadores_list_2, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+    else:
+        # print('::::::: municipal')
+        departamentos_2 = Departamento.objects.filter(divipola=departamento_2)
+        departamentos_2_list = departamentos_2.values_list('pk', 'divipola', 'nombre', flat=False)
+        df_departamentos_2 = pd.DataFrame.from_records(departamentos_2_list, columns=['departamento_pk', 'divipola_departamento', 'nombre_departamento'])
 
-    df_temp_2 = df_registros_2.merge(df_municipios_2, on='municipio_pk', how="left")
-    df_temp_2 = df_temp_2.merge(df_departamentos_2, on='departamento_pk', how="left")
-    df_temp_2 = df_temp_2.merge(df_indicadores_2, on='indicador_pk', how="left")
+        municipios_2 = Municipio.objects.filter(divipola=municipio_2)
+        municipios_2_list = municipios_2.values_list('pk', 'departamento', 'divipola', 'nombre', flat=False)
+        df_municipios_2 = pd.DataFrame.from_records(municipios_2_list, columns=['municipio_pk', 'departamento_pk', 'divipola_municipio', 'nombre_municipio'])
 
-    df_temp_2 = df_temp_2[['nombre_indicador', 'valor']]
-    df_temp_2 = df_temp_2.groupby(['nombre_indicador']).mean()
+        registros_2 = RegistroIndiceMunicipal.objects.filter(municipio__in=municipios_2, indicador__dimension__in=dimension)
+        registros_2_list = registros_2.values_list('pk', 'municipio', 'indicador', 'valor', flat=False)
+        df_registros_2 = pd.DataFrame.from_records(registros_2_list, columns=['registro_pk', 'municipio_pk', 'indicador_pk', 'valor'])
+
+        indicadores_2 = Indicador.objects.filter(dimension=dimension, es_porcentual=es_porcentual)
+        indicadores_2_list = indicadores_2.values_list('pk', 'dimension', 'nombre', flat=False)
+        df_indicadores_2 = pd.DataFrame.from_records(indicadores_2_list, columns=['indicador_pk', 'dimension_pk', 'nombre_indicador'])
+
+        df_temp_2 = df_registros_2.merge(df_municipios_2, on='municipio_pk', how="left")
+        df_temp_2 = df_temp_2.merge(df_indicadores_2, on='indicador_pk', how="left")
+        df_temp_2 = df_temp_2[['nombre_indicador', 'valor']]
+        df_temp_2 = df_temp_2[df_temp_2['nombre_indicador'].notna()]
 
     try:
-        headers_2 = list(df_temp_2.index)
-        values_2 = list(df_temp_2.iloc[:, 0])
+        headers_2 = list(df_temp_2.nombre_indicador)
+        values_2 = list(df_temp_2.valor)
 
-        headers_2.append(headers_2[0])
-        values_2.append(values_2[0])
-    
     except Exception as e: 
         print(e)
         headers_2 = ['']
@@ -528,7 +550,7 @@ def load_dimensiones(request):
         manzanas = Manzana.objects.filter(municipio__in=municipio)
         registros = RegistroIndiceManzana.objects.filter(manzana__in=manzanas)
 
-    if departamento_2_id is '':
+    if departamento_2_id == '':
         # Si no hay valor para departamento_2_id
         registros_list = registros.values_list('indicador', flat=True)
         lista_registros = list(set(registros_list))
