@@ -1,57 +1,52 @@
+FIXME:
+- Parece haber una inconsistencia en los DATOS / MAPA / Excel descargado. Revisar: Santander > Jordán > Utilización > Personas que se enfermaron
+    En la escala de colores sale que hay al menos un valor de 9, en el mapa no se visualiza, pero si se descarga la información si aparecen
+    
+    departamento=68, municipio=68370, dimension=6, indicador=75
+
+    SELECT id, manzana_id, indicador_id, valor 
+    FROM base_registroindicemanzana
+    WHERE indicador_id = '75' AND manzana_id IN (
+        SELECT id as 'id_manzana'
+        FROM base_manzana
+        WHERE  municipio_id = '916'
+    );
+
+    *** Parece que hay 2 manzanas que no están en el geojson, por esta razón no se ven los valores en el mapa.
+    *** Se debe indagar más para poder identificar donde está el error
+
 TODO:
 
-- Implementar función para tener los datos a nivel departamental y ver si es posible incluir el dato departamental de los indicadores en el tooltip municipal
-- Descargar datos
-    - Agregar botón para descargar datos
-    - la idea es que descargue los datos de los filtros usados. 
-        - Dataframe en Excel
-        - Mapa en Imagen
-        - Shape
-
-ESTO NO - Verificación datos de Accesibilidad - Recalcular areas de influencia determinar indicadores de accesibilidad. Validar que sumatoria de población rural + urbana corresponda con total (David)
-
-- Presentación de indicadores por Manzanas
-- Indicadores de calidad no están funcionando (los indicadores de calidad solo aplican a nivel departamental, se deben quitar del dropdown con municipios)
+- Funciones para actualizar los radares
 - Revisar hover de gráfico radar
-Prioridad baja - Agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
+- Incluir el dato departamental de los indicadores en el tooltip municipal
+- Prioridad baja - Agregar un campo en los indicadores para saber si a mayor valor es positivo o negativo 
     (número de camas vs % Mujeres en edad reproductiva sin cobertura (Todas las sedes))
 
 - Comparar radares - misma ubicación múltiples indicadores (sobreponer líneas)
 - Comparar radares - múltiples ubicaciones mismo indicador (sobreponer líneas)
-- Barranco minas, mapiripan (verificar municipios)
+- Barranco minas, mapiripan (verificar shapes de municipios)
+
+NOTE: Posibles mejoras
+
+- agregar título a los mapas (nombre del indicador?), para que al exportar la imagen salga con título
+- mejorar imagen inicial - que sea responsive
 
 DONE:
 
-- Ocultar pestañas de secciones que no se está utilizando
-- Revisar si están bien los indicadores (multiplicar por 100), ejemplo:
-    TOTAL NACIONAL
-    Prop_SinCobertura_Prim_Rural
-    0,750908939
-    Accesibilidad
-    (%) Población Rural sin Cobertura (Servicios Primarios)
+DONE - Descargar datos (Dataframe en Excel, Mapa en Imagen y Shape con los datos)
+DONE - justificar texto de la intro
+DONE - Se implementaron funciones para controlar las leyendas, se envían colores y cortes desde el view
+DONE - Agregar elemento '---------' en el modelo municipio para cada departamento, para tener un valor default para ver todos los municipios
+DONE - Modificar queryset para asignar elemento '---------' como inicial, en la función """ def load_municipios(request): """
+DONE - actualizar función para descargar datos, debe incluir info de MUNICIPIOS y MANZANAS
+DONE - Usar la función "get_shapes_manzanas" para agregar lógica de visualización de los municipios en la función updateMap, agregar mun_value
+DONE - actualizar funciones de actualización de dropdowns para DIMENSIÓN e INDICADOR, la idea es que solo aparezcan opciones que tengan datos para el DEPARTAMENTO/MUNICIPIO seleccionado
+DONE - hay un error al cambiar de Dimensión, parece que al actualizar los indicadores, no se selecciona el primer valor del indicador del dropdown
+DONE - Presentación de indicadores por Manzanas
+DONE - Indicadores de calidad no están funcionando (los indicadores de calidad solo aplican a nivel departamental, se deben quitar del dropdown con municipios)
 
-- función Map para cargar datos > se implementaron scripts para procesar los datos, todavía se deben cargar los datos de manera manual a la base de datos
-
-- Se implementaron funciones para controlar las leyendas, se envían colores y cortes desde el view
-    - cambiar colores de mapa
-    - escala de colores mapas (indicadores numéricos) 
-
-- justificar texto de la intro
-- agregar label de valor de gris y validar si está funcionando bien
-- mejorar imagen inicial (Accesibilidad y uso efectivo)
-
-- Se unificaron las vistas
-    - Ajustar las vistas por los niveles (municipal, departamental)
-    - Borra vista municipal, agregar dropdown de municipio a la vista departamental
-    - cambiar nombres de pestañas
-        Nacional > Departamental
-        Departamental > Municipal
-        Municipal > Por manzana
-
-- cambiar tile mapas
-- parece que hay un error en valores 0-10, ejemplo medellin (Accesibilidad, % Mujeres en edad reproductiva sin cobertura)
-- corregir escalas en radar
-
-FIXME:
+NOTE: Esto NO
 
 ESTO NO - Ajustar escalas de paleta de colores de los mapas para que tengan cortes y colores unificados en la vista de comparar.
+ESTO NO - Verificación datos de Accesibilidad - Recalcular areas de influencia determinar indicadores de accesibilidad. Validar que sumatoria de población rural + urbana corresponda con total (David)

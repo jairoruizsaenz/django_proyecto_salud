@@ -6,15 +6,12 @@
 {% block title_2 %}Indicadores{% endblock %}
 
 {% block content %}
-    {% comment %} <p>{{ mensaje }}</p> {% endcomment %}
     <div class="row">
-        {% comment %} <div class="col-md-2" style="margin-top: 25px"> {% endcomment %}
         <div class="col-md-2">
             <div class="form-group">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="compareCheck" onclick="Show_Hide_Sections()">
                     <label class="form-check-label" for="compareCheck">Comparar</label>
-                    {% comment %} <br><br><span style="color:red;">GEOPANDAS</span> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -34,9 +31,8 @@
     <!-- Presentar - Mapa -->
     <div id="section1">
         <div class="row">
-            {% comment %} <p style="color:red;">section1</p> {% endcomment %}
-            <div class="col-md-6">
-                <div class="form-group">
+            <div class="col-md-4">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_1">Departamento</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_1">
                         {% for dep in departamentos %}
@@ -49,34 +45,38 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
+            <div class="col-md-4">
+                <div class="form-group pb-2">
+                    <label for="selection_municipio_1">Municipio</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_1">
+                        <option value="000">----------</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group pb-2">
                     <label for="selection_dimension_1">Dimensión</label>
-                    <!-- <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_1" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> -->
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_1">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_1" onchange="dimension_dropdown_changed(1, '#selection_dimension_1');">
+                        <option value="default">default</option>
                     </select>
                 </div>
             </div>
         </div>
-        <div class="row" style="margin-top:16px;">
+        <div class="row mt-3">
             <div class="col-md-12">
+            {% comment %} <div class="col-md-12"> {% endcomment %}
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
                     {% comment %} map1 {% endcomment %}
                     <div class="form-group mb-3">
                         <label for="selection_indicador_1">Indicador</label>
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onChange="indicador_change(1)">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_1" name="selection_indicador_1" onchange="indicador_dropdown_changed(1, '#selection_indicador_1');">
                             <option value="default">default</option>
                         </select>
                     </div>
                     <div id="map1" style="height: 480px;"></div>
                     <div class="d-flex justify-content-end">
-                        <button id='download_button_1' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onClick="downloadExcel(1)"></i>Descargar datos</button> {% endcomment %}
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                        {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                        <button id='download_button_1_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                        <button id='download_button_1_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                     </div>
                 </div>
             </div>
@@ -98,13 +98,12 @@
         </div>
     </div>
 
-    <!-- Comparar - Mapa -->    
+    <!-- Comparar - Mapa -->
     <div id="section2">
         <div class="row">
-            {% comment %} <p style="color:red;">section2</p> {% endcomment %}
             <div class="col-md-6">
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_departamento_2">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_2">
                             {% for dep in departamentos %}
@@ -113,41 +112,39 @@
                                 {% else %}
                                     <option value="{{dep.divipola}}">{{dep.nombre}}</option>
                                 {% endif %}
-                            {% endfor %}                            
+                            {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
+                        <label for="selection_municipio_2">Municipio</label>
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_2">
+                            <option value="000">----------</option>
+                        </select>
+                    </div>
+                    <div class="form-group pb-2">
                         <label for="selection_dimension_2">Dimensión</label>
-                        {% comment %} <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_2" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_2">
-                            {% for dimension in dimensiones %}
-                                <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                            {% endfor %}
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_2" onchange="dimension_dropdown_changed(2, '#selection_dimension_2');">
+                            <option value="default">default</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_indicador_2">Indicador</label>
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onChange="indicador_change(2)">
-                            <!-- <option value="0">pruebas</option> -->
-                            {% for indicador in indicadores_first %}
-                                <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
-                            {% endfor %}
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_2" name="selection_indicador_2" onchange="indicador_dropdown_changed(2, '#selection_indicador_2');">
+                            <option value="default">default</option>
                         </select>
                     </div>
-                    <div style="margin-top:16px;">
-                        {% comment %} map2 {% endcomment %}
+                    <div class="mt-3">
                         <div id="map2" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
-                            <button id='download_button_2' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                            <button id='download_button_2_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                            <button id='download_button_2_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="p-3 mb-3" style="border: 1px solid #c2c3c4;">
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_departamento_3">Departamento</label>
                         <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_3">
                             {% for dep in departamentos %}
@@ -159,31 +156,29 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
+                        <label for="selection_municipio_3">Municipio</label>
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_3">
+                            <option value="000">----------</option>
+                        </select>
+                    </div>
+                    <div class="form-group pb-2">
                         <label for="selection_dimension_3">Dimensión</label>
-                        {% comment %} <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_3" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}"> {% endcomment %}
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_3">
-                            {% for dimension in dimensiones %}
-                                <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                            {% endfor %}
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_3" onchange="dimension_dropdown_changed(3, '#selection_dimension_3');">
+                            <option value="default">default</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="selection_indicador_3">Indicador</label>
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onChange="indicador_change(3)">
-                            <!-- <option value="0">pruebas</option> -->
-                            {% for indicador in indicadores_first %}
-                                <option value="{{indicador.pk}}">{{indicador.nombre}}</option>
-                            {% endfor %}
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_3" name="selection_indicador_3" onchange="indicador_dropdown_changed(3, '#selection_indicador_3');">
+                            <option value="default">default</option>
                         </select>
                     </div>
-                    <div style="margin-top:16px;">
-                        {% comment %} map3 {% endcomment %}
+                    <div class="mt-3">
                         <div id="map3" style="height: 480px;"></div>
                         <div class="d-flex justify-content-end">
-                            <button id='download_button_3' class="btn download_button gris_oscuro mt-3 me-3"></i>Descargar datos</button>
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" onclick="functionToExecute()"></i>Descargar mapa como imagen</button> {% endcomment %}
-                            {% comment %} <button class="btn gris_oscuro mt-3 me-3" disabled></i>Descargar shapes</button> {% endcomment %}
+                            <button id='download_button_3_excel' class="btn download_excel_file gris_oscuro mt-3 me-3"></i>Descargar datos (Excel)</button>
+                            <button id='download_button_3_geojson' class="btn download_geojson_file gris_oscuro mt-3 me-3"></i>Descargar shapes (GeoJson)</button>
                         </div>
                     </div>
                 </div>
@@ -194,9 +189,8 @@
     <!-- Comparar - Radar -->
     <div id="section3">
         <div class="row">
-            {% comment %} <p style="color:red;">section3</p> {% endcomment %}
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_4_1">Departamento 1</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_1">
                         {% for dep in departamentos %}
@@ -210,7 +204,15 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
+                    <label for="selection_municipio_4_1">Municipio 1</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_4_1">
+                        <option value="000">----------</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group pb-2">
                     <label for="selection_departamento_4_2">Departamento 2</label>
                     <select class="form-select form-select-sm" aria-label="Default select example" id="selection_departamento_4_2">
                         {% for dep in departamentos %}
@@ -224,32 +226,41 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
+                <div class="form-group pb-2">
+                    <label for="selection_municipio_4_2">Municipio 2</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_municipio_4_2">
+                        <option value="000">----------</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group pb-2">
                     <label for="selection_dimension_4">Dimensión</label>
-                    {% comment %} <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4" data-indicadores-url="{% url 'baseApp:ajax_load_indicadores' %}" onchange="indicadorPersonalizado()"> {% endcomment %}
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4">
-                        {% for dimension in dimensiones %}
-                            <option value="{{dimension.pk}}">{{dimension.nombre}}</option>
-                        {% endfor %}
-                        {% comment %} NOTE: agregar esta opción{% endcomment %}
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_dimension_4" onchange="dimension_dropdown_changed(4, '#selection_dimension_4');">
+                        <option value="default">default</option>
+                        {% comment %} FIXME: agregar esta opción{% endcomment %}
+                        {% comment %} NOTE: con la opción personalizado, debe aparecer el campo multiselect para comparar distintos indicadores que no pertenezcan a una misma dimensión {% endcomment %}
                         {% comment %} <option value="personalizado">Personalizado</option> {% endcomment %}
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group mb-3">
-                    <label for="selection_indicador_4">Tipo de indicadores</label>
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_4" name="selection_tipo_indicador_4" onChange="indicador_change(4)">
+            <div class="col-md-6">
+                <div class="form-group pb-2">
+                    <label for="selection_tipo_indicador_4">Tipo de indicadores</label>
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_tipo_indicador_4" name="selection_tipo_indicador_4" onchange="dimension_dropdown_changed(4, '#selection_dimension_4');">
                         <option value="porcentual">Porcentuales</option>
                         <option value="numerico">Numéricos</option>
                     </select>
                 </div>
             </div>
             {% comment %} FIXME: tiene clase hidden{% endcomment %}
+            {% comment %} NOTE: Validar para que iba a usar este campo {% endcomment %}
             <div class="col-md-4">
-                <div class="form-group hidden"> 
+                <div class="form-group pb-2 hidden"> 
                     <label for="selection_indicador_4">Indicador</label>
-                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_4" name="selection_indicador_4" onChange="indicador_change(4)">
+                    <select class="form-select form-select-sm" aria-label="Default select example" id="selection_indicador_4" name="selection_indicador_4">
                         <option value="0">pruebas</option>
                     </select>
                 </div>
@@ -275,7 +286,7 @@
             </div>
         </div>
 
-        <div class="row" style="margin-top:16px;">
+        <div class="row mt-3">
             <div class="col-md-12">
                 <div style="width:inherit; height: 480px; border: 1px solid #c2c3c4;">
                     {% comment %} radar - presentar {% endcomment %}
@@ -286,44 +297,129 @@
     </div>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/func_iniciales.js' %}"></script>
-    <script src="{% static 'js/radar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/func_iniciales.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/radar.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-
-    <!-- update_indicador_dropdownlist -->
+    
     <script>
-        function update_indicador_dropdownlist(dimension_dropdown_id, indicador_dropdown_id) {
-            var dimensionId = $(dimension_dropdown_id).val();
-
-            if (dimensionId == 'personalizado') {
-                $(indicador_dropdown_id).html('<option value="">----------</option>');
-            } else {
-                $.ajax({
-                    url: "{% url 'baseApp:ajax_load_indicadores' %}",
-                    data: { 'dimensionId': dimensionId },
-                    success: function (data) {
-                        $(indicador_dropdown_id).empty();
-                        $(indicador_dropdown_id).html(data);
-                        $(indicador_dropdown_id).trigger("change");
-                    }
-                });
-            }
+        function dimension_dropdown_changed(index, dropdown_id){
+            // var dropdown = $(dropdown_id);
+            // console.log('dimension_dropdown_changed', dropdown_id, dropdown.val())
+            dimension_change(index);
         }
     </script>
 
-    <!-- get_indicadores_map -->
     <script>
-        function get_indicadores_map(filtered_data, departamento, dimension, indicador) {
+        function indicador_dropdown_changed(index, dropdown_id){
+            // var dropdown = $(dropdown_id);
+            // console.log('indicador_dropdown_changed', dropdown_id, dropdown.val())
+            indicador_change(index);
+        }
+    </script>
+
+    <!-- update_municipio_dropdownlist -->
+    <script>
+        function update_municipio_dropdownlist(index, departamento_dropdown_id, municipio_dropdown_id) {
+            var departamentoId = $(departamento_dropdown_id).val();
+            // console.log('departamentoId:', departamentoId)
+            // console.log('municipio_dropdown_id:', municipio_dropdown_id)
+
+            if (departamentoId == '00') {
+                $(municipio_dropdown_id).html('<option value="default" selected>----------</option>');
+            } else {
+                $.ajax({
+                    url: "{% url 'baseApp:ajax_load_municipios' %}",
+                    data: { 'departamentoId': departamentoId },
+                    success: function (data) {
+                        $(municipio_dropdown_id).empty();
+                        $(municipio_dropdown_id).html(data);
+                        $(municipio_dropdown_id).trigger("change");
+                    }
+                });
+            }
+            municipio_change(index);
+        }
+    </script>
+
+    <!-- update_dimension_dropdownlist -->
+    <script>
+        function update_dimension_dropdownlist(index, departamento_dropdown_id, municipio_dropdown_id, dimension_dropdown_id, departamento_2_dropdown_id=null, municipio_2_dropdown_id=null) {
+            // console.log('-- function update_dimension_dropdownlist')
+            var departamentoId = $(departamento_dropdown_id).val();
+            var municipioId = $(municipio_dropdown_id).val();            
+            var departamento2Id = null;
+            var municipio2Id = null;
+
+            if (departamento_2_dropdown_id !== null) {
+                var departamento2Id = $(departamento_2_dropdown_id).val();
+            }
+            if (municipio_2_dropdown_id !== null) {
+                var municipio2Id = $(municipio_2_dropdown_id).val();
+            }
+
+            $.ajax({
+                url: "{% url 'baseApp:ajax_load_dimensiones' %}",
+                data: { 
+                    'departamentoId': departamentoId,
+                    'municipioId': municipioId,
+                    'departamento2Id':departamento2Id,
+                    'municipio2Id':municipio2Id
+                },
+                success: function (data) {
+                    $(dimension_dropdown_id).empty();
+                    $(dimension_dropdown_id).html(data);
+                    $(dimension_dropdown_id).change();
+                }        
+            });
+            // dimension_change(index);
+        }
+    </script>
+
+
+    <!-- update_indicador_dropdownlist -->
+    <script>
+        function update_indicador_dropdownlist(index, departamento_dropdown_id, municipio_dropdown_id, dimension_dropdown_id, indicador_dropdown_id) {
+            var departamentoId = $(departamento_dropdown_id).val();
+            var municipioId = $(municipio_dropdown_id).val();
+            var dimensionId = $(dimension_dropdown_id).val();
+
+            if (dimensionId == 'personalizado') {
+                $(indicador_dropdown_id).html('<option value="default" selected>----------</option>');
+            } else {
+                $.ajax({
+                    url: "{% url 'baseApp:ajax_load_indicadores' %}",
+                    data: { 
+                        'departamentoId': departamentoId,
+                        'municipioId': municipioId,
+                        'dimensionId': dimensionId,
+                    },
+                    success: function (data) {
+                        $(indicador_dropdown_id).empty();
+                        $(indicador_dropdown_id).html(data);
+                        $(indicador_dropdown_id).change();
+                    }
+                });
+            }
+            // indicador_change(index);
+        }
+    </script>
+
+
+    <!-- get_data_indicadores_map -->
+    <script>
+        function get_data_indicadores_map(filtered_data, departamento, municipio, dimension, indicador) {
             var results;
             var legend_colors, legend_values;
 
             if (departamento == '00') {
+                // console.log('-- Departamental -- get_data_indicadores_map')
                 // DEPARTAMENTAL
                 $.ajax({
-                    url: '{% url "baseApp:ajax_get_indicadores_map" %}',
+                    url: '{% url "baseApp:ajax_get_data_indicadores_map" %}',
                     async: false,
                     data: {
                         'departamento': departamento,
+                        'municipio':municipio,
                         'dimension': dimension,
                         'indicador': indicador
                     },
@@ -338,37 +434,82 @@
                         results = merged;
                         legend_colors = data.legend_colors;
                         legend_values = data.legend_values;
+                        // console.log('results - departamental:', results)
                     },
                     error: function (res) {
-                        console.log('Error - get_indicadores_map - departamental: ', res.responseText);
+                        console.log('Error - get_data_indicadores_map - departamental: ', res.responseText);
                     }
                 });
             } else {
-                // MUNICIPAL
-                $.ajax({
-                    url: '{% url "baseApp:ajax_get_indicadores_map" %}',
-                    async: false,
-                    data: {
-                        'departamento': departamento,
-                        'dimension': dimension,
-                        'indicador': indicador
-                    },
-                    dataType: 'json',
+                if (municipio == '000' || municipio == '' || municipio == 'default') {                    
+                    // console.log('-- Municipal -- get_data_indicadores_map')
+                    // MUNICIPAL
+                    $.ajax({
+                        url: '{% url "baseApp:ajax_get_data_indicadores_map" %}',
+                        async: false,
+                        data: {
+                            'departamento': departamento,
+                            'municipio':municipio,
+                            'dimension': dimension,
+                            'indicador': indicador
+                        },
+                        dataType: 'json',
 
-                    success: function (data) {
-                        const merged = filtered_data.map(location => {
-                            const divipola = location.properties.MPIO_CCNCT;
-                            const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
-                            return otherRecord ? {...location, ...otherRecord} : location;
-                        });
-                        results = merged;
-                        legend_colors = data.legend_colors;
-                        legend_values = data.legend_values;
-                    },
-                    error: function (res) {
-                        console.log('Error - get_indicadores_map - municipal: ', res.responseText);
-                    }
-                });
+                        success: function (data) {
+                            const merged = filtered_data.map(location => {
+                                // Usando como shapes archivo MunicipiosVeredas_2MB.json
+                                // const divipola = location.properties.MPIO_CCNCT;
+
+                                // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
+                                const divipola = location.properties.MPIO_CDPMP;
+
+                                const otherRecord = data.filter_records.find(({divipola_municipio: candidateDivipola}) => candidateDivipola == divipola);
+                                return otherRecord ? {...location, ...otherRecord} : location;
+                            });
+                            results = merged;
+                            legend_colors = data.legend_colors;
+                            legend_values = data.legend_values;
+                            // console.log('results - municipal:', results)
+                        },
+                        error: function (res) {
+                            console.log('Error - get_data_indicadores_map - municipal: ', res.responseText);
+                        }
+                    });
+                } else {
+                    // console.log('-- Manzana -- get_data_indicadores_map')
+                    // MANZANA
+                    $.ajax({
+                        url: '{% url "baseApp:ajax_get_data_indicadores_map" %}',
+                        async: false,
+                        data: {
+                            'departamento': departamento,
+                            'municipio':municipio,
+                            'dimension': dimension,
+                            'indicador': indicador
+                        },
+                        dataType: 'json',
+
+                        success: function (data) {
+                            const merged = filtered_data.map(location => {
+                                // Usando como shapes archivo MunicipiosVeredas_2MB.json
+                                // const divipola = location.properties.MPIO_CCNCT;
+
+                                // Usando como shapes archivos geojson en static/shapes/MPIOS_MNZ/*.geojson
+                                const divipola = location.properties.COD_DANE_A;
+
+                                const otherRecord = data.filter_records.find(({divipola_manzana: candidateDivipola}) => candidateDivipola == divipola);
+                                return otherRecord ? {...location, ...otherRecord} : location;
+                            });
+                            results = merged;
+                            legend_colors = data.legend_colors;
+                            legend_values = data.legend_values;
+                            // console.log('results - manzana:', results)
+                        },
+                        error: function (res) {
+                            console.log('Error - get_data_indicadores_map - municipal: ', res.responseText);
+                        }
+                    });
+                }
             }
             return [results, legend_colors, legend_values];
         }
@@ -376,11 +517,12 @@
 
     <!-- get_dimensiones_data_departamental_radar -->
     <script>
-        function get_dimensiones_data_departamental_radar_1(departamento, dimension, es_porcentual) {
+        function get_dimensiones_data_departamental_radar_1(departamento, municipio, dimension, es_porcentual) {
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar_1" %}',
                 data: {
                     'departamento': departamento,
+                    'municipio': municipio,
                     'dimension': dimension,
                     'es_porcentual':es_porcentual,
                 },
@@ -403,14 +545,16 @@
     </script>
 
     <script>
-        function get_dimensiones_data_departamental_radar_2(departamento_1, departamento_2, dimension, es_porcentual) {
+        function get_dimensiones_data_departamental_radar_2(departamento_1, municipio_1, departamento_2, municipio_2, dimension, es_porcentual) {
             // console.log("-- get_dimensiones_data_departamental_radar");
             // console.log(departamento_1, ' - ', departamento_2, ' - ', dimension, ' - ', es_porcentual)
             $.ajax({
                 url: '{% url "baseApp:ajax_get_dimensiones_data_departamental_radar_2" %}',
                 data: {
                     'departamento_1': departamento_1,
+                    'municipio_1':municipio_1,
                     'departamento_2': departamento_2,
+                    'municipio_2':municipio_2,
                     'dimension': dimension,
                     'es_porcentual':es_porcentual,
                 },
@@ -432,51 +576,38 @@
         }
     </script>
 
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script>
-        // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
+        // Download Excel File
+        $('.download_excel_file').on('click', e => {
+            // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
 
-        // CSRF Token
-        // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
-        $('.download_button').on('click', e => {
+            // CSRF Token
+            // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
+
             // random data
             let data = 'mydata=foo&excel=bar';
             let request = new XMLHttpRequest();
 
             // console.log(e.target.id);
-            if (e.target.id == 'download_button_1') {
+            if (e.target.id == 'download_button_1_excel') {
                 var dep = document.getElementById("selection_departamento_1");
-                var dep_value = dep.value;
-
+                var mun = document.getElementById("selection_municipio_1");
                 var dim = document.getElementById("selection_dimension_1");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_1");
-                var ind_value = ind.value;
-
-            } else if (e.target.id == 'download_button_2') {
+            } else if (e.target.id == 'download_button_2_excel') {
                 var dep = document.getElementById("selection_departamento_2");
-                var dep_value = dep.value;
-
+                var mun = document.getElementById("selection_municipio_2");
                 var dim = document.getElementById("selection_dimension_2");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_2");
-                var ind_value = ind.value;
-
-            } else if (e.target.id == 'download_button_3') {
+            } else if (e.target.id == 'download_button_3_excel') {
                 var dep = document.getElementById("selection_departamento_3");
-                var dep_value = dep.value;
-
+                var mun = document.getElementById("selection_municipio_3");
                 var dim = document.getElementById("selection_dimension_3");
-                var dim_value = dim.value;
-
                 var ind = document.getElementById("selection_indicador_3");
-                var ind_value = ind.value;
             }
-            //console.log(dep_value, dim_value, ind_value)
 
-            // request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}', true);
-            request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}?departamento='+dep_value+'&dimension='+dim_value+'&indicador='+ind_value, true);
+            request.open('POST', '{% url "baseApp:ajax_downloadExcel" %}?departamento='+dep.value+'&municipio='+mun.value+'&dimension='+dim.value+'&indicador='+ind.value, true);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
             request.responseType = 'blob';
 
@@ -504,109 +635,166 @@
                         document.body.removeChild(downloadLink);
                     }
                 } else {
-                    alert('Download failed.')
+                    alert('Se presentó un error en la descarga del archivo')
                 }
             };
             request.send(data);
         });
+    </script>
 
-        {% comment %} function ajax_downloadExcel(departamento, dimension, indicador) {
-            $.ajax({
-                url: '{% url "baseApp:ajax_downloadExcel" %}',
-                async: false,
-                data: {
-                    'departamento': departamento,
-                    'dimension': dimension,
-                    'indicador': indicador
-                },
-                dataType: 'json',
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    <script>
+        // Download GeoJson File
+        $('.download_geojson_file').on('click', e => {
+            // https://stackoverflow.com/questions/51675844/django-download-excel-file-with-ajax
 
-                success: function (data) {
-                    console.log('Exito - downloadExcel');
-                },
-                error: function (res) {
-                    console.log('Error - downloadExcel: ', res.responseText);
-                }
-            });
-        } {% endcomment %}
+            // CSRF Token
+            // https://stackoverflow.com/questions/6506897/csrf-token-missing-or-incorrect-while-post-parameter-via-ajax-in-django
 
-        function downloadExcel(index) {
-            // console.log('-- downloadExcel --------')
+            // random data
+            let data = 'mydata=foo&excel=bar';
+            let request = new XMLHttpRequest();
 
-            if (index == 1) {
+            // console.log(e.target.id);
+            if (e.target.id == 'download_button_1_geojson') {
                 var dep = document.getElementById("selection_departamento_1");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_1");
                 var dim = document.getElementById("selection_dimension_1");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_1");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
-            } else if (index == 2) {
+            } else if (e.target.id == 'download_button_2_geojson') {
                 var dep = document.getElementById("selection_departamento_2");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_2");
                 var dim = document.getElementById("selection_dimension_2");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_2");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
-            } else if (index == 3) {
+            } else if (e.target.id == 'download_button_3_geojson') {
                 var dep = document.getElementById("selection_departamento_3");
-                var dep_value = dep.value;
-                var dep_text = dep.options[dep.selectedIndex].text;
-
+                var mun = document.getElementById("selection_municipio_3");
                 var dim = document.getElementById("selection_dimension_3");
-                var dim_value = dim.value;
-                var dim_text = dim.options[dim.selectedIndex].text;
-
                 var ind = document.getElementById("selection_indicador_3");
-                var ind_value = ind.value;
-                var ind_text = ind.options[ind.selectedIndex].text;
-
             }
-            ajax_downloadExcel(dep_value, dim_value, ind_value)
-            // console.log('-------------------------------------------');
-            // console.log(dep_text, ' - ', dim_text, ' - ', ind_text);
-        }
+
+            request.open('POST', '{% url "baseApp:ajax_downloadGeoJson" %}?departamento='+dep.value+'&municipio='+mun.value+'&dimension='+dim.value+'&indicador='+ind.value, true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            request.responseType = 'blob';
+
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let filename = "";
+                    let disposition = request.getResponseHeader('Content-Disposition');
+                    // check if filename is given
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                    }
+                    let blob = this.response;
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    }
+                    else {
+                        let downloadLink = window.document.createElement('a');
+                        let contentTypeHeader = request.getResponseHeader("Content-Type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], {type: contentTypeHeader}));
+                        downloadLink.download = filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
+                } else {
+                    alert('Se presentó un error en la descarga del archivo')
+                }
+            };
+            request.send(data);
+        });
     </script>
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
     <script>
         var shapes_municipales = "{% static 'json/MunicipiosVeredas_2MB.json' %}"
         var shapes_departamentales = "{% static 'json/Colombia.json' %}"
-        {% comment %} var shapes_departamentales = "{% static 'json/23.geojson' %}" {% endcomment %}
+
+        function get_shapes_municipales(dep_code) {
+            return "{% static 'shapes/SHAPES_DEPTO_MPIO/dep_code.geojson' %}".replace('dep_code', dep_code)
+        }
+        function get_shapes_manzanas(mun_code) {
+            return "{% static 'shapes/MPIOS_MNZ/mun_code.geojson' %}".replace('mun_code', mun_code)
+        } 
     </script>
-    <script src="{% static 'js/mapas.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mapas.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
-    {% comment %} <script>
-        $("#selection_dimension_2").change(function () { update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2"); });
-        $("#selection_dimension_3").change(function () { update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3"); });
-        $("#selection_dimension_4").change(function () { update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4"); });
-
-        update_indicador_dropdownlist("#selection_dimension_2", "#selection_indicador_2");
-        update_indicador_dropdownlist("#selection_dimension_3", "#selection_indicador_3");
-        update_indicador_dropdownlist("#selection_dimension_4", "#selection_indicador_4");
-    </script> {% endcomment %}
-
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
-    <script src="{% static 'js/virtual-select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/virtual-select.min.js' %}"></script>
 
     <script>
         // lectura de indicadores en formato json para el multiselect
         var indicadores_json = JSON.parse('{{ indicadores_json | safe }}')
     </script>
 
-    <script src="{% static 'js/func_generales.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/func_generales.js' %}"></script>
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
+
+    <script>
+        // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // <!-- multiselect -->
+
+        var selection = [];
+
+        function filtroMultiselect(elemento) { 
+            return selection.includes(elemento.pk.toString());
+        }
+
+        function hide_show_indicadorPersonalizado() {
+            // console.log('function hide_show_indicadorPersonalizado()');
+
+            var dimension = document.getElementById('selection_dimension_4');
+            // FIXME:
+            // var dimension_value = dimension.options[dimension.selectedIndex].value;
+            var dimension_value = 'TEST'
+
+            var section4 = document.getElementById("section4");
+            section4.classList.remove("visible");
+            section4.classList.add("hidden");
+
+            if (dimension_value == 'personalizado') {
+                document.getElementById("selection_indicador_4").disabled = true;
+                section4.classList.remove("hidden");
+                section4.classList.add("visible");
+            } else {
+                document.getElementById("selection_indicador_4").disabled = false;
+            }
+        };
+
+        function indicadorPersonalizado() {
+            // console.log('function indicadorPersonalizado()');
+
+            selection = $('#multipleSelect').val();
+            var data_multiselect = indicadores_json.filter(filtroMultiselect)
+
+            var selection__ind_pk = [];
+            var selection__ind_name = [];
+            for(var i=0; i < data_multiselect.length; i++){
+                selection__ind_pk.push(data_multiselect[i].pk);
+                selection__ind_name.push(data_multiselect[i]['fields'].nombre);
+            }
+
+            // console.log('-----')
+            // console.log('selection:', selection)
+            // console.log('data_multiselect:', data_multiselect)
+            // console.log('selection__ind_pk:', selection__ind_pk)
+            // console.log('selection__ind_name:', selection__ind_name)
+        };
+
+        VirtualSelect.init({
+            ele: '#multipleSelect'
+        });
+
+        document.getElementById('selection_dimension_4').addEventListener('change', function() { hide_show_indicadorPersonalizado(); });
+        document.getElementById('multipleSelect').addEventListener('change', function() { indicadorPersonalizado(); });
+        
+        indicadorPersonalizado();
+        hide_show_indicadorPersonalizado();
+
+    </script>
 {% endblock %}

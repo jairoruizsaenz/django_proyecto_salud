@@ -12,4 +12,7 @@ temp_borrar/
 
 .ipynb_checkpoints/
 
-shapes/
+MPIOS_MNZ/
+# SHAPES_DEPTO_MPIO/
+
+*.sqlite3
